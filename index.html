@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>نظام تتبع الصحة والنشاطات الذكي | مرجلة متكاملة</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0a0a0f 0%, #030303 100%);
+            font-family: 'Segoe UI', 'Cairo', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            padding: 16px;
+            color: #f0f0f0;
+        }
+
+        .app-container {
+            max-width: 550px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .card {
+            background: rgba(18, 18, 24, 0.95);
+            backdrop-filter: blur(2px);
+            border-radius: 32px;
+            padding: 20px 18px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 75, 95, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .login-screen {
+            background: rgba(12, 12, 18, 0.98);
+            border-radius: 48px;
+            padding: 32px 24px;
+            border: 1px solid #ff4b5f;
+            box-shadow: 0 20px 40px rgba(255, 75, 95, 0.2);
+        }
+
+        .login-screen h2 {
+            background: linear-gradient(135deg, #ff4b5f, #ff8c42);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 28px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #ffb347;
+            font-weight: bold;
+        }
+
+        .login-input, .form-select {
+            width: 100%;
+            padding: 14px 18px;
+            background: #1e1e2a;
+            border: 2px solid #2d2d3a;
+            border-radius: 60px;
+            color: white;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .login-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #ff4b5f;
+            background: #252530;
+        }
+
+        .form-select {
+            appearance: none;
+            cursor: pointer;
+        }
+
+        textarea.login-input {
+            border-radius: 24px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .login-btn {
+            background: linear-gradient(95deg, #ff4b5f, #ff6a4b);
+            border: none;
+            padding: 16px;
+            width: 100%;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 8px;
+        }
+
+        .login-btn:active { transform: scale(0.97); }
+
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            flex: 1;
+            background: #1a1a22;
+            text-align: center;
+            padding: 12px 0;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #2c2c38;
+            font-size: 14px;
+        }
+
+        .tab.active {
+            background: linear-gradient(95deg, #ff4b5f, #ff6a4b);
+            border-color: #ff8a6b;
+            color: white;
+        }
+
+        .battery-container {
+            background: #2a2a32;
+            height: 20px;
+            border-radius: 40px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+
+        .bat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff4b5f, #ffb347);
+            transition: width 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border-radius: 40px;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .btn-action {
+            background: linear-gradient(95deg, #ff4b5f, #ff6a4b);
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 16px;
+            color: white;
+            margin: 12px 0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-secondary {
+            background: #2a2a34;
+            border: 1px solid #ff4b5f;
+        }
+
+        .nutrition-card {
+            background: linear-gradient(135deg, #1b2a2a, #0f1a1f);
+            border-radius: 28px;
+            padding: 18px;
+            margin: 16px 0;
+            border-right: 4px solid #ffb347;
+        }
+
+        .rest-alert {
+            background: rgba(255, 75, 95, 0.15);
+            border: 1px solid #ff4b5f;
+            border-radius: 28px;
+            padding: 16px;
+            margin: 12px 0;
+            text-align: center;
+        }
+
+        .stat-badge {
+            background: #1e1e28;
+            padding: 10px;
+            border-radius: 24px;
+            text-align: center;
+            flex: 1;
+            font-size: 13px;
+        }
+
+        .history-log {
+            max-height: 150px;
+            overflow-y: auto;
+            background: #0e0e14;
+            border-radius: 24px;
+            padding: 12px;
+            font-size: 12px;
+            margin-top: 16px;
+        }
+
+        .logout-btn {
+            background: #2a2a34;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            color: #ff8a6b;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .chart-wrap {
+            margin-top: 20px;
+            background: #0b0b10;
+            border-radius: 28px;
+            padding: 12px;
+        }
+
+        canvas {
+            max-height: 200px;
+            width: 100%;
+        }
+
+        .mini-stats {
+            display: flex;
+            gap: 12px;
+            margin: 16px 0;
+            flex-wrap: wrap;
+        }
+
+        .glow-text {
+            color: #ffb347;
+            font-weight: bold;
+        }
+
+        .activity-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .activity-option {
+            background: #1e1e28;
+            padding: 12px;
+            text-align: center;
+            border-radius: 28px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .activity-option.selected {
+            border-color: #ff4b5f;
+            background: #2a2a38;
+            box-shadow: 0 0 10px rgba(255, 75, 95, 0.3);
+        }
+
+        .intensity-btns {
+            display: flex;
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        .intensity-btn {
+            flex: 1;
+            background: #1e1e28;
+            padding: 12px;
+            text-align: center;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .intensity-btn.selected {
+            background: #ff4b5f;
+        }
+
+        .report-card {
+            background: #0f0f16;
+            border-radius: 28px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+
+        .daily-report, .monthly-report {
+            background: #0a0a10;
+            border-radius: 24px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+            .tab {
+                font-size: 12px;
+                padding: 10px 0;
+            }
+            .stat-badge {
+                font-size: 11px;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="app-container" id="root"></div>
+
+<script>
+    // ====================== نظام التتبع الصحي المتكامل ======================
+    
+    const STORAGE_KEY = 'health_tracker_pro_v2';
+    
+    function getTodayKey() {
+        return new Date().toISOString().slice(0,10);
+    }
+    
+    // إنشاء مستخدم جديد مع جميع البيانات
+    function createFullUser(userData) {
+        const today = getTodayKey();
+        return {
+            email: userData.email,
+            fullName: userData.fullName,
+            gender: userData.gender,
+            age: parseInt(userData.age),
+            weight: parseFloat(userData.weight),
+            healthConditions: userData.healthConditions || 'لا يوجد',
+            diseases: userData.diseases || 'لا يوجد',
+            createdAt: Date.now(),
+            
+            // بيانات الطاقة والنشاطات
+            currentEnergy: 100, // نسبة الطاقة الحالية
+            lastActivityTime: 0,
+            lastActivityType: null,
+            
+            // سجل النشاطات اليومية
+            dailyActivities: {},
+            
+            // سجل اليومي الكامل
+            dailyLogs: {
+                [today]: {
+                    sleepTime: '',
+                    wakeTime: '',
+                    meals: [],
+                    previousActivities: '',
+                    activities: []
+                }
+            },
+            
+            // الإحصائيات الكلية
+            totalStats: {
+                activitiesCount: 0,
+                totalCalories: 0,
+                byType: {
+                    'تضاجع': 0,
+                    'جري': 0,
+                    'مشي': 0,
+                    'تمارين': 0,
+                    'اخرى': 0
+                }
+            },
+            
+            lastDateReset: today,
+            registrationComplete: true
+        };
+    }
+    
+    // تحميل قاعدة البيانات
+    function loadAllUsers() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return {};
+        try { return JSON.parse(raw); } catch(e) { return {}; }
+    }
+    
+    function saveAllUsers(db) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+    }
+    
+    // الحصول على المستخدم أو إنشاؤه مع البيانات الكاملة
+    function getOrCreateUser(userData) {
+        const db = loadAllUsers();
+        const email = userData.email.trim().toLowerCase();
+        
+        if (!db[email]) {
+            db[email] = createFullUser(userData);
+            saveAllUsers(db);
+        }
+        
+        let user = db[email];
+        const today = getTodayKey();
+        
+        // إعادة ضبط يومية
+        if (user.lastDateReset !== today) {
+            // تجديد الطاقة بنسبة 100% بعد النوم
+            user.currentEnergy = 100;
+            user.lastDateReset = today;
+            
+            // إنشاء سجل لليوم الجديد
+            if (!user.dailyLogs[today]) {
+                user.dailyLogs[today] = {
+                    sleepTime: '',
+                    wakeTime: '',
+                    meals: [],
+                    previousActivities: '',
+                    activities: []
+                };
+            }
+            
+            saveAllUsers(db);
+        }
+        
+        if (!user.dailyLogs[today]) {
+            user.dailyLogs[today] = {
+                sleepTime: '',
+                wakeTime: '',
+                meals: [],
+                previousActivities: '',
+                activities: []
+            };
+            saveAllUsers(db);
+        }
+        
+        if (!user.dailyActivities[today]) {
+            user.dailyActivities[today] = [];
+            saveAllUsers(db);
+        }
+        
+        return user;
+    }
+    
+    function persistUser(user) {
+        const db = loadAllUsers();
+        db[user.email] = user;
+        saveAllUsers(db);
+    }
+    
+    // حساب السعرات المحروقة بناءً على النشاط والوزن والمدة والكثافة
+    function calculateCalories(activityType, weight, durationMinutes, intensity) {
+        const MET = {
+            'تضاجع': 1.5,
+            'مشي': 3.5,
+            'جري': 8.0,
+            'تمارين': 6.0,
+            'اخرى': 4.0
+        };
+        
+        let intensityMultiplier = 1;
+        if (intensity === 'سريع') intensityMultiplier = 1.3;
+        else if (intensity === 'متوسط') intensityMultiplier = 1;
+        else intensityMultiplier = 0.7;
+        
+        const metValue = (MET[activityType] || 4) * intensityMultiplier;
+        const calories = (metValue * weight * durationMinutes) / 60;
+        return Math.round(calories);
+    }
+    
+    // حساب استهلاك الطاقة
+    function calculateEnergyDrain(activityType, durationMinutes, intensity) {
+        let baseDrain = 15;
+        if (activityType === 'جري') baseDrain = 35;
+        else if (activityType === 'تمارين') baseDrain = 25;
+        else if (activityType === 'مشي') baseDrain = 10;
+        else if (activityType === 'تضاجع') baseDrain = 5;
+        
+        let durationFactor = Math.min(1.5, durationMinutes / 30);
+        let intensityFactor = intensity === 'سريع' ? 1.4 : (intensity === 'متوسط' ? 1 : 0.6);
+        
+        let drain = Math.round(baseDrain * durationFactor * intensityFactor);
+        return Math.min(70, drain);
+    }
+    
+    // حساب وقت الراحة المطلوب
+    function calculateRestTime(energyDrain, intensity) {
+        let baseRest = energyDrain / 10;
+        if (intensity === 'سريع') baseRest *= 1.5;
+        return Math.max(1, Math.min(8, Math.round(baseRest)));
+    }
+    
+    // تقديم نصائح مخصصة حسب النشاط والطاقة
+    function getPersonalizedAdvice(activityType, energyAfter, restHours) {
+        if (energyAfter < 20) {
+            return "⚠️ تحذير: طاقتك منخفضة جداً! تحتاج إلى راحة كاملة وتناول وجبة غنية بالبروتين والكربوهيدرات.";
+        } else if (energyAfter < 50) {
+            return "😴 أنشطتك استنزفت جزءاً كبيراً من طاقتك. يفضل أخذ قسط من الراحة وتناول سناكات صحية.";
+        } else if (restHours > 3) {
+            return "💪 نشاط مكثف! يحتاج جسمك إلى تعافي جيد. اشرب الماء وتناول وجبة غنية بالبروتين.";
+        } else {
+            return "👍 أداء ممتاز! يمكنك الاستمرار بأنشطة خفيفة أو أخذ استراحة قصيرة.";
+        }
+    }
+    
+    // تسجيل نشاط جديد
+    function recordActivity(activityData) {
+        if (!currentUser) return null;
+        
+        const user = currentUser;
+        const today = getTodayKey();
+        
+        // حساب السعرات والطاقة
+        const calories = calculateCalories(activityData.type, user.weight, activityData.duration, activityData.intensity);
+        const energyDrain = calculateEnergyDrain(activityData.type, activityData.duration, activityData.intensity);
+        const newEnergy = Math.max(0, user.currentEnergy - energyDrain);
+        const restRequired = calculateRestTime(energyDrain, activityData.intensity);
+        
+        // تسجيل النشاط
+        const activityRecord = {
+            id: Date.now(),
+            timestamp: new Date().toISOString(),
+            time: new Date().toLocaleTimeString('ar-EG'),
+            type: activityData.type,
+            duration: activityData.duration,
+            intensity: activityData.intensity,
+            calories: calories,
+            energyDrain: energyDrain,
+            energyBefore: user.currentEnergy,
+            energyAfter: newEnergy,
+            sleepTime: activityData.sleepTime || '',
+            wakeTime: activityData.wakeTime || '',
+            meals: activityData.meals || [],
+            previousActivities: activityData.previousActivities || ''
+        };
+        
+        // تحديث بيانات المستخدم
+        user.currentEnergy = newEnergy;
+        user.lastActivityTime = Date.now();
+        user.lastActivityType = activityData.type;
+        
+        // حفظ في السجل اليومي
+        if (!user.dailyLogs[today]) {
+            user.dailyLogs[today] = { sleepTime: '', wakeTime: '', meals: [], previousActivities: '', activities: [] };
+        }
+        
+        user.dailyLogs[today].activities.push(activityRecord);
+        
+        if (activityData.sleepTime) user.dailyLogs[today].sleepTime = activityData.sleepTime;
+        if (activityData.wakeTime) user.dailyLogs[today].wakeTime = activityData.wakeTime;
+        if (activityData.meals && activityData.meals.length) user.dailyLogs[today].meals = activityData.meals;
+        if (activityData.previousActivities) user.dailyLogs[today].previousActivities = activityData.previousActivities;
+        
+        // تحديث الإحصائيات الكلية
+        user.totalStats.activitiesCount++;
+        user.totalStats.totalCalories += calories;
+        user.totalStats.byType[activityData.type] = (user.totalStats.byType[activityData.type] || 0) + 1;
+        
+        // حفظ في dailyActivities للرسوم البيانية
+        if (!user.dailyActivities[today]) user.dailyActivities[today] = [];
+        user.dailyActivities[today].push({
+            type: activityData.type,
+            calories: calories,
+            energyDrain: energyDrain
+        });
+        
+        persistUser(user);
+        
+        return {
+            calories: calories,
+            energyDrain: energyDrain,
+            energyAfter: newEnergy,
+            restRequired: restRequired,
+            advice: getPersonalizedAdvice(activityData.type, newEnergy, restRequired)
+        };
+    }
+    
+    // متغيرات الجلسة
+    let currentUser = null;
+    let activeTab = 'activities'; // activities, dailyReport, monthlyReport
+    let chartInstance = null;
+    let chartPeriod = 'week';
+    let selectedActivityType = 'مشي';
+    let selectedIntensity = 'متوسط';
+    
+    // تسجيل الخروج
+    function logout() {
+        currentUser = null;
+        renderLoginScreen();
+    }
+    
+    // رسم البيان
+    function renderChart() {
+        if (!currentUser) return;
+        const canvas = document.getElementById('statsCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        
+        const dailyActs = currentUser.dailyActivities || {};
+        const sortedDays = Object.keys(dailyActs).sort().slice(-30);
+        
+        const caloriesData = sortedDays.map(day => {
+            const acts = dailyActs[day] || [];
+            return acts.reduce((sum, a) => sum + (a.calories || 0), 0);
+        });
+        
+        if (chartInstance) chartInstance.destroy();
+        
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: sortedDays.map(d => d.slice(5)),
+                datasets: [{
+                    label: 'السعرات المحروقة',
+                    data: caloriesData,
+                    backgroundColor: 'rgba(255, 75, 95, 0.2)',
+                    borderColor: '#ff4b5f',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3,
+                    pointBackgroundColor: '#ffb347'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { labels: { color: '#ddd', font: { size: 11 } } }
+                },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#ccc' } },
+                    x: { ticks: { color: '#ccc', maxRotation: 45, minRotation: 45 } }
+                }
+            }
+        });
+    }
+    
+    // عرض التقرير اليومي
+    function renderDailyReport() {
+        if (!currentUser) return '<div class="daily-report">لا توجد بيانات</div>';
+        
+        const today = getTodayKey();
+        const log = currentUser.dailyLogs[today] || { sleepTime: '', wakeTime: '', meals: [], previousActivities: '', activities: [] };
+        const activities = log.activities || [];
+        const totalCalories = activities.reduce((sum, a) => sum + (a.calories || 0), 0);
+        const totalEnergyDrain = activities.reduce((sum, a) => sum + (a.energyDrain || 0), 0);
+        
+        return `
+            <div class="daily-report">
+                <h3 style="color:#ffb347; margin-bottom:16px;">📅 تقرير يوم ${today}</h3>
+                <div class="flex-between"><span>😴 وقت النوم:</span><span>${log.sleepTime || 'لم يسجل'}</span></div>
+                <div class="flex-between"><span>🌅 وقت الاستيقاظ:</span><span>${log.wakeTime || 'لم يسجل'}</span></div>
+                <div class="flex-between"><span>🍽️ الوجبات:</span><span>${log.meals.length ? log.meals.join(' - ') : 'لم يسجل'}</span></div>
+                <div class="flex-between"><span>📝 الأنشطة السابقة:</span><span>${log.previousActivities || 'لا يوجد'}</span></div>
+                <hr style="margin:12px 0; border-color:#333;">
+                <div class="flex-between"><span>🔥 إجمالي السعرات المحروقة:</span><span class="glow-text">${totalCalories} سعرة</span></div>
+                <div class="flex-between"><span>⚡ استنزاف الطاقة:</span><span>${totalEnergyDrain}%</span></div>
+                <div class="flex-between"><span>🔋 الطاقة المتبقية:</span><span>${currentUser.currentEnergy}%</span></div>
+                <div class="flex-between"><span>📊 عدد الأنشطة:</span><span>${activities.length}</span></div>
+                ${activities.length ? `
+                <div style="margin-top:12px;">
+                    <strong>📋 تفاصيل الأنشطة:</strong>
+                    ${activities.map(a => `
+                        <div style="background:#1a1a22; padding:10px; margin:8px 0; border-radius:16px;">
+                            <div>🕒 ${a.time} - <strong>${a.type}</strong> (${a.duration} دقيقة - ${a.intensity})</div>
+                            <div>🔥 ${a.calories} سعرة | ⚡ استنزاف ${a.energyDrain}%</div>
+                        </div>
+                    `).join('')}
+                </div>
+                ` : '<div style="margin-top:12px;">✨ لا توجد أنشطة مسجلة اليوم</div>'}
+            </div>
+        `;
+    }
+    
+    // عرض التقرير الشهري
+    function renderMonthlyReport() {
+        if (!currentUser) return '<div>لا توجد بيانات</div>';
+        
+        const dailyActs = currentUser.dailyActivities || {};
+        const last30Days = Object.keys(dailyActs).sort().slice(-30);
+        
+        let totalActivities = 0;
+        let totalCalories = 0;
+        let typeStats = { 'تضاجع': 0, 'جري': 0, 'مشي': 0, 'تمارين': 0, 'اخرى': 0 };
+        
+        last30Days.forEach(day => {
+            const acts = dailyActs[day] || [];
+            acts.forEach(a => {
+                totalActivities++;
+                totalCalories += a.calories || 0;
+                if (typeStats[a.type] !== undefined) typeStats[a.type]++;
+                else typeStats['اخرى']++;
+            });
+        });
+        
+        return `
+            <div class="monthly-report">
+                <h3 style="color:#ffb347; margin-bottom:16px;">📊 التقرير الشهري (آخر 30 يوم)</h3>
+                <div class="flex-between"><span>📆 عدد الأيام النشطة:</span><span>${last30Days.filter(d => (dailyActs[d] || []).length > 0).length}</span></div>
+                <div class="flex-between"><span>🎯 إجمالي الأنشطة:</span><span>${totalActivities}</span></div>
+                <div class="flex-between"><span>🔥 إجمالي السعرات المحروقة:</span><span class="glow-text">${totalCalories} سعرة</span></div>
+                <div class="flex-between"><span>🏆 متوسط السعرات يومياً:</span><span>${Math.round(totalCalories / 30)} سعرة</span></div>
+                <hr style="margin:12px 0; border-color:#333;">
+                <div><strong>📈 توزيع الأنشطة:</strong></div>
+                ${Object.entries(typeStats).map(([type, count]) => count > 0 ? `
+                    <div class="flex-between"><span>${type === 'تضاجع' ? '💑' : type === 'جري' ? '🏃' : type === 'مشي' ? '🚶' : type === 'تمارين' ? '💪' : '📌'} ${type}:</span><span>${count} مرة</span></div>
+                ` : '').join('')}
+            </div>
+        `;
+    }
+    
+    // نافذة إدخال النشاط
+    function showActivityForm() {
+        const modalHtml = `
+            <div id="activityModal" style="position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.9); z-index:1000; display:flex; align-items:center; justify-content:center; padding:20px;">
+                <div style="background:#121218; border-radius:32px; max-width:500px; width:100%; max-height:90vh; overflow-y:auto; padding:24px;">
+                    <h3 style="color:#ffb347; margin-bottom:20px;">➕ تسجيل نشاط جديد</h3>
+                    
+                    <div class="form-group">
+                        <label>😴 متى نمت الليلة الماضية؟</label>
+                        <input type="time" id="sleepTime" class="login-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>🌅 متى استيقظت؟</label>
+                        <input type="time" id="wakeTime" class="login-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>🍽️ ماذا تناولت من طعام وشراب؟</label>
+                        <input type="text" id="meals" class="login-input" placeholder="مثال: فطور: بيض وخبز، غداء: دجاج ورز...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>📝 ما هي الأنشطة التي قمت بها قبل هذا النشاط؟</label>
+                        <textarea id="prevActivities" class="login-input" rows="2" placeholder="مثال: مشيت ساعة، شربت قهوة..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>🏃‍♂️ اختر نوع النشاط:</label>
+                        <div class="activity-selector">
+                            ${['مشي', 'جري', 'تمارين', 'تضاجع', 'اخرى'].map(type => `
+                                <div class="activity-option ${selectedActivityType === type ? 'selected' : ''}" onclick="selectActivityType('${type}')">${type === 'تضاجع' ? '💑 تضاجع' : type === 'جري' ? '🏃 جري' : type === 'مشي' ? '🚶 مشي' : type === 'تمارين' ? '💪 تمارين' : '📌 اخرى'}</div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>⏱️ المدة (بالدقائق):</label>
+                        <input type="number" id="duration" class="login-input" min="1" max="300" value="30">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>⚡ شدة النشاط:</label>
+                        <div class="intensity-btns">
+                            ${['هادئ', 'متوسط', 'سريع'].map(int => `
+                                <div class="intensity-btn ${selectedIntensity === int ? 'selected' : ''}" onclick="selectIntensity('${int}')">${int === 'هادئ' ? '🐢 هادئ' : int === 'متوسط' ? '⚡ متوسط' : '🚀 سريع'}</div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div style="display:flex; gap:12px; margin-top:24px;">
+                        <button onclick="closeModal()" class="btn-action" style="background:#2a2a34;">إلغاء</button>
+                        <button onclick="submitActivity()" class="btn-action">✅ تسجيل النشاط</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        const existingModal = document.getElementById('activityModal');
+        if (existingModal) existingModal.remove();
+        
+        const div = document.createElement('div');
+        div.innerHTML = modalHtml;
+        document.body.appendChild(div.firstElementChild);
+    }
+    
+    window.selectActivityType = (type) => {
+        selectedActivityType = type;
+        showActivityForm();
+    };
+    
+    window.selectIntensity = (intensity) => {
+        selectedIntensity = intensity;
+        showActivityForm();
+    };
+    
+    window.closeModal = () => {
+        const modal = document.getElementById('activityModal');
+        if (modal) modal.remove();
+        renderMainApp();
+    };
+    
+    window.submitActivity = () => {
+        const sleepTime = document.getElementById('sleepTime')?.value || '';
+        const wakeTime = document.getElementById('wakeTime')?.value || '';
+        const meals = document.getElementById('meals')?.value || '';
+        const prevActivities = document.getElementById('prevActivities')?.value || '';
+        const duration = parseInt(document.getElementById('duration')?.value || '30');
+        
+        if (duration < 1 || duration > 300) {
+            alert('الرجاء إدخال مدة بين 1 و 300 دقيقة');
+            return;
+        }
+        
+        const result = recordActivity({
+            type: selectedActivityType,
+            duration: duration,
+            intensity: selectedIntensity,
+            sleepTime: sleepTime,
+            wakeTime: wakeTime,
+            meals: meals ? [meals] : [],
+            previousActivities: prevActivities
+        });
+        
+        if (result) {
+            alert(`✅ تم تسجيل النشاط!\n🔥 السعرات المحروقة: ${result.calories}\n⚡ استنزاف الطاقة: ${result.energyDrain}%\n🔋 الطاقة المتبقية: ${result.energyAfter}%\n⏰ الراحة الموصى بها: ${result.restRequired} ساعات\n\n${result.advice}`);
+        }
+        
+        closeModal();
+    };
+    
+    // عرض الواجهة الرئيسية
+    function renderMainApp() {
+        if (!currentUser) return;
+        
+        const html = `
+            <div class="card">
+                <div class="flex-between">
+                    <div><span style="background:#ff4b5f20; padding:6px 14px; border-radius:30px;">👤 ${currentUser.fullName}</span></div>
+                    <button class="logout-btn" onclick="logout()">🚪 خروج</button>
+                </div>
+                
+                <div class="tabs">
+                    <div class="tab ${activeTab === 'activities' ? 'active' : ''}" onclick="setTab('activities')">⚡ نشاط جديد</div>
+                    <div class="tab ${activeTab === 'dailyReport' ? 'active' : ''}" onclick="setTab('dailyReport')">📅 تقرير يومي</div>
+                    <div class="tab ${activeTab === 'monthlyReport' ? 'active' : ''}" onclick="setTab('monthlyReport')">📊 تقرير شهري</div>
+                </div>
+                
+                <div id="tabContent"></div>
+                
+                <div class="chart-wrap">
+                    <div class="flex-between">
+                        <span><strong>📈 السعرات المحروقة (آخر 30 يوم)</strong></span>
+                    </div>
+                    <canvas id="statsCanvas" height="150"></canvas>
+                </div>
+            </div>
+        `;
+        
+        const root = document.getElementById('root');
+        root.innerHTML = html + '<div id="dynamicContent"></div>';
+        
+        const tabContent = document.getElementById('tabContent');
+        if (activeTab === 'activities') {
+            tabContent.innerHTML = `
+                <div style="background:#0c0c12; border-radius:28px; padding:20px; margin-bottom:16px;">
+                    <div class="flex-between">
+                        <span>🔋 نسبة الطاقة الحالية</span>
+                        <span>${currentUser.currentEnergy}%</span>
+                    </div>
+                    <div class="battery-container">
+                        <div class="bat-fill" style="width: ${currentUser.currentEnergy}%;"></div>
+                    </div>
+                    <div class="flex-between">
+                        <span>🏆 إجمالي الأنشطة: ${currentUser.totalStats.activitiesCount}</span>
+                        <span>🔥 إجمالي السعرات: ${currentUser.totalStats.totalCalories}</span>
+                    </div>
+                    <button class="btn-action" onclick="showActivityForm()">➕ تسجيل نشاط جديد</button>
+                    ${currentUser.currentEnergy < 30 ? '<div class="rest-alert">⚠️ طاقتك منخفضة! ينصح بأخذ قسط من الراحة.</div>' : ''}
+                </div>
+            `;
+        } else if (activeTab === 'dailyReport') {
+            tabContent.innerHTML = renderDailyReport();
+        } else if (activeTab === 'monthlyReport') {
+            tabContent.innerHTML = renderMonthlyReport();
+        }
+        
+        setTimeout(() => renderChart(), 100);
+    }
+    
+    window.setTab = (tab) => {
+        activeTab = tab;
+        renderMainApp();
+    };
+    
+    // شاشة تسجيل الدخول المتكاملة
+    function renderLoginScreen() {
+        const root = document.getElementById('root');
+        root.innerHTML = `
+            <div class="login-screen">
+                <div style="font-size: 48px; text-align:center; margin-bottom:8px;">🏃‍♂️⚡</div>
+                <h2>نظام تتبع الصحة والنشاطات</h2>
+                <p style="text-align:center; margin-bottom:20px;">تتبع ذكي | تحليل الطاقة | تقارير يومية وشهرية</p>
+                
+                <div class="form-group">
+                    <label>📧 البريد الإلكتروني</label>
+                    <input type="email" id="email" class="login-input" placeholder="example@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label>👤 الاسم الكامل</label>
+                    <input type="text" id="fullName" class="login-input" placeholder="أدخل اسمك الكامل">
+                </div>
+                
+                <div class="form-group">
+                    <label>⚥ الجنس</label>
+                    <select id="gender" class="form-select">
+                        <option value="ذكر">ذكر</option>
+                        <option value="أنثى">أنثى</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>🎂 العمر</label>
+                    <input type="number" id="age" class="login-input" placeholder="مثال: 25">
+                </div>
+                
+                <div class="form-group">
+                    <label>⚖️ الوزن (كغ)</label>
+                    <input type="number" id="weight" class="login-input" placeholder="مثال: 70" step="0.1">
+                </div>
+                
+                <div class="form-group">
+                    <label>🩺 هل تعاني من أمراض مزمنة؟</label>
+                    <select id="hasDiseases" class="form-select">
+                        <option value="لا">لا</option>
+                        <option value="نعم">نعم</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="diseasesGroup" style="display:none;">
+                    <label>📋 ما هي الأمراض التي تعاني منها؟</label>
+                    <textarea id="diseases" class="login-input" rows="2" placeholder="مثال: ضغط الدم، السكري..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>💪 الحالة الصحية العامة</label>
+                    <textarea id="healthStatus" class="login-input" rows="2" placeholder="صف حالتك الصحية..."></textarea>
+                </div>
+                
+                <button id="registerBtn" class="login-btn">🚀 بدء الرحلة الصحية</button>
+                <div style="margin-top: 16px; font-size: 11px; text-align:center; color:#aaa;">✓ حفظ تلقائي ✓ تقارير مفصلة ✓ نصائح مخصصة</div>
+            </div>
+        `;
+        
+        const hasDiseasesSelect = document.getElementById('hasDiseases');
+        const diseasesGroup = document.getElementById('diseasesGroup');
+        
+        hasDiseasesSelect.addEventListener('change', (e) => {
+            diseasesGroup.style.display = e.target.value === 'نعم' ? 'block' : 'none';
+        });
+        
+        document.getElementById('registerBtn').onclick = () => {
+            const email = document.getElementById('email').value.trim();
+            const fullName = document.getElementById('fullName').value.trim();
+            const gender = document.getElementById('gender').value;
+            const age = document.getElementById('age').value;
+            const weight = document.getElementById('weight').value;
+            const hasDiseases = document.getElementById('hasDiseases').value;
+            const diseases = hasDiseases === 'نعم' ? document.getElementById('diseases').value : 'لا يوجد';
+            const healthStatus = document.getElementById('healthStatus').value || 'جيدة';
+            
+            if (!email || !fullName || !age || !weight) {
+                alert('الرجاء ملء جميع الحقول الأساسية');
+                return;
+            }
+            
+            if (email.indexOf('@') === -1) {
+                alert('الرجاء إدخال بريد إلكتروني صحيح');
+                return;
+            }
+            
+            if (parseInt(age) < 10 || parseInt(age) > 120) {
+                alert('الرجاء إدخال عمر صحيح');
+                return;
+            }
+            
+            if (parseFloat(weight) < 20 || parseFloat(weight) > 300) {
+                alert('الرجاء إدخال وزن صحيح');
+                return;
+            }
+            
+            currentUser = getOrCreateUser({
+                email: email,
+                fullName: fullName,
+                gender: gender,
+                age: age,
+                weight: weight,
+                healthConditions: healthStatus,
+                diseases: diseases
+            });
+            
+            renderMainApp();
+        };
+    }
+    
+    // بدء التشغيل
+    renderLoginScreen();
+</script>
+</body>
+</html>
