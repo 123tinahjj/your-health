@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>نظام تتبع الصحة والنشاطات الذكي | مرجلة متكاملة</title>
+    <title>نظام تتبع الصحة الذكي | Smart Health Tracker</title>
     <style>
         * {
             margin: 0;
@@ -12,44 +12,88 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        body {
-            background: linear-gradient(145deg, #0a0a0f 0%, #030303 100%);
-            font-family: 'Segoe UI', 'Cairo', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-            min-height: 100vh;
-            padding: 16px;
-            color: #f0f0f0;
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #121218;
+            --bg-card: rgba(18, 18, 24, 0.98);
+            --border-color: #2a2a35;
+            --accent-primary: #ff4b5f;
+            --accent-secondary: #ff8c42;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a8;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --info: #2196f3;
         }
 
+        body.light-mode {
+            --bg-primary: #f5f5f7;
+            --bg-secondary: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.98);
+            --border-color: #e0e0e5;
+            --text-primary: #1a1a1f;
+            --text-secondary: #5a5a6a;
+        }
+
+        body {
+            background: var(--bg-primary);
+            font-family: 'Segoe UI', 'Cairo', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-primary);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* responsive container - يتكيف مع الحاسوب والهاتف */
         .app-container {
-            max-width: 550px;
+            max-width: 1400px;
             margin: 0 auto;
             width: 100%;
         }
 
-        .card {
-            background: rgba(18, 18, 24, 0.95);
-            backdrop-filter: blur(2px);
-            border-radius: 32px;
-            padding: 20px 18px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255, 75, 95, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        /* للحاسوب: عرض شبكي */
+        @media (min-width: 1024px) {
+            .dashboard-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+            .full-width {
+                grid-column: span 2;
+            }
+            body {
+                padding: 30px;
+            }
         }
 
+        /* كروت */
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(2px);
+            border-radius: 28px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        /* شاشة تسجيل الدخول */
         .login-screen {
-            background: rgba(12, 12, 18, 0.98);
+            background: var(--bg-card);
             border-radius: 48px;
-            padding: 32px 24px;
-            border: 1px solid #ff4b5f;
-            box-shadow: 0 20px 40px rgba(255, 75, 95, 0.2);
+            padding: 32px;
+            border: 1px solid var(--accent-primary);
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         .login-screen h2 {
-            background: linear-gradient(135deg, #ff4b5f, #ff8c42);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            font-size: 28px;
+            font-size: 26px;
             margin-bottom: 12px;
             text-align: center;
         }
@@ -61,41 +105,29 @@
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-size: 14px;
-            color: #ffb347;
+            font-size: 13px;
+            color: var(--accent-secondary);
             font-weight: bold;
         }
 
         .login-input, .form-select {
             width: 100%;
             padding: 14px 18px;
-            background: #1e1e2a;
-            border: 2px solid #2d2d3a;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
             border-radius: 60px;
-            color: white;
+            color: var(--text-primary);
             font-size: 15px;
             transition: 0.2s;
         }
 
         .login-input:focus, .form-select:focus {
             outline: none;
-            border-color: #ff4b5f;
-            background: #252530;
-        }
-
-        .form-select {
-            appearance: none;
-            cursor: pointer;
-        }
-
-        textarea.login-input {
-            border-radius: 24px;
-            resize: vertical;
-            font-family: inherit;
+            border-color: var(--accent-primary);
         }
 
         .login-btn {
-            background: linear-gradient(95deg, #ff4b5f, #ff6a4b);
+            background: linear-gradient(95deg, var(--accent-primary), var(--accent-secondary));
             border: none;
             padding: 16px;
             width: 100%;
@@ -108,46 +140,51 @@
             margin-top: 8px;
         }
 
-        .login-btn:active { transform: scale(0.97); }
+        .btn-danger {
+            background: linear-gradient(95deg, #dc3545, #c82333);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            border: 1px solid var(--accent-primary);
+            color: var(--accent-primary);
+        }
 
         .tabs {
             display: flex;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             flex-wrap: wrap;
         }
 
         .tab {
-            flex: 1;
-            background: #1a1a22;
-            text-align: center;
-            padding: 12px 0;
+            padding: 12px 24px;
+            background: var(--bg-secondary);
             border-radius: 60px;
-            font-weight: bold;
             cursor: pointer;
             transition: 0.2s;
-            border: 1px solid #2c2c38;
-            font-size: 14px;
+            border: 1px solid var(--border-color);
+            font-weight: bold;
         }
 
         .tab.active {
-            background: linear-gradient(95deg, #ff4b5f, #ff6a4b);
-            border-color: #ff8a6b;
+            background: linear-gradient(95deg, var(--accent-primary), var(--accent-secondary));
+            border-color: transparent;
             color: white;
         }
 
         .battery-container {
-            background: #2a2a32;
-            height: 20px;
+            background: var(--border-color);
+            height: 30px;
             border-radius: 40px;
             overflow: hidden;
-            margin: 12px 0;
+            margin: 15px 0;
         }
 
         .bat-fill {
             height: 100%;
-            background: linear-gradient(90deg, #ff4b5f, #ffb347);
-            transition: width 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            transition: width 0.5s;
             border-radius: 40px;
         }
 
@@ -155,13 +192,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 10px 0;
+            margin: 12px 0;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
         }
 
         .btn-action {
-            background: linear-gradient(95deg, #ff4b5f, #ff6a4b);
+            background: linear-gradient(95deg, var(--accent-primary), var(--accent-secondary));
             width: 100%;
             padding: 16px;
             border: none;
@@ -171,93 +208,42 @@
             color: white;
             margin: 12px 0;
             cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .btn-secondary {
-            background: #2a2a34;
-            border: 1px solid #ff4b5f;
-        }
-
-        .nutrition-card {
-            background: linear-gradient(135deg, #1b2a2a, #0f1a1f);
-            border-radius: 28px;
-            padding: 18px;
-            margin: 16px 0;
-            border-right: 4px solid #ffb347;
         }
 
         .rest-alert {
             background: rgba(255, 75, 95, 0.15);
-            border: 1px solid #ff4b5f;
+            border: 1px solid var(--accent-primary);
             border-radius: 28px;
             padding: 16px;
             margin: 12px 0;
             text-align: center;
         }
 
-        .stat-badge {
-            background: #1e1e28;
-            padding: 10px;
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: 16px;
             border-radius: 24px;
             text-align: center;
-            flex: 1;
-            font-size: 13px;
         }
 
         .history-log {
-            max-height: 150px;
-            overflow-y: auto;
-            background: #0e0e14;
-            border-radius: 24px;
-            padding: 12px;
-            font-size: 12px;
-            margin-top: 16px;
-        }
-
-        .logout-btn {
-            background: #2a2a34;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 40px;
-            color: #ff8a6b;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
-        .chart-wrap {
-            margin-top: 20px;
-            background: #0b0b10;
-            border-radius: 28px;
-            padding: 12px;
-        }
-
-        canvas {
             max-height: 200px;
-            width: 100%;
-        }
-
-        .mini-stats {
-            display: flex;
-            gap: 12px;
-            margin: 16px 0;
-            flex-wrap: wrap;
-        }
-
-        .glow-text {
-            color: #ffb347;
-            font-weight: bold;
+            overflow-y: auto;
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            padding: 16px;
+            margin-top: 16px;
         }
 
         .activity-selector {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 12px;
             margin: 16px 0;
         }
 
         .activity-option {
-            background: #1e1e28;
+            background: var(--bg-secondary);
             padding: 12px;
             text-align: center;
             border-radius: 28px;
@@ -267,9 +253,8 @@
         }
 
         .activity-option.selected {
-            border-color: #ff4b5f;
-            background: #2a2a38;
-            box-shadow: 0 0 10px rgba(255, 75, 95, 0.3);
+            border-color: var(--accent-primary);
+            background: rgba(255, 75, 95, 0.1);
         }
 
         .intensity-btns {
@@ -280,57 +265,88 @@
 
         .intensity-btn {
             flex: 1;
-            background: #1e1e28;
+            background: var(--bg-secondary);
             padding: 12px;
             text-align: center;
             border-radius: 40px;
             cursor: pointer;
-            transition: 0.2s;
         }
 
         .intensity-btn.selected {
-            background: #ff4b5f;
+            background: var(--accent-primary);
+            color: white;
         }
 
-        .report-card {
-            background: #0f0f16;
-            border-radius: 28px;
-            padding: 16px;
-            margin: 12px 0;
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        .daily-report, .monthly-report {
-            background: #0a0a10;
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: 32px;
+            max-width: 550px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 28px;
+        }
+
+        .lang-switch {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .lang-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .lang-btn.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: white;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .chart-box {
+            background: var(--bg-secondary);
             border-radius: 24px;
             padding: 16px;
-            margin-bottom: 16px;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        canvas {
+            max-height: 220px;
+            width: 100%;
         }
 
-        button {
-            font-family: inherit;
-        }
-
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
             body {
-                padding: 8px;
+                padding: 12px;
             }
             .tab {
+                padding: 8px 16px;
                 font-size: 12px;
-                padding: 10px 0;
-            }
-            .stat-badge {
-                font-size: 11px;
             }
         }
     </style>
@@ -340,123 +356,250 @@
 <div class="app-container" id="root"></div>
 
 <script>
-    // ====================== نظام التتبع الصحي المتكامل ======================
+    // ====================== النظام المتكامل ======================
     
-    const STORAGE_KEY = 'health_tracker_pro_v2';
+    const STORAGE_KEY = 'health_tracker_pro_final';
+    const ADMIN_PASSWORD = '1234';
     
-    function getTodayKey() {
-        return new Date().toISOString().slice(0,10);
+    let currentUser = null;
+    let activeTab = 'activities';
+    let currentLang = 'ar';
+    let isLightMode = false;
+    let charts = { pie: null, bar: null, line: null };
+    
+    // ملف الترجمة
+    const translations = {
+        ar: {
+            appTitle: 'نظام تتبع الصحة الذكي',
+            login: 'تسجيل الدخول',
+            email: 'البريد الإلكتروني',
+            fullName: 'الاسم الكامل',
+            gender: 'الجنس',
+            male: 'ذكر',
+            female: 'أنثى',
+            age: 'العمر',
+            weight: 'الوزن (كغ)',
+            height: 'الطول (سم)',
+            healthStatus: 'الحالة الصحية',
+            startJourney: '🚀 بدء الرحلة',
+            deleteAllData: '🗑️ حذف كل البيانات',
+            passwordRequired: 'كلمة السر مطلوبة (1234)',
+            energy: 'الطاقة',
+            activities: 'النشاطات',
+            dailyReport: 'تقرير يومي',
+            monthlyReport: 'تقرير شهري',
+            newActivity: 'تسجيل نشاط جديد',
+            sleepTime: 'وقت النوم',
+            wakeTime: 'وقت الاستيقاظ',
+            meals: 'الوجبات',
+            previousActivity: 'الأنشطة السابقة',
+            activityType: 'نوع النشاط',
+            duration: 'المدة (دقائق)',
+            intensity: 'الشدة',
+            light: 'هادئ',
+            medium: 'متوسط',
+            intense: 'شديد',
+            cancel: 'إلغاء',
+            submit: 'تسجيل',
+            logout: 'خروج',
+            theme: 'الوضع',
+            restRequired: 'الراحة المطلوبة',
+            calories: 'سعرات',
+            totalStats: 'إحصائيات',
+            noData: 'لا توجد بيانات',
+            deleteConfirm: '⚠️ سيتم حذف جميع بياناتك نهائياً. أدخل كلمة السر 1234 للتأكيد',
+            wrongPassword: 'كلمة السر غير صحيحة',
+            logoutConfirm: 'أدخل كلمة السر 1234 لتسجيل الخروج',
+            dailySummary: 'ملخص نهاية اليوم'
+        },
+        en: {
+            appTitle: 'Smart Health Tracker',
+            login: 'Login',
+            email: 'Email',
+            fullName: 'Full Name',
+            gender: 'Gender',
+            male: 'Male',
+            female: 'Female',
+            age: 'Age',
+            weight: 'Weight (kg)',
+            height: 'Height (cm)',
+            healthStatus: 'Health Status',
+            startJourney: '🚀 Start Journey',
+            deleteAllData: '🗑️ Delete All Data',
+            passwordRequired: 'Password required (1234)',
+            energy: 'Energy',
+            activities: 'Activities',
+            dailyReport: 'Daily Report',
+            monthlyReport: 'Monthly Report',
+            newActivity: 'New Activity',
+            sleepTime: 'Sleep Time',
+            wakeTime: 'Wake Time',
+            meals: 'Meals',
+            previousActivity: 'Previous Activities',
+            activityType: 'Activity Type',
+            duration: 'Duration (min)',
+            intensity: 'Intensity',
+            light: 'Light',
+            medium: 'Medium',
+            intense: 'Intense',
+            cancel: 'Cancel',
+            submit: 'Submit',
+            logout: 'Logout',
+            theme: 'Theme',
+            restRequired: 'Rest Required',
+            calories: 'Calories',
+            totalStats: 'Statistics',
+            noData: 'No Data',
+            deleteConfirm: '⚠️ All data will be permanently deleted. Enter password 1234 to confirm',
+            wrongPassword: 'Wrong password',
+            logoutConfirm: 'Enter password 1234 to logout',
+            dailySummary: 'End of Day Summary'
+        }
+    };
+    
+    function t(key) {
+        return translations[currentLang][key] || key;
     }
     
-    // إنشاء مستخدم جديد مع جميع البيانات
-    function createFullUser(userData) {
+    // معاملات METs
+    const MET_VALUES = {
+        'مشي بطيء': 3.0, 'Slow Walk': 3.0,
+        'مشي سريع': 4.5, 'Fast Walk': 4.5,
+        'جري (8كم/س)': 8.0, 'Jogging': 8.0,
+        'جري سريع': 12.0, 'Running': 12.0,
+        'تمارين خفيفة': 4.0, 'Light Exercise': 4.0,
+        'تمارين مكثفة': 7.0, 'Intense Exercise': 7.0,
+        'تضاجع (رجل)': 3.5, 'Sex (Male)': 3.5,
+        'تضاجع (أنثى)': 3.0, 'Sex (Female)': 3.0,
+        'تضاجع (ذكر يضاجع)': 3.5, 'Sex (Active Male)': 3.5,
+        'تضاجع (أنثى تضاجع)': 3.0, 'Sex (Active Female)': 3.0
+    };
+    
+    const PREVIOUS_ACTIVITY_IMPACT = {
+        'لا شيء': 0, 'None': 0,
+        'عمل شاق': 15, 'Hard Work': 15,
+        'تمرين مكثف': 20, 'Intense Exercise': 20,
+        'إجهاد عام': 10, 'Stress': 10,
+        'قلة نوم': 12, 'Lack of Sleep': 12
+    };
+    
+    function calculateBMR(weight, height, age, gender) {
+        if (gender === 'ذكر' || gender === 'Male') {
+            return 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+        } else {
+            return 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+        }
+    }
+    
+    function calculateCalories(met, weight, duration) {
+        return met * weight * (duration / 60);
+    }
+    
+    function calculateEnergyDrain(calories, bmr) {
+        const hourlyBMR = bmr / 24;
+        return Math.min(85, Math.max(5, Math.round((calories / hourlyBMR) * 100)));
+    }
+    
+    function calculateWakeDrain(wakeHours) {
+        return Math.min(70, wakeHours * 4.5);
+    }
+    
+    function calculateRest(energyDrain, duration) {
+        return Math.min(16, Math.max(1, Math.round(((energyDrain / 12) + (duration / 60)) * 10) / 10));
+    }
+    
+    function getTodayKey() { return new Date().toISOString().slice(0, 10); }
+    function getCurrentMonthKey() { return new Date().toISOString().slice(0, 7); }
+    
+    function createNewUser(userData) {
         const today = getTodayKey();
+        const month = getCurrentMonthKey();
+        const bmr = calculateBMR(userData.weight, userData.height || 170, userData.age, userData.gender);
+        
         return {
             email: userData.email,
             fullName: userData.fullName,
             gender: userData.gender,
             age: parseInt(userData.age),
             weight: parseFloat(userData.weight),
-            healthConditions: userData.healthConditions || 'لا يوجد',
-            diseases: userData.diseases || 'لا يوجد',
+            height: parseFloat(userData.height || 170),
+            bmr: bmr,
+            healthConditions: userData.healthConditions || '',
             createdAt: Date.now(),
-            
-            // بيانات الطاقة والنشاطات
-            currentEnergy: 100, // نسبة الطاقة الحالية
+            currentEnergy: 100,
             lastActivityTime: 0,
-            lastActivityType: null,
-            
-            // سجل النشاطات اليومية
-            dailyActivities: {},
-            
-            // سجل اليومي الكامل
-            dailyLogs: {
-                [today]: {
-                    sleepTime: '',
-                    wakeTime: '',
-                    meals: [],
-                    previousActivities: '',
-                    activities: []
-                }
-            },
-            
-            // الإحصائيات الكلية
-            totalStats: {
-                activitiesCount: 0,
-                totalCalories: 0,
-                byType: {
-                    'تضاجع': 0,
-                    'جري': 0,
-                    'مشي': 0,
-                    'تمارين': 0,
-                    'اخرى': 0
-                }
-            },
-            
+            dailyLogs: { [today]: { sleepTime: '', wakeTime: '', wakeHours: 0, meals: [], previousActivities: '', activities: [], daySummary: null } },
+            monthlyLogs: { [month]: { activities: [], totalCalories: 0, totalActivities: 0 } },
+            totalStats: { activitiesCount: 0, totalCalories: 0, byType: {} },
             lastDateReset: today,
-            registrationComplete: true
+            lastMonthReset: month
         };
     }
     
-    // تحميل قاعدة البيانات
     function loadAllUsers() {
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return {};
-        try { return JSON.parse(raw); } catch(e) { return {}; }
+        return raw ? JSON.parse(raw) : {};
     }
     
     function saveAllUsers(db) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
     }
     
-    // الحصول على المستخدم أو إنشاؤه مع البيانات الكاملة
+    function checkAndResetDay(user) {
+        const today = getTodayKey();
+        const month = getCurrentMonthKey();
+        let changed = false;
+        
+        // إعادة ضبط يومية عند منتصف الليل
+        if (user.lastDateReset !== today) {
+            // إنشاء ملخص نهاية اليوم
+            const yesterday = user.lastDateReset;
+            if (yesterday && user.dailyLogs[yesterday] && user.dailyLogs[yesterday].activities.length > 0) {
+                const activities = user.dailyLogs[yesterday].activities;
+                const totalCalories = activities.reduce((s, a) => s + a.calories, 0);
+                const totalEnergyDrain = activities.reduce((s, a) => s + a.energyDrain, 0);
+                user.dailyLogs[yesterday].daySummary = {
+                    date: yesterday,
+                    totalCalories: totalCalories,
+                    totalEnergyDrain: totalEnergyDrain,
+                    activitiesCount: activities.length,
+                    finalEnergy: activities[activities.length - 1]?.energyAfter || 100
+                };
+            }
+            
+            // بدء يوم جديد
+            user.currentEnergy = 100;
+            user.lastDateReset = today;
+            if (!user.dailyLogs[today]) {
+                user.dailyLogs[today] = { sleepTime: '', wakeTime: '', wakeHours: 0, meals: [], previousActivities: '', activities: [], daySummary: null };
+            }
+            changed = true;
+        }
+        
+        // إعادة ضبط شهرية
+        if (user.lastMonthReset !== month) {
+            if (!user.monthlyLogs[month]) {
+                user.monthlyLogs[month] = { activities: [], totalCalories: 0, totalActivities: 0 };
+            }
+            user.lastMonthReset = month;
+            changed = true;
+        }
+        
+        return changed;
+    }
+    
     function getOrCreateUser(userData) {
         const db = loadAllUsers();
         const email = userData.email.trim().toLowerCase();
         
         if (!db[email]) {
-            db[email] = createFullUser(userData);
+            db[email] = createNewUser(userData);
             saveAllUsers(db);
         }
         
         let user = db[email];
-        const today = getTodayKey();
-        
-        // إعادة ضبط يومية
-        if (user.lastDateReset !== today) {
-            // تجديد الطاقة بنسبة 100% بعد النوم
-            user.currentEnergy = 100;
-            user.lastDateReset = today;
-            
-            // إنشاء سجل لليوم الجديد
-            if (!user.dailyLogs[today]) {
-                user.dailyLogs[today] = {
-                    sleepTime: '',
-                    wakeTime: '',
-                    meals: [],
-                    previousActivities: '',
-                    activities: []
-                };
-            }
-            
-            saveAllUsers(db);
-        }
-        
-        if (!user.dailyLogs[today]) {
-            user.dailyLogs[today] = {
-                sleepTime: '',
-                wakeTime: '',
-                meals: [],
-                previousActivities: '',
-                activities: []
-            };
-            saveAllUsers(db);
-        }
-        
-        if (!user.dailyActivities[today]) {
-            user.dailyActivities[today] = [];
-            saveAllUsers(db);
-        }
+        checkAndResetDay(user);
+        saveAllUsers(db);
         
         return user;
     }
@@ -467,359 +610,204 @@
         saveAllUsers(db);
     }
     
-    // حساب السعرات المحروقة بناءً على النشاط والوزن والمدة والكثافة
-    function calculateCalories(activityType, weight, durationMinutes, intensity) {
-        const MET = {
-            'تضاجع': 1.5,
-            'مشي': 3.5,
-            'جري': 8.0,
-            'تمارين': 6.0,
-            'اخرى': 4.0
-        };
-        
-        let intensityMultiplier = 1;
-        if (intensity === 'سريع') intensityMultiplier = 1.3;
-        else if (intensity === 'متوسط') intensityMultiplier = 1;
-        else intensityMultiplier = 0.7;
-        
-        const metValue = (MET[activityType] || 4) * intensityMultiplier;
-        const calories = (metValue * weight * durationMinutes) / 60;
-        return Math.round(calories);
-    }
-    
-    // حساب استهلاك الطاقة
-    function calculateEnergyDrain(activityType, durationMinutes, intensity) {
-        let baseDrain = 15;
-        if (activityType === 'جري') baseDrain = 35;
-        else if (activityType === 'تمارين') baseDrain = 25;
-        else if (activityType === 'مشي') baseDrain = 10;
-        else if (activityType === 'تضاجع') baseDrain = 5;
-        
-        let durationFactor = Math.min(1.5, durationMinutes / 30);
-        let intensityFactor = intensity === 'سريع' ? 1.4 : (intensity === 'متوسط' ? 1 : 0.6);
-        
-        let drain = Math.round(baseDrain * durationFactor * intensityFactor);
-        return Math.min(70, drain);
-    }
-    
-    // حساب وقت الراحة المطلوب
-    function calculateRestTime(energyDrain, intensity) {
-        let baseRest = energyDrain / 10;
-        if (intensity === 'سريع') baseRest *= 1.5;
-        return Math.max(1, Math.min(8, Math.round(baseRest)));
-    }
-    
-    // تقديم نصائح مخصصة حسب النشاط والطاقة
-    function getPersonalizedAdvice(activityType, energyAfter, restHours) {
-        if (energyAfter < 20) {
-            return "⚠️ تحذير: طاقتك منخفضة جداً! تحتاج إلى راحة كاملة وتناول وجبة غنية بالبروتين والكربوهيدرات.";
-        } else if (energyAfter < 50) {
-            return "😴 أنشطتك استنزفت جزءاً كبيراً من طاقتك. يفضل أخذ قسط من الراحة وتناول سناكات صحية.";
-        } else if (restHours > 3) {
-            return "💪 نشاط مكثف! يحتاج جسمك إلى تعافي جيد. اشرب الماء وتناول وجبة غنية بالبروتين.";
-        } else {
-            return "👍 أداء ممتاز! يمكنك الاستمرار بأنشطة خفيفة أو أخذ استراحة قصيرة.";
-        }
-    }
-    
-    // تسجيل نشاط جديد
-    function recordActivity(activityData) {
-        if (!currentUser) return null;
-        
-        const user = currentUser;
+    function recordActivity(activityData, user) {
         const today = getTodayKey();
+        const month = getCurrentMonthKey();
         
-        // حساب السعرات والطاقة
-        const calories = calculateCalories(activityData.type, user.weight, activityData.duration, activityData.intensity);
-        const energyDrain = calculateEnergyDrain(activityData.type, activityData.duration, activityData.intensity);
-        const newEnergy = Math.max(0, user.currentEnergy - energyDrain);
-        const restRequired = calculateRestTime(energyDrain, activityData.intensity);
+        const met = MET_VALUES[activityData.type] || 4.0;
+        const calories = calculateCalories(met, user.weight, activityData.duration);
+        const energyDrain = calculateEnergyDrain(calories, user.bmr);
+        const wakeDrain = calculateWakeDrain(activityData.wakeHours || 0);
+        const prevImpact = activityData.previousActivityImpact || 0;
         
-        // تسجيل النشاط
+        let energyBefore = user.currentEnergy - wakeDrain - prevImpact;
+        energyBefore = Math.max(10, Math.min(100, energyBefore));
+        const energyAfter = Math.max(0, energyBefore - energyDrain);
+        const restRequired = calculateRest(energyDrain, activityData.duration);
+        
         const activityRecord = {
             id: Date.now(),
             timestamp: new Date().toISOString(),
-            time: new Date().toLocaleTimeString('ar-EG'),
+            time: new Date().toLocaleTimeString(currentLang === 'ar' ? 'ar-EG' : 'en-US'),
             type: activityData.type,
             duration: activityData.duration,
             intensity: activityData.intensity,
-            calories: calories,
+            calories: Math.round(calories),
             energyDrain: energyDrain,
-            energyBefore: user.currentEnergy,
-            energyAfter: newEnergy,
-            sleepTime: activityData.sleepTime || '',
-            wakeTime: activityData.wakeTime || '',
-            meals: activityData.meals || [],
-            previousActivities: activityData.previousActivities || ''
+            energyBefore: Math.round(energyBefore),
+            energyAfter: Math.round(energyAfter),
+            sleepTime: activityData.sleepTime,
+            wakeTime: activityData.wakeTime,
+            meals: activityData.meals,
+            previousActivities: activityData.previousActivities
         };
         
-        // تحديث بيانات المستخدم
-        user.currentEnergy = newEnergy;
+        user.currentEnergy = Math.round(energyAfter);
         user.lastActivityTime = Date.now();
-        user.lastActivityType = activityData.type;
         
-        // حفظ في السجل اليومي
         if (!user.dailyLogs[today]) {
-            user.dailyLogs[today] = { sleepTime: '', wakeTime: '', meals: [], previousActivities: '', activities: [] };
+            user.dailyLogs[today] = { sleepTime: '', wakeTime: '', wakeHours: 0, meals: [], previousActivities: '', activities: [], daySummary: null };
         }
         
         user.dailyLogs[today].activities.push(activityRecord);
-        
         if (activityData.sleepTime) user.dailyLogs[today].sleepTime = activityData.sleepTime;
         if (activityData.wakeTime) user.dailyLogs[today].wakeTime = activityData.wakeTime;
-        if (activityData.meals && activityData.meals.length) user.dailyLogs[today].meals = activityData.meals;
-        if (activityData.previousActivities) user.dailyLogs[today].previousActivities = activityData.previousActivities;
+        if (activityData.wakeHours) user.dailyLogs[today].wakeHours = activityData.wakeHours;
+        if (activityData.meals?.length) user.dailyLogs[today].meals = activityData.meals;
         
-        // تحديث الإحصائيات الكلية
+        // تحديث الإحصائيات الشهرية
+        if (!user.monthlyLogs[month]) {
+            user.monthlyLogs[month] = { activities: [], totalCalories: 0, totalActivities: 0 };
+        }
+        user.monthlyLogs[month].activities.push(activityRecord);
+        user.monthlyLogs[month].totalCalories += Math.round(calories);
+        user.monthlyLogs[month].totalActivities++;
+        
         user.totalStats.activitiesCount++;
-        user.totalStats.totalCalories += calories;
+        user.totalStats.totalCalories += Math.round(calories);
         user.totalStats.byType[activityData.type] = (user.totalStats.byType[activityData.type] || 0) + 1;
-        
-        // حفظ في dailyActivities للرسوم البيانية
-        if (!user.dailyActivities[today]) user.dailyActivities[today] = [];
-        user.dailyActivities[today].push({
-            type: activityData.type,
-            calories: calories,
-            energyDrain: energyDrain
-        });
         
         persistUser(user);
         
-        return {
-            calories: calories,
-            energyDrain: energyDrain,
-            energyAfter: newEnergy,
-            restRequired: restRequired,
-            advice: getPersonalizedAdvice(activityData.type, newEnergy, restRequired)
-        };
+        return { calories: Math.round(calories), energyDrain, energyAfter, restRequired };
     }
     
-    // متغيرات الجلسة
-    let currentUser = null;
-    let activeTab = 'activities'; // activities, dailyReport, monthlyReport
-    let chartInstance = null;
-    let chartPeriod = 'week';
-    let selectedActivityType = 'مشي';
-    let selectedIntensity = 'متوسط';
+    function verifyPassword(callback) {
+        const pwd = prompt(t('passwordRequired'));
+        if (pwd === ADMIN_PASSWORD) callback(true);
+        else { alert(t('wrongPassword')); callback(false); }
+    }
     
-    // تسجيل الخروج
     function logout() {
-        currentUser = null;
-        renderLoginScreen();
+        verifyPassword((success) => {
+            if (success) { currentUser = null; renderLoginScreen(); }
+        });
     }
     
-    // رسم البيان
-    function renderChart() {
-        if (!currentUser) return;
-        const canvas = document.getElementById('statsCanvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        
-        const dailyActs = currentUser.dailyActivities || {};
-        const sortedDays = Object.keys(dailyActs).sort().slice(-30);
-        
-        const caloriesData = sortedDays.map(day => {
-            const acts = dailyActs[day] || [];
-            return acts.reduce((sum, a) => sum + (a.calories || 0), 0);
-        });
-        
-        if (chartInstance) chartInstance.destroy();
-        
-        chartInstance = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: sortedDays.map(d => d.slice(5)),
-                datasets: [{
-                    label: 'السعرات المحروقة',
-                    data: caloriesData,
-                    backgroundColor: 'rgba(255, 75, 95, 0.2)',
-                    borderColor: '#ff4b5f',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.3,
-                    pointBackgroundColor: '#ffb347'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: { labels: { color: '#ddd', font: { size: 11 } } }
-                },
-                scales: {
-                    y: { beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#ccc' } },
-                    x: { ticks: { color: '#ccc', maxRotation: 45, minRotation: 45 } }
-                }
+    function deleteAllUserData(email) {
+        verifyPassword((success) => {
+            if (success) {
+                const db = loadAllUsers();
+                delete db[email];
+                saveAllUsers(db);
+                alert('✅ تم حذف جميع البيانات');
+                renderLoginScreen();
             }
         });
     }
     
-    // عرض التقرير اليومي
-    function renderDailyReport() {
-        if (!currentUser) return '<div class="daily-report">لا توجد بيانات</div>';
+    function renderCharts(user) {
+        const month = getCurrentMonthKey();
+        const monthlyData = user.monthlyLogs[month] || { activities: [] };
+        const typeCount = {};
+        monthlyData.activities.forEach(a => { typeCount[a.type] = (typeCount[a.type] || 0) + 1; });
         
-        const today = getTodayKey();
-        const log = currentUser.dailyLogs[today] || { sleepTime: '', wakeTime: '', meals: [], previousActivities: '', activities: [] };
-        const activities = log.activities || [];
-        const totalCalories = activities.reduce((sum, a) => sum + (a.calories || 0), 0);
-        const totalEnergyDrain = activities.reduce((sum, a) => sum + (a.energyDrain || 0), 0);
+        const pieCtx = document.getElementById('pieChart')?.getContext('2d');
+        if (pieCtx) {
+            if (charts.pie) charts.pie.destroy();
+            charts.pie = new Chart(pieCtx, { type: 'pie', data: { labels: Object.keys(typeCount), datasets: [{ data: Object.values(typeCount), backgroundColor: ['#ff4b5f', '#ff8c42', '#4caf50', '#2196f3', '#9c27b0', '#00bcd4'] }] }, options: { responsive: true } });
+        }
         
-        return `
-            <div class="daily-report">
-                <h3 style="color:#ffb347; margin-bottom:16px;">📅 تقرير يوم ${today}</h3>
-                <div class="flex-between"><span>😴 وقت النوم:</span><span>${log.sleepTime || 'لم يسجل'}</span></div>
-                <div class="flex-between"><span>🌅 وقت الاستيقاظ:</span><span>${log.wakeTime || 'لم يسجل'}</span></div>
-                <div class="flex-between"><span>🍽️ الوجبات:</span><span>${log.meals.length ? log.meals.join(' - ') : 'لم يسجل'}</span></div>
-                <div class="flex-between"><span>📝 الأنشطة السابقة:</span><span>${log.previousActivities || 'لا يوجد'}</span></div>
-                <hr style="margin:12px 0; border-color:#333;">
-                <div class="flex-between"><span>🔥 إجمالي السعرات المحروقة:</span><span class="glow-text">${totalCalories} سعرة</span></div>
-                <div class="flex-between"><span>⚡ استنزاف الطاقة:</span><span>${totalEnergyDrain}%</span></div>
-                <div class="flex-between"><span>🔋 الطاقة المتبقية:</span><span>${currentUser.currentEnergy}%</span></div>
-                <div class="flex-between"><span>📊 عدد الأنشطة:</span><span>${activities.length}</span></div>
-                ${activities.length ? `
-                <div style="margin-top:12px;">
-                    <strong>📋 تفاصيل الأنشطة:</strong>
-                    ${activities.map(a => `
-                        <div style="background:#1a1a22; padding:10px; margin:8px 0; border-radius:16px;">
-                            <div>🕒 ${a.time} - <strong>${a.type}</strong> (${a.duration} دقيقة - ${a.intensity})</div>
-                            <div>🔥 ${a.calories} سعرة | ⚡ استنزاف ${a.energyDrain}%</div>
-                        </div>
-                    `).join('')}
-                </div>
-                ` : '<div style="margin-top:12px;">✨ لا توجد أنشطة مسجلة اليوم</div>'}
-            </div>
-        `;
+        const last7Days = [];
+        const last7Calories = [];
+        for (let i = 6; i >= 0; i--) {
+            const d = new Date();
+            d.setDate(d.getDate() - i);
+            const dateStr = d.toISOString().slice(0, 10);
+            last7Days.push(dateStr.slice(5));
+            const dayLog = user.dailyLogs[dateStr];
+            const cals = dayLog?.activities?.reduce((s, a) => s + a.calories, 0) || 0;
+            last7Calories.push(cals);
+        }
+        
+        const barCtx = document.getElementById('barChart')?.getContext('2d');
+        if (barCtx) {
+            if (charts.bar) charts.bar.destroy();
+            charts.bar = new Chart(barCtx, { type: 'bar', data: { labels: last7Days, datasets: [{ label: t('calories'), data: last7Calories, backgroundColor: '#ff4b5f' }] }, options: { responsive: true } });
+        }
+        
+        const lineCtx = document.getElementById('lineChart')?.getContext('2d');
+        if (lineCtx) {
+            const energyData = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const dateStr = d.toISOString().slice(0, 10);
+                const lastAct = user.dailyLogs[dateStr]?.activities?.slice(-1)[0];
+                energyData.push(lastAct?.energyAfter || 100);
+            }
+            if (charts.line) charts.line.destroy();
+            charts.line = new Chart(lineCtx, { type: 'line', data: { labels: last7Days, datasets: [{ label: t('energy') + ' %', data: energyData, borderColor: '#ff8c42', fill: true }] }, options: { responsive: true } });
+        }
     }
     
-    // عرض التقرير الشهري
-    function renderMonthlyReport() {
-        if (!currentUser) return '<div>لا توجد بيانات</div>';
-        
-        const dailyActs = currentUser.dailyActivities || {};
-        const last30Days = Object.keys(dailyActs).sort().slice(-30);
-        
-        let totalActivities = 0;
-        let totalCalories = 0;
-        let typeStats = { 'تضاجع': 0, 'جري': 0, 'مشي': 0, 'تمارين': 0, 'اخرى': 0 };
-        
-        last30Days.forEach(day => {
-            const acts = dailyActs[day] || [];
-            acts.forEach(a => {
-                totalActivities++;
-                totalCalories += a.calories || 0;
-                if (typeStats[a.type] !== undefined) typeStats[a.type]++;
-                else typeStats['اخرى']++;
-            });
-        });
-        
-        return `
-            <div class="monthly-report">
-                <h3 style="color:#ffb347; margin-bottom:16px;">📊 التقرير الشهري (آخر 30 يوم)</h3>
-                <div class="flex-between"><span>📆 عدد الأيام النشطة:</span><span>${last30Days.filter(d => (dailyActs[d] || []).length > 0).length}</span></div>
-                <div class="flex-between"><span>🎯 إجمالي الأنشطة:</span><span>${totalActivities}</span></div>
-                <div class="flex-between"><span>🔥 إجمالي السعرات المحروقة:</span><span class="glow-text">${totalCalories} سعرة</span></div>
-                <div class="flex-between"><span>🏆 متوسط السعرات يومياً:</span><span>${Math.round(totalCalories / 30)} سعرة</span></div>
-                <hr style="margin:12px 0; border-color:#333;">
-                <div><strong>📈 توزيع الأنشطة:</strong></div>
-                ${Object.entries(typeStats).map(([type, count]) => count > 0 ? `
-                    <div class="flex-between"><span>${type === 'تضاجع' ? '💑' : type === 'جري' ? '🏃' : type === 'مشي' ? '🚶' : type === 'تمارين' ? '💪' : '📌'} ${type}:</span><span>${count} مرة</span></div>
-                ` : '').join('')}
-            </div>
-        `;
-    }
+    let selectedActivityType = 'مشي سريع';
+    let selectedIntensity = 'متوسط';
     
-    // نافذة إدخال النشاط
     function showActivityForm() {
+        const activityOptions = currentLang === 'ar' 
+            ? ['مشي بطيء', 'مشي سريع', 'جري (8كم/س)', 'جري سريع', 'تمارين خفيفة', 'تمارين مكثفة', 'تضاجع (رجل)', 'تضاجع (أنثى)']
+            : ['Slow Walk', 'Fast Walk', 'Jogging', 'Running', 'Light Exercise', 'Intense Exercise', 'Sex (Male)', 'Sex (Female)'];
+        
         const modalHtml = `
-            <div id="activityModal" style="position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.9); z-index:1000; display:flex; align-items:center; justify-content:center; padding:20px;">
-                <div style="background:#121218; border-radius:32px; max-width:500px; width:100%; max-height:90vh; overflow-y:auto; padding:24px;">
-                    <h3 style="color:#ffb347; margin-bottom:20px;">➕ تسجيل نشاط جديد</h3>
-                    
-                    <div class="form-group">
-                        <label>😴 متى نمت الليلة الماضية؟</label>
-                        <input type="time" id="sleepTime" class="login-input">
+            <div id="activityModal" class="modal">
+                <div class="modal-content">
+                    <h3 style="color: var(--accent-secondary);">➕ ${t('newActivity')}</h3>
+                    <div class="form-group"><label>😴 ${t('sleepTime')}</label><input type="time" id="sleepTime" class="login-input"></div>
+                    <div class="form-group"><label>🌅 ${t('wakeTime')}</label><input type="time" id="wakeTime" class="login-input"></div>
+                    <div class="form-group"><label>🍽️ ${t('meals')}</label><input type="text" id="meals" class="login-input"></div>
+                    <div class="form-group"><label>📝 ${t('previousActivity')}</label>
+                        <select id="prevActivityType" class="form-select">
+                            <option value="لا شيء">${currentLang === 'ar' ? 'لا شيء' : 'None'}</option>
+                            <option value="عمل شاق">${currentLang === 'ar' ? 'عمل شاق' : 'Hard Work'}</option>
+                            <option value="تمرين مكثف">${currentLang === 'ar' ? 'تمرين مكثف' : 'Intense Exercise'}</option>
+                            <option value="إجهاد عام">${currentLang === 'ar' ? 'إجهاد عام' : 'Stress'}</option>
+                            <option value="قلة نوم">${currentLang === 'ar' ? 'قلة نوم' : 'Lack of Sleep'}</option>
+                        </select>
                     </div>
-                    
-                    <div class="form-group">
-                        <label>🌅 متى استيقظت؟</label>
-                        <input type="time" id="wakeTime" class="login-input">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>🍽️ ماذا تناولت من طعام وشراب؟</label>
-                        <input type="text" id="meals" class="login-input" placeholder="مثال: فطور: بيض وخبز، غداء: دجاج ورز...">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>📝 ما هي الأنشطة التي قمت بها قبل هذا النشاط؟</label>
-                        <textarea id="prevActivities" class="login-input" rows="2" placeholder="مثال: مشيت ساعة، شربت قهوة..."></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>🏃‍♂️ اختر نوع النشاط:</label>
+                    <div class="form-group"><label>🏃 ${t('activityType')}</label>
                         <div class="activity-selector">
-                            ${['مشي', 'جري', 'تمارين', 'تضاجع', 'اخرى'].map(type => `
-                                <div class="activity-option ${selectedActivityType === type ? 'selected' : ''}" onclick="selectActivityType('${type}')">${type === 'تضاجع' ? '💑 تضاجع' : type === 'جري' ? '🏃 جري' : type === 'مشي' ? '🚶 مشي' : type === 'تمارين' ? '💪 تمارين' : '📌 اخرى'}</div>
-                            `).join('')}
+                            ${activityOptions.map(type => `<div class="activity-option ${selectedActivityType === type ? 'selected' : ''}" onclick="selectActivityType('${type}')">${type}</div>`).join('')}
                         </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label>⏱️ المدة (بالدقائق):</label>
-                        <input type="number" id="duration" class="login-input" min="1" max="300" value="30">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>⚡ شدة النشاط:</label>
+                    <div class="form-group"><label>⏱️ ${t('duration')}</label><input type="number" id="duration" class="login-input" min="1" max="300" value="30"></div>
+                    <div class="form-group"><label>⚡ ${t('intensity')}</label>
                         <div class="intensity-btns">
-                            ${['هادئ', 'متوسط', 'سريع'].map(int => `
-                                <div class="intensity-btn ${selectedIntensity === int ? 'selected' : ''}" onclick="selectIntensity('${int}')">${int === 'هادئ' ? '🐢 هادئ' : int === 'متوسط' ? '⚡ متوسط' : '🚀 سريع'}</div>
-                            `).join('')}
+                            ${[t('light'), t('medium'), t('intense')].map(int => `<div class="intensity-btn ${selectedIntensity === int ? 'selected' : ''}" onclick="selectIntensity('${int}')">${int}</div>`).join('')}
                         </div>
                     </div>
-                    
-                    <div style="display:flex; gap:12px; margin-top:24px;">
-                        <button onclick="closeModal()" class="btn-action" style="background:#2a2a34;">إلغاء</button>
-                        <button onclick="submitActivity()" class="btn-action">✅ تسجيل النشاط</button>
+                    <div style="display:flex; gap:12px; margin-top:20px;">
+                        <button onclick="closeModal()" class="login-btn btn-secondary">${t('cancel')}</button>
+                        <button onclick="submitActivity()" class="login-btn">${t('submit')}</button>
                     </div>
                 </div>
             </div>
         `;
-        
-        const existingModal = document.getElementById('activityModal');
-        if (existingModal) existingModal.remove();
-        
+        document.getElementById('dynamicModal')?.remove();
         const div = document.createElement('div');
+        div.id = 'dynamicModal';
         div.innerHTML = modalHtml;
-        document.body.appendChild(div.firstElementChild);
+        document.body.appendChild(div);
     }
     
-    window.selectActivityType = (type) => {
-        selectedActivityType = type;
-        showActivityForm();
-    };
-    
-    window.selectIntensity = (intensity) => {
-        selectedIntensity = intensity;
-        showActivityForm();
-    };
-    
-    window.closeModal = () => {
-        const modal = document.getElementById('activityModal');
-        if (modal) modal.remove();
-        renderMainApp();
-    };
+    window.selectActivityType = (type) => { selectedActivityType = type; showActivityForm(); };
+    window.selectIntensity = (int) => { selectedIntensity = int; showActivityForm(); };
+    window.closeModal = () => { document.getElementById('dynamicModal')?.remove(); renderMainApp(); };
     
     window.submitActivity = () => {
         const sleepTime = document.getElementById('sleepTime')?.value || '';
         const wakeTime = document.getElementById('wakeTime')?.value || '';
         const meals = document.getElementById('meals')?.value || '';
-        const prevActivities = document.getElementById('prevActivities')?.value || '';
+        const prevActivityType = document.getElementById('prevActivityType')?.value || 'لا شيء';
         const duration = parseInt(document.getElementById('duration')?.value || '30');
         
-        if (duration < 1 || duration > 300) {
-            alert('الرجاء إدخال مدة بين 1 و 300 دقيقة');
-            return;
+        let wakeHours = 0;
+        if (sleepTime && wakeTime) {
+            const sleepDate = new Date(`2000/01/01 ${sleepTime}`);
+            const wakeDate = new Date(`2000/01/01 ${wakeTime}`);
+            let diff = (wakeDate - sleepDate) / (1000 * 3600);
+            if (diff < 0) diff += 24;
+            wakeHours = Math.max(0, 24 - diff);
         }
         
         const result = recordActivity({
@@ -828,147 +816,125 @@
             intensity: selectedIntensity,
             sleepTime: sleepTime,
             wakeTime: wakeTime,
+            wakeHours: wakeHours,
             meals: meals ? [meals] : [],
-            previousActivities: prevActivities
-        });
+            previousActivities: prevActivityType,
+            previousActivityImpact: PREVIOUS_ACTIVITY_IMPACT[prevActivityType] || 0
+        }, currentUser);
         
-        if (result) {
-            alert(`✅ تم تسجيل النشاط!\n🔥 السعرات المحروقة: ${result.calories}\n⚡ استنزاف الطاقة: ${result.energyDrain}%\n🔋 الطاقة المتبقية: ${result.energyAfter}%\n⏰ الراحة الموصى بها: ${result.restRequired} ساعات\n\n${result.advice}`);
-        }
-        
+        alert(`✅ ${t('submit')}!\n🔥 ${t('calories')}: ${result.calories}\n⚡ ${t('energy')}: -${result.energyDrain}%\n🔋 ${t('energy')}: ${result.energyAfter}%\n⏰ ${t('restRequired')}: ${result.restRequired} ${currentLang === 'ar' ? 'ساعات' : 'hours'}`);
         closeModal();
+        renderMainApp();
     };
     
-    // عرض الواجهة الرئيسية
     function renderMainApp() {
         if (!currentUser) return;
+        checkAndResetDay(currentUser);
+        
+        const today = getTodayKey();
+        const month = getCurrentMonthKey();
+        const todayLog = currentUser.dailyLogs[today] || { activities: [] };
+        const monthlyData = currentUser.monthlyLogs[month] || { totalCalories: 0, totalActivities: 0 };
+        const energyEval = currentUser.currentEnergy >= 60 ? 'good' : (currentUser.currentEnergy >= 30 ? 'medium' : 'low');
         
         const html = `
             <div class="card">
                 <div class="flex-between">
-                    <div><span style="background:#ff4b5f20; padding:6px 14px; border-radius:30px;">👤 ${currentUser.fullName}</span></div>
-                    <button class="logout-btn" onclick="logout()">🚪 خروج</button>
+                    <div><span style="background:rgba(255,75,95,0.2); padding:8px 16px; border-radius:30px;">👤 ${currentUser.fullName}</span></div>
+                    <div class="lang-switch">
+                        <button class="lang-btn ${currentLang === 'ar' ? 'active' : ''}" onclick="setLang('ar')">عربي</button>
+                        <button class="lang-btn ${currentLang === 'en' ? 'active' : ''}" onclick="setLang('en')">EN</button>
+                        <button class="theme-toggle lang-btn" onclick="toggleTheme()">🌓</button>
+                        <button class="lang-btn" onclick="logout()">🚪 ${t('logout')}</button>
+                    </div>
                 </div>
                 
                 <div class="tabs">
-                    <div class="tab ${activeTab === 'activities' ? 'active' : ''}" onclick="setTab('activities')">⚡ نشاط جديد</div>
-                    <div class="tab ${activeTab === 'dailyReport' ? 'active' : ''}" onclick="setTab('dailyReport')">📅 تقرير يومي</div>
-                    <div class="tab ${activeTab === 'monthlyReport' ? 'active' : ''}" onclick="setTab('monthlyReport')">📊 تقرير شهري</div>
+                    <div class="tab ${activeTab === 'activities' ? 'active' : ''}" onclick="setTab('activities')">⚡ ${t('activities')}</div>
+                    <div class="tab ${activeTab === 'dailyReport' ? 'active' : ''}" onclick="setTab('dailyReport')">📅 ${t('dailyReport')}</div>
+                    <div class="tab ${activeTab === 'monthlyReport' ? 'active' : ''}" onclick="setTab('monthlyReport')">📊 ${t('monthlyReport')}</div>
                 </div>
                 
                 <div id="tabContent"></div>
                 
-                <div class="chart-wrap">
-                    <div class="flex-between">
-                        <span><strong>📈 السعرات المحروقة (آخر 30 يوم)</strong></span>
-                    </div>
-                    <canvas id="statsCanvas" height="150"></canvas>
+                <div class="charts-grid full-width">
+                    <div class="chart-box"><canvas id="pieChart" height="180"></canvas></div>
+                    <div class="chart-box"><canvas id="barChart" height="180"></canvas></div>
+                    <div class="chart-box"><canvas id="lineChart" height="180"></canvas></div>
                 </div>
             </div>
         `;
         
-        const root = document.getElementById('root');
-        root.innerHTML = html + '<div id="dynamicContent"></div>';
+        document.getElementById('root').innerHTML = html;
         
         const tabContent = document.getElementById('tabContent');
         if (activeTab === 'activities') {
             tabContent.innerHTML = `
-                <div style="background:#0c0c12; border-radius:28px; padding:20px; margin-bottom:16px;">
-                    <div class="flex-between">
-                        <span>🔋 نسبة الطاقة الحالية</span>
-                        <span>${currentUser.currentEnergy}%</span>
-                    </div>
-                    <div class="battery-container">
-                        <div class="bat-fill" style="width: ${currentUser.currentEnergy}%;"></div>
-                    </div>
-                    <div class="flex-between">
-                        <span>🏆 إجمالي الأنشطة: ${currentUser.totalStats.activitiesCount}</span>
-                        <span>🔥 إجمالي السعرات: ${currentUser.totalStats.totalCalories}</span>
-                    </div>
-                    <button class="btn-action" onclick="showActivityForm()">➕ تسجيل نشاط جديد</button>
-                    ${currentUser.currentEnergy < 30 ? '<div class="rest-alert">⚠️ طاقتك منخفضة! ينصح بأخذ قسط من الراحة.</div>' : ''}
+                <div class="card" style="margin-bottom:0;">
+                    <div class="flex-between"><span>🔋 ${t('energy')}</span><span style="color:${energyEval === 'good' ? '#4caf50' : (energyEval === 'medium' ? '#ff9800' : '#f44336')}">${currentUser.currentEnergy}%</span></div>
+                    <div class="battery-container"><div class="bat-fill" style="width: ${currentUser.currentEnergy}%;"></div></div>
+                    <div class="flex-between"><span>🏆 ${t('totalStats')}</span><span>${currentUser.totalStats.activitiesCount} ${t('activities')} | ${currentUser.totalStats.totalCalories} ${t('calories')}</span></div>
+                    <button class="btn-action" onclick="showActivityForm()">➕ ${t('newActivity')}</button>
+                    ${currentUser.currentEnergy < 30 ? '<div class="rest-alert">⚠️ ' + (currentLang === 'ar' ? 'طاقتك منخفضة! الراحة ضرورية.' : 'Low energy! Rest required.') + '</div>' : ''}
                 </div>
             `;
         } else if (activeTab === 'dailyReport') {
-            tabContent.innerHTML = renderDailyReport();
+            const activities = [...(todayLog.activities || [])].reverse();
+            const totalCals = activities.reduce((s, a) => s + a.calories, 0);
+            const totalDrain = activities.reduce((s, a) => s + a.energyDrain, 0);
+            tabContent.innerHTML = `
+                <div class="card">
+                    <h3>📅 ${t('dailyReport')} - ${today}</h3>
+                    <div class="flex-between"><span>😴 ${t('sleepTime')}:</span><span>${todayLog.sleepTime || '-'}</span></div>
+                    <div class="flex-between"><span>🌅 ${t('wakeTime')}:</span><span>${todayLog.wakeTime || '-'}</span></div>
+                    <div class="flex-between"><span>🍽️ ${t('meals')}:</span><span>${todayLog.meals?.join(', ') || '-'}</span></div>
+                    <div class="flex-between"><span>🔥 ${t('calories')}:</span><span>${totalCals}</span></div>
+                    <div class="flex-between"><span>⚡ ${t('energy')}:</span><span>-${totalDrain}%</span></div>
+                    <hr style="margin:12px 0;">
+                    ${activities.length ? activities.map(a => `
+                        <div style="background:var(--bg-primary); padding:12px; margin:8px 0; border-radius:16px;">
+                            <div class="flex-between"><span>🕒 ${a.time} - <strong>${a.type}</strong> (${a.duration} min)</span></div>
+                            <div>🔥 ${a.calories} cal | ⚡ -${a.energyDrain}% | 🔋 ${a.energyAfter}%</div>
+                        </div>
+                    `).join('') : `<div>✨ ${t('noData')}</div>`}
+                </div>
+            `;
         } else if (activeTab === 'monthlyReport') {
-            tabContent.innerHTML = renderMonthlyReport();
+            tabContent.innerHTML = `
+                <div class="card">
+                    <h3>📊 ${t('monthlyReport')} - ${month}</h3>
+                    <div class="flex-between"><span>🎯 ${t('activities')}:</span><span>${monthlyData.totalActivities}</span></div>
+                    <div class="flex-between"><span>🔥 ${t('calories')}:</span><span>${monthlyData.totalCalories}</span></div>
+                    <div class="flex-between"><span>📈 ${currentLang === 'ar' ? 'متوسط يومي' : 'Daily Average'}:</span><span>${Math.round(monthlyData.totalCalories / 30)} cal</span></div>
+                    <button class="btn-action btn-secondary" onclick="deleteAllUserData('${currentUser.email}')" style="margin-top:20px;">🗑️ ${t('deleteAllData')}</button>
+                </div>
+            `;
         }
         
-        setTimeout(() => renderChart(), 100);
+        setTimeout(() => renderCharts(currentUser), 100);
     }
     
-    window.setTab = (tab) => {
-        activeTab = tab;
-        renderMainApp();
-    };
-    
-    // شاشة تسجيل الدخول المتكاملة
     function renderLoginScreen() {
         const root = document.getElementById('root');
         root.innerHTML = `
             <div class="login-screen">
-                <div style="font-size: 48px; text-align:center; margin-bottom:8px;">🏃‍♂️⚡</div>
-                <h2>نظام تتبع الصحة والنشاطات</h2>
-                <p style="text-align:center; margin-bottom:20px;">تتبع ذكي | تحليل الطاقة | تقارير يومية وشهرية</p>
-                
-                <div class="form-group">
-                    <label>📧 البريد الإلكتروني</label>
-                    <input type="email" id="email" class="login-input" placeholder="example@email.com">
+                <div style="font-size:48px; text-align:center;">🏃‍♂️⚡</div>
+                <h2>${t('appTitle')}</h2>
+                <div class="lang-switch" style="justify-content:center; margin-bottom:20px;">
+                    <button class="lang-btn ${currentLang === 'ar' ? 'active' : ''}" onclick="setLang('ar')">عربي</button>
+                    <button class="lang-btn ${currentLang === 'en' ? 'active' : ''}" onclick="setLang('en')">EN</button>
+                    <button class="theme-toggle lang-btn" onclick="toggleTheme()">🌓</button>
                 </div>
-                
-                <div class="form-group">
-                    <label>👤 الاسم الكامل</label>
-                    <input type="text" id="fullName" class="login-input" placeholder="أدخل اسمك الكامل">
-                </div>
-                
-                <div class="form-group">
-                    <label>⚥ الجنس</label>
-                    <select id="gender" class="form-select">
-                        <option value="ذكر">ذكر</option>
-                        <option value="أنثى">أنثى</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>🎂 العمر</label>
-                    <input type="number" id="age" class="login-input" placeholder="مثال: 25">
-                </div>
-                
-                <div class="form-group">
-                    <label>⚖️ الوزن (كغ)</label>
-                    <input type="number" id="weight" class="login-input" placeholder="مثال: 70" step="0.1">
-                </div>
-                
-                <div class="form-group">
-                    <label>🩺 هل تعاني من أمراض مزمنة؟</label>
-                    <select id="hasDiseases" class="form-select">
-                        <option value="لا">لا</option>
-                        <option value="نعم">نعم</option>
-                    </select>
-                </div>
-                
-                <div class="form-group" id="diseasesGroup" style="display:none;">
-                    <label>📋 ما هي الأمراض التي تعاني منها؟</label>
-                    <textarea id="diseases" class="login-input" rows="2" placeholder="مثال: ضغط الدم، السكري..."></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label>💪 الحالة الصحية العامة</label>
-                    <textarea id="healthStatus" class="login-input" rows="2" placeholder="صف حالتك الصحية..."></textarea>
-                </div>
-                
-                <button id="registerBtn" class="login-btn">🚀 بدء الرحلة الصحية</button>
-                <div style="margin-top: 16px; font-size: 11px; text-align:center; color:#aaa;">✓ حفظ تلقائي ✓ تقارير مفصلة ✓ نصائح مخصصة</div>
+                <div class="form-group"><label>📧 ${t('email')}</label><input type="email" id="email" class="login-input"></div>
+                <div class="form-group"><label>👤 ${t('fullName')}</label><input type="text" id="fullName" class="login-input"></div>
+                <div class="form-group"><label>⚥ ${t('gender')}</label><select id="gender" class="form-select"><option>${t('male')}</option><option>${t('female')}</option></select></div>
+                <div class="form-group"><label>🎂 ${t('age')}</label><input type="number" id="age" class="login-input"></div>
+                <div class="form-group"><label>⚖️ ${t('weight')}</label><input type="number" id="weight" class="login-input" step="0.1"></div>
+                <div class="form-group"><label>📏 ${t('height')}</label><input type="number" id="height" class="login-input" value="170"></div>
+                <button id="registerBtn" class="login-btn">${t('startJourney')}</button>
+                <button id="deleteAllBtn" class="login-btn btn-danger" style="margin-top:12px;">🗑️ ${t('deleteAllData')}</button>
             </div>
         `;
-        
-        const hasDiseasesSelect = document.getElementById('hasDiseases');
-        const diseasesGroup = document.getElementById('diseasesGroup');
-        
-        hasDiseasesSelect.addEventListener('change', (e) => {
-            diseasesGroup.style.display = e.target.value === 'نعم' ? 'block' : 'none';
-        });
         
         document.getElementById('registerBtn').onclick = () => {
             const email = document.getElementById('email').value.trim();
@@ -976,45 +942,24 @@
             const gender = document.getElementById('gender').value;
             const age = document.getElementById('age').value;
             const weight = document.getElementById('weight').value;
-            const hasDiseases = document.getElementById('hasDiseases').value;
-            const diseases = hasDiseases === 'نعم' ? document.getElementById('diseases').value : 'لا يوجد';
-            const healthStatus = document.getElementById('healthStatus').value || 'جيدة';
-            
-            if (!email || !fullName || !age || !weight) {
-                alert('الرجاء ملء جميع الحقول الأساسية');
-                return;
-            }
-            
-            if (email.indexOf('@') === -1) {
-                alert('الرجاء إدخال بريد إلكتروني صحيح');
-                return;
-            }
-            
-            if (parseInt(age) < 10 || parseInt(age) > 120) {
-                alert('الرجاء إدخال عمر صحيح');
-                return;
-            }
-            
-            if (parseFloat(weight) < 20 || parseFloat(weight) > 300) {
-                alert('الرجاء إدخال وزن صحيح');
-                return;
-            }
-            
-            currentUser = getOrCreateUser({
-                email: email,
-                fullName: fullName,
-                gender: gender,
-                age: age,
-                weight: weight,
-                healthConditions: healthStatus,
-                diseases: diseases
-            });
-            
+            const height = document.getElementById('height').value;
+            if (!email || !fullName || !age || !weight) { alert('Please fill all fields'); return; }
+            currentUser = getOrCreateUser({ email, fullName, gender, age: parseInt(age), weight: parseFloat(weight), height: parseFloat(height), healthConditions: '' });
             renderMainApp();
+        };
+        document.getElementById('deleteAllBtn').onclick = () => {
+            const email = document.getElementById('email').value.trim();
+            if (email) deleteAllUserData(email);
+            else alert('Enter email to delete');
         };
     }
     
-    // بدء التشغيل
+    window.setTab = (tab) => { activeTab = tab; renderMainApp(); };
+    window.setLang = (lang) => { currentLang = lang; if (currentUser) renderMainApp(); else renderLoginScreen(); };
+    window.toggleTheme = () => { isLightMode = !isLightMode; document.body.classList.toggle('light-mode', isLightMode); if (currentUser) renderMainApp(); else renderLoginScreen(); };
+    window.deleteAllUserData = deleteAllUserData;
+    window.logout = logout;
+    
     renderLoginScreen();
 </script>
 </body>
