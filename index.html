@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>نظام تتبع الصحة الذكي | Smart Health Tracker</title>
+    <meta name="theme-color" content="#f5f5f7">
+    <title>نظام تتبع الصحة الذكي | Smart Health Tracker Pro</title>
     <style>
         * {
             margin: 0;
@@ -13,27 +14,29 @@
         }
 
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #121218;
-            --bg-card: rgba(18, 18, 24, 0.98);
-            --border-color: #2a2a35;
-            --accent-primary: #ff4b5f;
-            --accent-secondary: #ff8c42;
-            --text-primary: #f0f0f0;
-            --text-secondary: #a0a0a8;
-            --success: #4caf50;
-            --warning: #ff9800;
-            --danger: #f44336;
-            --info: #2196f3;
-        }
-
-        body.light-mode {
             --bg-primary: #f5f5f7;
             --bg-secondary: #ffffff;
             --bg-card: rgba(255, 255, 255, 0.98);
             --border-color: #e0e0e5;
             --text-primary: #1a1a1f;
             --text-secondary: #5a5a6a;
+            --accent-primary: #ff4b5f;
+            --accent-secondary: #ff8c42;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --info: #2196f3;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        body.dark-mode {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #121218;
+            --bg-card: rgba(18, 18, 24, 0.98);
+            --border-color: #2a2a35;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a8;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         body {
@@ -42,7 +45,7 @@
             min-height: 100vh;
             padding: 20px;
             color: var(--text-primary);
-            transition: background 0.3s, color 0.3s;
+            transition: all 0.3s ease;
         }
 
         .app-container {
@@ -72,16 +75,23 @@
             padding: 24px;
             margin-bottom: 20px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
         }
 
         .login-screen {
             background: var(--bg-card);
             border-radius: 48px;
-            padding: 32px;
+            padding: 40px 32px;
             border: 1px solid var(--accent-primary);
             max-width: 500px;
-            margin: 0 auto;
+            margin: 40px auto;
+            box-shadow: var(--shadow);
         }
 
         .login-screen h2 {
@@ -89,24 +99,24 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            font-size: 26px;
-            margin-bottom: 12px;
+            font-size: 28px;
+            margin-bottom: 20px;
             text-align: center;
         }
 
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-size: 13px;
+            font-size: 14px;
             color: var(--accent-secondary);
             font-weight: bold;
         }
 
-        .login-input, .form-select {
+        .login-input, .form-select, textarea {
             width: 100%;
             padding: 14px 18px;
             background: var(--bg-secondary);
@@ -114,12 +124,14 @@
             border-radius: 60px;
             color: var(--text-primary);
             font-size: 15px;
-            transition: 0.2s;
+            transition: all 0.2s;
+            font-family: inherit;
         }
 
-        .login-input:focus, .form-select:focus {
+        .login-input:focus, .form-select:focus, textarea:focus {
             outline: none;
             border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(255, 75, 95, 0.1);
         }
 
         .login-btn {
@@ -132,8 +144,13 @@
             font-size: 18px;
             color: white;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s;
             margin-top: 8px;
+        }
+
+        .login-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(255, 75, 95, 0.3);
         }
 
         .btn-danger {
@@ -142,7 +159,7 @@
 
         .btn-secondary {
             background: var(--bg-secondary);
-            border: 1px solid var(--accent-primary);
+            border: 2px solid var(--accent-primary);
             color: var(--accent-primary);
         }
 
@@ -158,7 +175,7 @@
             background: var(--bg-secondary);
             border-radius: 60px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s;
             border: 1px solid var(--border-color);
             font-weight: bold;
         }
@@ -180,7 +197,7 @@
         .bat-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-            transition: width 0.5s;
+            transition: width 0.5s ease;
             border-radius: 40px;
         }
 
@@ -204,6 +221,11 @@
             color: white;
             margin: 12px 0;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            transform: scale(1.02);
         }
 
         .rest-alert {
@@ -213,6 +235,12 @@
             padding: 16px;
             margin: 12px 0;
             text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
         .stat-card {
@@ -223,7 +251,7 @@
         }
 
         .history-log {
-            max-height: 200px;
+            max-height: 300px;
             overflow-y: auto;
             background: var(--bg-secondary);
             border-radius: 24px;
@@ -236,7 +264,7 @@
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 12px;
             margin: 16px 0;
-            max-height: 280px;
+            max-height: 300px;
             overflow-y: auto;
             padding: 4px;
         }
@@ -247,9 +275,13 @@
             text-align: center;
             border-radius: 28px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s;
             border: 2px solid transparent;
             font-size: 14px;
+        }
+
+        .activity-option:hover {
+            transform: scale(1.05);
         }
 
         .activity-option.selected {
@@ -270,6 +302,11 @@
             text-align: center;
             border-radius: 40px;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .intensity-btn:hover {
+            transform: scale(1.05);
         }
 
         .intensity-btn.selected {
@@ -289,6 +326,12 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal-content {
@@ -314,6 +357,7 @@
             border-radius: 30px;
             cursor: pointer;
             font-size: 12px;
+            transition: all 0.2s;
         }
 
         .lang-btn.active {
@@ -340,6 +384,69 @@
             width: 100%;
         }
 
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            left: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border-left: 4px solid var(--accent-primary);
+            padding: 16px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            z-index: 1001;
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .activity-item {
+            background: var(--bg-primary);
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 16px;
+            transition: all 0.2s;
+        }
+
+        .activity-item:hover {
+            transform: translateX(-5px);
+        }
+
+        .delete-activity {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .goal-progress {
+            background: var(--border-color);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .goal-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            transition: width 0.5s;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 12px;
@@ -347,6 +454,9 @@
             .tab {
                 padding: 8px 16px;
                 font-size: 12px;
+            }
+            .card {
+                padding: 16px;
             }
         }
     </style>
@@ -356,21 +466,19 @@
 <div class="app-container" id="root"></div>
 
 <script>
-    // ====================== النظام المتكامل مع حفظ تلقائي ======================
+    // ====================== النظام المتكامل المطور ======================
     
-    const STORAGE_KEY = 'health_tracker_pro_final_v2';
-    const ADMIN_PASSWORD = '1234';
+    const STORAGE_KEY = 'health_tracker_pro_v3';
     
     let currentUser = null;
     let activeTab = 'activities';
     let currentLang = 'ar';
-    let isLightMode = false;
     let charts = { pie: null, bar: null, line: null };
     
-    // ملف الترجمة
+    // الترجمة الموسعة
     const translations = {
         ar: {
-            appTitle: 'نظام تتبع الصحة الذكي',
+            appTitle: 'نظام تتبع الصحة الذكي برو',
             login: 'تسجيل الدخول',
             email: 'البريد الإلكتروني',
             fullName: 'الاسم الكامل',
@@ -383,7 +491,7 @@
             healthStatus: 'الحالة الصحية',
             startJourney: '🚀 بدء الرحلة',
             deleteAllData: '🗑️ حذف كل البيانات',
-            passwordRequired: 'كلمة السر مطلوبة (1234)',
+            passwordRequired: 'كلمة السر مطلوبة',
             energy: 'الطاقة',
             activities: 'النشاطات',
             dailyReport: 'تقرير يومي',
@@ -407,13 +515,25 @@
             calories: 'سعرات',
             totalStats: 'إحصائيات',
             noData: 'لا توجد بيانات',
-            deleteConfirm: '⚠️ سيتم حذف جميع بياناتك نهائياً. أدخل كلمة السر 1234 للتأكيد',
+            deleteConfirm: '⚠️ سيتم حذف جميع بياناتك نهائياً. أدخل كلمة السر للتأكيد',
             wrongPassword: 'كلمة السر غير صحيحة',
-            logoutConfirm: 'أدخل كلمة السر 1234 لتسجيل الخروج',
-            dailySummary: 'ملخص نهاية اليوم'
+            logoutConfirm: 'أدخل كلمة السر لتسجيل الخروج',
+            dailySummary: 'ملخص نهاية اليوم',
+            goals: 'الأهداف',
+            setGoal: 'حدد هدفك اليومي',
+            dailyGoal: 'الهدف اليومي (سعرات)',
+            save: 'حفظ',
+            edit: 'تعديل',
+            delete: 'حذف',
+            recommendations: 'توصيات ذكية',
+            export: 'تصدير البيانات',
+            share: 'مشاركة',
+            achievements: 'الإنجازات',
+            streak: 'المواظبة',
+            bestDay: 'أفضل يوم'
         },
         en: {
-            appTitle: 'Smart Health Tracker',
+            appTitle: 'Smart Health Tracker Pro',
             login: 'Login',
             email: 'Email',
             fullName: 'Full Name',
@@ -426,7 +546,7 @@
             healthStatus: 'Health Status',
             startJourney: '🚀 Start Journey',
             deleteAllData: '🗑️ Delete All Data',
-            passwordRequired: 'Password required (1234)',
+            passwordRequired: 'Password required',
             energy: 'Energy',
             activities: 'Activities',
             dailyReport: 'Daily Report',
@@ -450,10 +570,22 @@
             calories: 'Calories',
             totalStats: 'Statistics',
             noData: 'No Data',
-            deleteConfirm: '⚠️ All data will be permanently deleted. Enter password 1234 to confirm',
+            deleteConfirm: '⚠️ All data will be permanently deleted. Enter password to confirm',
             wrongPassword: 'Wrong password',
-            logoutConfirm: 'Enter password 1234 to logout',
-            dailySummary: 'End of Day Summary'
+            logoutConfirm: 'Enter password to logout',
+            dailySummary: 'End of Day Summary',
+            goals: 'Goals',
+            setGoal: 'Set Daily Goal',
+            dailyGoal: 'Daily Goal (calories)',
+            save: 'Save',
+            edit: 'Edit',
+            delete: 'Delete',
+            recommendations: 'Smart Recommendations',
+            export: 'Export Data',
+            share: 'Share',
+            achievements: 'Achievements',
+            streak: 'Streak',
+            bestDay: 'Best Day'
         }
     };
     
@@ -461,20 +593,20 @@
         return translations[currentLang][key] || key;
     }
     
-    // قائمة النشاطات الجنسية والمتنوعة حسب الطلب
+    // قائمة الأنشطة الموسعة
     const ACTIVITY_LIST_AR = [
         'مشي بطيء', 'مشي سريع', 'جري (8كم/س)', 'جري سريع', 'تمارين خفيفة', 'تمارين مكثفة',
-        'تضاجع (ذكر يضاجع ذكر)', 'تضاجع (ذكر يضاجع أنثى)', 'تضاجع (أنثى تضاجع أنثى)',
-        'استمناء (ذكر)', 'استمناء (أنثى)', 'مداعبة حميمة'
+        'ركوب دراجة', 'سباحة', 'يوغا', 'تأمل', 'تضاجع (ذكر يضاجع ذكر)', 'تضاجع (ذكر يضاجع أنثى)',
+        'تضاجع (أنثى تضاجع أنثى)', 'استمناء (ذكر)', 'استمناء (أنثى)', 'مداعبة حميمة', 'رقص', 'تسلق'
     ];
     
     const ACTIVITY_LIST_EN = [
         'Slow Walk', 'Fast Walk', 'Jogging', 'Running', 'Light Exercise', 'Intense Exercise',
-        'Sex (Male with Male)', 'Sex (Male with Female)', 'Sex (Female with Female)',
-        'Masturbation (Male)', 'Masturbation (Female)', 'Intimate Caress'
+        'Cycling', 'Swimming', 'Yoga', 'Meditation', 'Sex (Male with Male)', 'Sex (Male with Female)',
+        'Sex (Female with Female)', 'Masturbation (Male)', 'Masturbation (Female)', 'Intimate Caress', 'Dancing', 'Climbing'
     ];
     
-    // معاملات METs محدثة لتشمل جميع الأنشطة
+    // METs محدثة
     const MET_VALUES = {
         'مشي بطيء': 3.0, 'Slow Walk': 3.0,
         'مشي سريع': 4.5, 'Fast Walk': 4.5,
@@ -482,12 +614,18 @@
         'جري سريع': 12.0, 'Running': 12.0,
         'تمارين خفيفة': 4.0, 'Light Exercise': 4.0,
         'تمارين مكثفة': 7.0, 'Intense Exercise': 7.0,
+        'ركوب دراجة': 6.0, 'Cycling': 6.0,
+        'سباحة': 7.0, 'Swimming': 7.0,
+        'يوغا': 2.5, 'Yoga': 2.5,
+        'تأمل': 1.5, 'Meditation': 1.5,
         'تضاجع (ذكر يضاجع ذكر)': 3.8, 'Sex (Male with Male)': 3.8,
         'تضاجع (ذكر يضاجع أنثى)': 3.5, 'Sex (Male with Female)': 3.5,
         'تضاجع (أنثى تضاجع أنثى)': 3.2, 'Sex (Female with Female)': 3.2,
         'استمناء (ذكر)': 2.5, 'Masturbation (Male)': 2.5,
         'استمناء (أنثى)': 2.2, 'Masturbation (Female)': 2.2,
-        'مداعبة حميمة': 2.0, 'Intimate Caress': 2.0
+        'مداعبة حميمة': 2.0, 'Intimate Caress': 2.0,
+        'رقص': 5.0, 'Dancing': 5.0,
+        'تسلق': 8.0, 'Climbing': 8.0
     };
     
     const PREVIOUS_ACTIVITY_IMPACT = {
@@ -495,7 +633,8 @@
         'عمل شاق': 15, 'Hard Work': 15,
         'تمرين مكثف': 20, 'Intense Exercise': 20,
         'إجهاد عام': 10, 'Stress': 10,
-        'قلة نوم': 12, 'Lack of Sleep': 12
+        'قلة نوم': 12, 'Lack of Sleep': 12,
+        'مرض': 25, 'Illness': 25
     };
     
     function calculateBMR(weight, height, age, gender) {
@@ -512,15 +651,18 @@
     
     function calculateEnergyDrain(calories, bmr) {
         const hourlyBMR = bmr / 24;
-        return Math.min(85, Math.max(5, Math.round((calories / hourlyBMR) * 100)));
+        return Math.min(85, Math.max(5, Math.round((calories / hourlyBMR) * 100) / 10));
     }
     
     function calculateWakeDrain(wakeHours) {
-        return Math.min(70, wakeHours * 4.5);
+        return Math.min(70, wakeHours * 3.5);
     }
     
-    function calculateRest(energyDrain, duration) {
-        return Math.min(16, Math.max(1, Math.round(((energyDrain / 12) + (duration / 60)) * 10) / 10));
+    function calculateRest(energyAfter) {
+        if (energyAfter <= 20) return 8;
+        if (energyAfter <= 40) return 4;
+        if (energyAfter <= 60) return 2;
+        return 1;
     }
     
     function getTodayKey() { return new Date().toISOString().slice(0, 10); }
@@ -543,6 +685,9 @@
             createdAt: Date.now(),
             currentEnergy: 100,
             lastActivityTime: 0,
+            dailyGoal: 500,
+            streak: 0,
+            bestDay: 0,
             dailyLogs: { [today]: { sleepTime: '', wakeTime: '', wakeHours: 0, meals: [], previousActivities: '', activities: [], daySummary: null } },
             monthlyLogs: { [month]: { activities: [], totalCalories: 0, totalActivities: 0 } },
             totalStats: { activitiesCount: 0, totalCalories: 0, byType: {} },
@@ -578,6 +723,13 @@
                     activitiesCount: activities.length,
                     finalEnergy: activities[activities.length - 1]?.energyAfter || 100
                 };
+                
+                if (totalCalories >= user.dailyGoal) {
+                    user.streak++;
+                    if (totalCalories > user.bestDay) user.bestDay = totalCalories;
+                } else {
+                    user.streak = 0;
+                }
             }
             user.currentEnergy = 100;
             user.lastDateReset = today;
@@ -598,7 +750,6 @@
         return changed;
     }
     
-    // تسجيل الدخول التلقائي: نجلب المستخدم من localStorage إذا كان موجود
     function getExistingUserByEmail(email) {
         const db = loadAllUsers();
         const normalizedEmail = email.trim().toLowerCase();
@@ -623,6 +774,7 @@
         checkAndResetDay(user);
         db[email] = user;
         saveAllUsers(db);
+        localStorage.setItem('last_logged_in_email', email);
         return user;
     }
     
@@ -645,7 +797,7 @@
         let energyBefore = user.currentEnergy - wakeDrain - prevImpact;
         energyBefore = Math.max(10, Math.min(100, energyBefore));
         const energyAfter = Math.max(0, energyBefore - energyDrain);
-        const restRequired = calculateRest(energyDrain, activityData.duration);
+        const restRequired = calculateRest(energyAfter);
         
         const activityRecord = {
             id: Date.now(),
@@ -690,36 +842,96 @@
         
         persistUser(user);
         
+        showNotification(`✅ تم التسجيل!\n🔥 السعرات: ${Math.round(calories)}\n⚡ استهلاك الطاقة: -${energyDrain}%\n🔋 الطاقة المتبقية: ${Math.round(energyAfter)}%\n⏰ الراحة الموصى بها: ${restRequired} ساعات`);
+        
         return { calories: Math.round(calories), energyDrain, energyAfter, restRequired };
     }
     
-    function verifyPassword(callback) {
-        const pwd = prompt(t('passwordRequired'));
-        if (pwd === ADMIN_PASSWORD) callback(true);
-        else { alert(t('wrongPassword')); callback(false); }
+    function deleteActivity(user, activityId, dateKey) {
+        const dayLog = user.dailyLogs[dateKey];
+        if (dayLog) {
+            const activityIndex = dayLog.activities.findIndex(a => a.id === activityId);
+            if (activityIndex !== -1) {
+                const removed = dayLog.activities.splice(activityIndex, 1)[0];
+                user.totalStats.activitiesCount--;
+                user.totalStats.totalCalories -= removed.calories;
+                user.totalStats.byType[removed.type] = (user.totalStats.byType[removed.type] || 1) - 1;
+                if (user.totalStats.byType[removed.type] === 0) delete user.totalStats.byType[removed.type];
+                
+                persistUser(user);
+                showNotification('🗑️ تم حذف النشاط بنجاح');
+                renderMainApp();
+            }
+        }
+    }
+    
+    function setDailyGoal(user, goal) {
+        user.dailyGoal = parseInt(goal);
+        persistUser(user);
+        showNotification('🎯 تم تحديث الهدف اليومي');
+        renderMainApp();
+    }
+    
+    function exportData(user) {
+        const data = {
+            user: {
+                name: user.fullName,
+                email: user.email,
+                age: user.age,
+                weight: user.weight,
+                height: user.height
+            },
+            stats: user.totalStats,
+            dailyLogs: user.dailyLogs,
+            monthlyLogs: user.monthlyLogs
+        };
+        const dataStr = JSON.stringify(data, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `health_data_${user.email}_${getTodayKey()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showNotification('📥 تم تصدير البيانات بنجاح');
+    }
+    
+    function showNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
     }
     
     function logout() {
-        verifyPassword((success) => {
-            if (success) { currentUser = null; renderLoginScreen(); }
-        });
+        const pwd = prompt(t('logoutConfirm'));
+        if (pwd === '1234') {
+            currentUser = null;
+            localStorage.removeItem('last_logged_in_email');
+            renderLoginScreen();
+            showNotification('👋 تم تسجيل الخروج بنجاح');
+        } else {
+            alert(t('wrongPassword'));
+        }
     }
     
     function deleteAllUserData(email) {
-        verifyPassword((success) => {
-            if (success) {
-                const db = loadAllUsers();
-                delete db[email];
-                saveAllUsers(db);
-                alert('✅ تم حذف جميع البيانات');
-                if (currentUser && currentUser.email === email) {
-                    currentUser = null;
-                    renderLoginScreen();
-                } else {
-                    renderLoginScreen();
-                }
+        const pwd = prompt(t('deleteConfirm'));
+        if (pwd === '1234') {
+            const db = loadAllUsers();
+            delete db[email];
+            saveAllUsers(db);
+            showNotification('✅ تم حذف جميع البيانات');
+            if (currentUser && currentUser.email === email) {
+                currentUser = null;
+                renderLoginScreen();
+            } else {
+                renderLoginScreen();
             }
-        });
+        } else {
+            alert(t('wrongPassword'));
+        }
     }
     
     function renderCharts(user) {
@@ -731,7 +943,7 @@
         const pieCtx = document.getElementById('pieChart')?.getContext('2d');
         if (pieCtx) {
             if (charts.pie) charts.pie.destroy();
-            charts.pie = new Chart(pieCtx, { type: 'pie', data: { labels: Object.keys(typeCount), datasets: [{ data: Object.values(typeCount), backgroundColor: ['#ff4b5f', '#ff8c42', '#4caf50', '#2196f3', '#9c27b0', '#00bcd4'] }] }, options: { responsive: true } });
+            charts.pie = new Chart(pieCtx, { type: 'pie', data: { labels: Object.keys(typeCount), datasets: [{ data: Object.values(typeCount), backgroundColor: ['#ff4b5f', '#ff8c42', '#4caf50', '#2196f3', '#9c27b0', '#00bcd4', '#ff9800', '#e91e63'] }] }, options: { responsive: true, maintainAspectRatio: true } });
         }
         
         const last7Days = [];
@@ -749,7 +961,7 @@
         const barCtx = document.getElementById('barChart')?.getContext('2d');
         if (barCtx) {
             if (charts.bar) charts.bar.destroy();
-            charts.bar = new Chart(barCtx, { type: 'bar', data: { labels: last7Days, datasets: [{ label: t('calories'), data: last7Calories, backgroundColor: '#ff4b5f' }] }, options: { responsive: true } });
+            charts.bar = new Chart(barCtx, { type: 'bar', data: { labels: last7Days, datasets: [{ label: t('calories'), data: last7Calories, backgroundColor: '#ff4b5f' }] }, options: { responsive: true, maintainAspectRatio: true } });
         }
         
         const lineCtx = document.getElementById('lineChart')?.getContext('2d');
@@ -763,7 +975,7 @@
                 energyData.push(lastAct?.energyAfter || 100);
             }
             if (charts.line) charts.line.destroy();
-            charts.line = new Chart(lineCtx, { type: 'line', data: { labels: last7Days, datasets: [{ label: t('energy') + ' %', data: energyData, borderColor: '#ff8c42', fill: true }] }, options: { responsive: true } });
+            charts.line = new Chart(lineCtx, { type: 'line', data: { labels: last7Days, datasets: [{ label: t('energy') + ' %', data: energyData, borderColor: '#ff8c42', backgroundColor: 'rgba(255, 140, 66, 0.1)', fill: true }] }, options: { responsive: true, maintainAspectRatio: true } });
         }
     }
     
@@ -777,10 +989,10 @@
         const modalHtml = `
             <div id="activityModal" class="modal">
                 <div class="modal-content">
-                    <h3 style="color: var(--accent-secondary);">➕ ${t('newActivity')}</h3>
+                    <h3 style="color: var(--accent-secondary); margin-bottom: 20px;">➕ ${t('newActivity')}</h3>
                     <div class="form-group"><label>😴 ${t('sleepTime')}</label><input type="time" id="sleepTime" class="login-input"></div>
                     <div class="form-group"><label>🌅 ${t('wakeTime')}</label><input type="time" id="wakeTime" class="login-input"></div>
-                    <div class="form-group"><label>🍽️ ${t('meals')}</label><input type="text" id="meals" class="login-input" placeholder="فطور، غداء..."></div>
+                    <div class="form-group"><label>🍽️ ${t('meals')}</label><input type="text" id="meals" class="login-input" placeholder="${currentLang === 'ar' ? 'فطور، غداء، عشاء' : 'Breakfast, Lunch, Dinner'}"></div>
                     <div class="form-group"><label>📝 ${t('previousActivity')}</label>
                         <select id="prevActivityType" class="form-select">
                             <option value="لا شيء">${currentLang === 'ar' ? 'لا شيء' : 'None'}</option>
@@ -788,22 +1000,23 @@
                             <option value="تمرين مكثف">${currentLang === 'ar' ? 'تمرين مكثف' : 'Intense Exercise'}</option>
                             <option value="إجهاد عام">${currentLang === 'ar' ? 'إجهاد عام' : 'Stress'}</option>
                             <option value="قلة نوم">${currentLang === 'ar' ? 'قلة نوم' : 'Lack of Sleep'}</option>
+                            <option value="مرض">${currentLang === 'ar' ? 'مرض' : 'Illness'}</option>
                         </select>
                     </div>
                     <div class="form-group"><label>🏃 ${t('activityType')}</label>
                         <div class="activity-selector">
-                            ${activityOptions.map(type => `<div class="activity-option ${selectedActivityType === type ? 'selected' : ''}" onclick="selectActivityType('${type.replace(/'/g, "\\'")}')">${type}</div>`).join('')}
+                            ${activityOptions.map(type => `<div class="activity-option ${selectedActivityType === type ? 'selected' : ''}" onclick="window.selectActivityType('${type.replace(/'/g, "\\'")}')">${type}</div>`).join('')}
                         </div>
                     </div>
                     <div class="form-group"><label>⏱️ ${t('duration')}</label><input type="number" id="duration" class="login-input" min="1" max="300" value="30"></div>
                     <div class="form-group"><label>⚡ ${t('intensity')}</label>
                         <div class="intensity-btns">
-                            ${[t('light'), t('medium'), t('intense')].map(int => `<div class="intensity-btn ${selectedIntensity === int ? 'selected' : ''}" onclick="selectIntensity('${int}')">${int}</div>`).join('')}
+                            ${[t('light'), t('medium'), t('intense')].map(int => `<div class="intensity-btn ${selectedIntensity === int ? 'selected' : ''}" onclick="window.selectIntensity('${int}')">${int}</div>`).join('')}
                         </div>
                     </div>
                     <div style="display:flex; gap:12px; margin-top:20px;">
-                        <button onclick="closeModal()" class="login-btn btn-secondary">${t('cancel')}</button>
-                        <button onclick="submitActivity()" class="login-btn">${t('submit')}</button>
+                        <button onclick="window.closeModal()" class="login-btn btn-secondary">${t('cancel')}</button>
+                        <button onclick="window.submitActivity()" class="login-btn">${t('submit')}</button>
                     </div>
                 </div>
             </div>
@@ -835,21 +1048,19 @@
             wakeHours = Math.max(0, 24 - diff);
         }
         
-        const result = recordActivity({
+        recordActivity({
             type: selectedActivityType,
             duration: duration,
             intensity: selectedIntensity,
             sleepTime: sleepTime,
             wakeTime: wakeTime,
             wakeHours: wakeHours,
-            meals: meals ? [meals] : [],
+            meals: meals ? meals.split('،') : [],
             previousActivities: prevActivityType,
             previousActivityImpact: PREVIOUS_ACTIVITY_IMPACT[prevActivityType] || 0
         }, currentUser);
         
-        alert(`✅ ${t('submit')}!\n🔥 ${t('calories')}: ${result.calories}\n⚡ ${t('energy')}: -${result.energyDrain}%\n🔋 ${t('energy')}: ${result.energyAfter}%\n⏰ ${t('restRequired')}: ${result.restRequired} ${currentLang === 'ar' ? 'ساعات' : 'hours'}`);
         closeModal();
-        renderMainApp();
     };
     
     function renderMainApp() {
@@ -861,6 +1072,8 @@
         const month = getCurrentMonthKey();
         const todayLog = currentUser.dailyLogs[today] || { activities: [] };
         const monthlyData = currentUser.monthlyLogs[month] || { totalCalories: 0, totalActivities: 0 };
+        const todayCalories = todayLog.activities.reduce((s, a) => s + a.calories, 0);
+        const goalProgress = (todayCalories / currentUser.dailyGoal) * 100;
         const energyEval = currentUser.currentEnergy >= 60 ? 'good' : (currentUser.currentEnergy >= 30 ? 'medium' : 'low');
         
         const html = `
@@ -868,17 +1081,18 @@
                 <div class="flex-between">
                     <div><span style="background:rgba(255,75,95,0.2); padding:8px 16px; border-radius:30px;">👤 ${currentUser.fullName}</span></div>
                     <div class="lang-switch">
-                        <button class="lang-btn ${currentLang === 'ar' ? 'active' : ''}" onclick="setLang('ar')">عربي</button>
-                        <button class="lang-btn ${currentLang === 'en' ? 'active' : ''}" onclick="setLang('en')">EN</button>
-                        <button class="theme-toggle lang-btn" onclick="toggleTheme()">🌓</button>
-                        <button class="lang-btn" onclick="logout()">🚪 ${t('logout')}</button>
+                        <button class="lang-btn ${currentLang === 'ar' ? 'active' : ''}" onclick="window.setLang('ar')">عربي</button>
+                        <button class="lang-btn ${currentLang === 'en' ? 'active' : ''}" onclick="window.setLang('en')">EN</button>
+                        <button class="lang-btn" onclick="window.toggleDarkMode()">🌓</button>
+                        <button class="lang-btn" onclick="window.logout()">🚪 ${t('logout')}</button>
                     </div>
                 </div>
                 
                 <div class="tabs">
-                    <div class="tab ${activeTab === 'activities' ? 'active' : ''}" onclick="setTab('activities')">⚡ ${t('activities')}</div>
-                    <div class="tab ${activeTab === 'dailyReport' ? 'active' : ''}" onclick="setTab('dailyReport')">📅 ${t('dailyReport')}</div>
-                    <div class="tab ${activeTab === 'monthlyReport' ? 'active' : ''}" onclick="setTab('monthlyReport')">📊 ${t('monthlyReport')}</div>
+                    <div class="tab ${activeTab === 'activities' ? 'active' : ''}" onclick="window.setTab('activities')">⚡ ${t('activities')}</div>
+                    <div class="tab ${activeTab === 'dailyReport' ? 'active' : ''}" onclick="window.setTab('dailyReport')">📅 ${t('dailyReport')}</div>
+                    <div class="tab ${activeTab === 'monthlyReport' ? 'active' : ''}" onclick="window.setTab('monthlyReport')">📊 ${t('monthlyReport')}</div>
+                    <div class="tab ${activeTab === 'goals' ? 'active' : ''}" onclick="window.setTab('goals')">🎯 ${t('goals')}</div>
                 </div>
                 
                 <div id="tabContent"></div>
@@ -899,9 +1113,16 @@
                 <div class="card" style="margin-bottom:0;">
                     <div class="flex-between"><span>🔋 ${t('energy')}</span><span style="color:${energyEval === 'good' ? '#4caf50' : (energyEval === 'medium' ? '#ff9800' : '#f44336')}">${currentUser.currentEnergy}%</span></div>
                     <div class="battery-container"><div class="bat-fill" style="width: ${currentUser.currentEnergy}%;"></div></div>
+                    <div class="flex-between"><span>🎯 ${t('dailyGoal')}</span><span>${todayCalories} / ${currentUser.dailyGoal} ${t('calories')}</span></div>
+                    <div class="goal-progress"><div class="goal-fill" style="width: ${Math.min(100, goalProgress)}%;"></div></div>
                     <div class="flex-between"><span>🏆 ${t('totalStats')}</span><span>${currentUser.totalStats.activitiesCount} ${t('activities')} | ${currentUser.totalStats.totalCalories} ${t('calories')}</span></div>
-                    <button class="btn-action" onclick="showActivityForm()">➕ ${t('newActivity')}</button>
-                    ${currentUser.currentEnergy < 30 ? '<div class="rest-alert">⚠️ ' + (currentLang === 'ar' ? 'طاقتك منخفضة! الراحة ضرورية.' : 'Low energy! Rest required.') + '</div>' : ''}
+                    <div class="flex-between"><span>🔥 ${t('streak')}</span><span>${currentUser.streak} ${currentLang === 'ar' ? 'أيام متتالية' : 'days streak'}</span></div>
+                    <button class="btn-action" onclick="window.showActivityForm()">➕ ${t('newActivity')}</button>
+                    ${currentUser.currentEnergy < 30 ? '<div class="rest-alert">⚠️ ' + (currentLang === 'ar' ? 'طاقتك منخفضة جداً! الراحة ضرورية لمدة ' + calculateRest(currentUser.currentEnergy) + ' ساعات على الأقل.' : 'Very low energy! Rest required for at least ' + calculateRest(currentUser.currentEnergy) + ' hours.') + '</div>' : ''}
+                    <div class="flex-between" style="margin-top: 16px;">
+                        <button class="login-btn btn-secondary" style="flex:1; margin:0 4px;" onclick="window.exportData(currentUser)">📥 ${t('export')}</button>
+                        <button class="login-btn btn-secondary" style="flex:1; margin:0 4px;" onclick="window.deleteAllUserData('${currentUser.email}')">🗑️ ${t('deleteAllData')}</button>
+                    </div>
                 </div>
             `;
         } else if (activeTab === 'dailyReport') {
@@ -914,15 +1135,21 @@
                     <div class="flex-between"><span>😴 ${t('sleepTime')}:</span><span>${todayLog.sleepTime || '-'}</span></div>
                     <div class="flex-between"><span>🌅 ${t('wakeTime')}:</span><span>${todayLog.wakeTime || '-'}</span></div>
                     <div class="flex-between"><span>🍽️ ${t('meals')}:</span><span>${todayLog.meals?.join(', ') || '-'}</span></div>
-                    <div class="flex-between"><span>🔥 ${t('calories')}:</span><span>${totalCals}</span></div>
+                    <div class="flex-between"><span>🔥 ${t('calories')}:</span><span>${totalCals} / ${currentUser.dailyGoal}</span></div>
                     <div class="flex-between"><span>⚡ ${t('energy')}:</span><span>-${totalDrain}%</span></div>
                     <hr style="margin:12px 0;">
-                    ${activities.length ? activities.map(a => `
-                        <div style="background:var(--bg-primary); padding:12px; margin:8px 0; border-radius:16px;">
-                            <div class="flex-between"><span>🕒 ${a.time} - <strong>${a.type}</strong> (${a.duration} min)</span></div>
-                            <div>🔥 ${a.calories} cal | ⚡ -${a.energyDrain}% | 🔋 ${a.energyAfter}%</div>
-                        </div>
-                    `).join('') : `<div>✨ ${t('noData')}</div>`}
+                    <h4>📋 ${t('activities')}</h4>
+                    <div class="history-log">
+                        ${activities.length ? activities.map(a => `
+                            <div class="activity-item">
+                                <div class="flex-between">
+                                    <span><strong>🕒 ${a.time}</strong><br>${a.type} (${a.duration} دقيقة)</span>
+                                    <button class="delete-activity" onclick="window.deleteActivity('${a.id}', '${today}')">🗑️</button>
+                                </div>
+                                <div>🔥 ${a.calories} cal | ⚡ -${a.energyDrain}% | 🔋 ${a.energyAfter}%</div>
+                            </div>
+                        `).join('') : `<div style="text-align:center; padding:20px;">✨ ${t('noData')}</div>`}
+                    </div>
                 </div>
             `;
         } else if (activeTab === 'monthlyReport') {
@@ -932,7 +1159,22 @@
                     <div class="flex-between"><span>🎯 ${t('activities')}:</span><span>${monthlyData.totalActivities}</span></div>
                     <div class="flex-between"><span>🔥 ${t('calories')}:</span><span>${monthlyData.totalCalories}</span></div>
                     <div class="flex-between"><span>📈 ${currentLang === 'ar' ? 'متوسط يومي' : 'Daily Average'}:</span><span>${Math.round(monthlyData.totalCalories / 30)} cal</span></div>
-                    <button class="btn-action btn-secondary" onclick="deleteAllUserData('${currentUser.email}')" style="margin-top:20px;">🗑️ ${t('deleteAllData')}</button>
+                    <div class="flex-between"><span>🏆 ${t('bestDay')}:</span><span>${currentUser.bestDay} cal</span></div>
+                </div>
+            `;
+        } else if (activeTab === 'goals') {
+            tabContent.innerHTML = `
+                <div class="card">
+                    <h3>🎯 ${t('goals')}</h3>
+                    <div class="form-group">
+                        <label>${t('dailyGoal')}</label>
+                        <input type="number" id="goalInput" class="login-input" value="${currentUser.dailyGoal}" min="100" max="5000">
+                    </div>
+                    <button class="login-btn" onclick="window.setDailyGoal(${currentUser.dailyGoal})">${t('save')}</button>
+                    <hr style="margin: 20px 0;">
+                    <h4>💡 ${t('recommendations')}</h4>
+                    ${currentUser.currentEnergy < 30 ? '<div class="rest-alert">😴 ' + (currentLang === 'ar' ? 'أنت بحاجة ماسة للراحة. حاول أخذ قسط من النوم.' : 'You urgently need rest. Try to get some sleep.') + '</div>' : ''}
+                    ${todayCalories < currentUser.dailyGoal ? '<div class="rest-alert">🎯 ' + (currentLang === 'ar' ? 'أنت على بعد ' + (currentUser.dailyGoal - todayCalories) + ' سعرة من تحقيق هدفك اليومي!' : 'You are ' + (currentUser.dailyGoal - todayCalories) + ' calories away from your daily goal!') + '</div>' : '<div class="rest-alert" style="background: rgba(76, 175, 80, 0.15); border-color: #4caf50;">🎉 ' + (currentLang === 'ar' ? 'مبروك! لقد حققت هدفك اليومي!' : 'Congratulations! You achieved your daily goal!') + '</div>'}
                 </div>
             `;
         }
@@ -947,16 +1189,16 @@
                 <div style="font-size:48px; text-align:center;">🏃‍♂️⚡</div>
                 <h2>${t('appTitle')}</h2>
                 <div class="lang-switch" style="justify-content:center; margin-bottom:20px;">
-                    <button class="lang-btn ${currentLang === 'ar' ? 'active' : ''}" onclick="setLang('ar')">عربي</button>
-                    <button class="lang-btn ${currentLang === 'en' ? 'active' : ''}" onclick="setLang('en')">EN</button>
-                    <button class="theme-toggle lang-btn" onclick="toggleTheme()">🌓</button>
+                    <button class="lang-btn ${currentLang === 'ar' ? 'active' : ''}" onclick="window.setLang('ar')">عربي</button>
+                    <button class="lang-btn ${currentLang === 'en' ? 'active' : ''}" onclick="window.setLang('en')">EN</button>
+                    <button class="lang-btn" onclick="window.toggleDarkMode()">🌓</button>
                 </div>
                 <div class="form-group"><label>📧 ${t('email')}</label><input type="email" id="email" class="login-input" placeholder="example@mail.com"></div>
                 <div class="form-group"><label>👤 ${t('fullName')}</label><input type="text" id="fullName" class="login-input"></div>
                 <div class="form-group"><label>⚥ ${t('gender')}</label><select id="gender" class="form-select"><option>${t('male')}</option><option>${t('female')}</option></select></div>
-                <div class="form-group"><label>🎂 ${t('age')}</label><input type="number" id="age" class="login-input"></div>
-                <div class="form-group"><label>⚖️ ${t('weight')}</label><input type="number" id="weight" class="login-input" step="0.1"></div>
-                <div class="form-group"><label>📏 ${t('height')}</label><input type="number" id="height" class="login-input" value="170"></div>
+                <div class="form-group"><label>🎂 ${t('age')}</label><input type="number" id="age" class="login-input" min="1" max="120"></div>
+                <div class="form-group"><label>⚖️ ${t('weight')}</label><input type="number" id="weight" class="login-input" step="0.1" min="20" max="300"></div>
+                <div class="form-group"><label>📏 ${t('height')}</label><input type="number" id="height" class="login-input" value="170" min="50" max="250"></div>
                 <button id="registerBtn" class="login-btn">${t('startJourney')}</button>
                 <button id="deleteAllBtn" class="login-btn btn-danger" style="margin-top:12px;">🗑️ ${t('deleteAllData')}</button>
             </div>
@@ -969,24 +1211,38 @@
             const age = document.getElementById('age').value;
             const weight = document.getElementById('weight').value;
             const height = document.getElementById('height').value;
-            if (!email || !fullName || !age || !weight) { alert('الرجاء ملء جميع الحقول المطلوبة'); return; }
+            if (!email || !fullName || !age || !weight) {
+                alert(currentLang === 'ar' ? 'الرجاء ملء جميع الحقول المطلوبة' : 'Please fill all required fields');
+                return;
+            }
             currentUser = registerOrLogin({ email, fullName, gender, age: parseInt(age), weight: parseFloat(weight), height: parseFloat(height), healthConditions: '' });
             renderMainApp();
         };
         document.getElementById('deleteAllBtn').onclick = () => {
             const email = document.getElementById('email').value.trim();
             if (email) deleteAllUserData(email);
-            else alert('أدخل البريد الإلكتروني لحذف البيانات');
+            else alert(currentLang === 'ar' ? 'أدخل البريد الإلكتروني لحذف البيانات' : 'Enter email to delete data');
         };
     }
     
     window.setTab = (tab) => { activeTab = tab; renderMainApp(); };
     window.setLang = (lang) => { currentLang = lang; if (currentUser) renderMainApp(); else renderLoginScreen(); };
-    window.toggleTheme = () => { isLightMode = !isLightMode; document.body.classList.toggle('light-mode', isLightMode); if (currentUser) renderMainApp(); else renderLoginScreen(); };
+    window.toggleDarkMode = () => { document.body.classList.toggle('dark-mode'); };
     window.deleteAllUserData = deleteAllUserData;
     window.logout = logout;
+    window.deleteActivity = (activityId, dateKey) => deleteActivity(currentUser, parseInt(activityId), dateKey);
+    window.setDailyGoal = () => {
+        const goal = document.getElementById('goalInput')?.value;
+        if (goal) setDailyGoal(currentUser, goal);
+    };
+    window.exportData = exportData;
     
-    // التحقق من وجود مستخدم محفوظ تلقائياً (آخر جلسة)
+    // تهيئة الوضع الافتراضي (فاتح)
+    if (localStorage.getItem('dark_mode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
+    
+    // التحقق من وجود مستخدم محفوظ
     const savedUsers = loadAllUsers();
     const lastUserEmail = localStorage.getItem('last_logged_in_email');
     if (lastUserEmail && savedUsers[lastUserEmail]) {
@@ -997,25 +1253,6 @@
     } else {
         renderLoginScreen();
     }
-    
-    // حفظ آخر بريد مسجل دخول عند التسجيل
-    const origRegister = registerOrLogin;
-    window.registerOrLogin = function(userData) {
-        const user = origRegister(userData);
-        localStorage.setItem('last_logged_in_email', user.email);
-        return user;
-    };
-    registerOrLogin = function(userData) {
-        const user = origRegister(userData);
-        localStorage.setItem('last_logged_in_email', user.email);
-        return user;
-    };
-    // ربط الدالة بعد التحميل
-    setTimeout(() => {
-        if (window.registerOrLogin !== registerOrLogin) {
-            window.registerOrLogin = registerOrLogin;
-        }
-    }, 0);
 </script>
 </body>
 </html>
