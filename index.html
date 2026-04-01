@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <meta name="theme-color" content="#FFD700">
     <meta name="description" content="NeuroSync Pro - المساعد الذكي المتكامل لإدارة المال والوقت والصحة">
-    <title>NeuroSync Pro - المساعد الذكي المتكامل v4.1</title>
+    <title>NeuroSync Pro - المساعد الذكي المتكامل v5.0</title>
     <link rel="manifest" href="data:application/manifest+json,{}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -557,6 +557,28 @@
             padding: 16px;
         }
 
+        /* Search Box */
+        .search-box {
+            margin-bottom: 16px;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 10px 35px 10px 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-primary);
+        }
+        
+        .search-box i {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            color: var(--text-secondary);
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -591,7 +613,7 @@
         <div class="sidebar-header">
             <div class="sidebar-logo">🧠</div>
             <h3>NeuroSync Pro</h3>
-            <small>المساعد الذكي المتكامل v4.1</small>
+            <small>المساعد الذكي المتكامل v5.0</small>
         </div>
         <div class="sidebar-menu">
             <div class="sidebar-item active" data-panel="dashboard"><i class="fas fa-chart-line"></i><span>لوحة التحكم</span></div>
@@ -609,7 +631,7 @@
     <div class="app-container">
         <!-- Header -->
         <div class="main-header">
-            <div class="logo-area"><div class="logo-icon">🧠</div><div class="logo-text">NeuroSync Pro v4.1</div></div>
+            <div class="logo-area"><div class="logo-icon">🧠</div><div class="logo-text">NeuroSync Pro v5.0</div></div>
             <div class="header-actions">
                 <div class="icon-btn" onclick="importData()" title="استيراد">📂</div>
                 <div class="icon-btn" onclick="exportAllData()" title="تصدير">💾</div>
@@ -638,7 +660,7 @@
         <!-- AI Panel -->
         <div id="aiPanel" class="content-panel">
             <div class="chat-section">
-                <div class="chat-messages" id="chatMessages"><div class="message bot-message"><div class="message-bubble">👋 مرحباً! أنا NeuroSync Pro v4.1 - مساعدك الذكي المتقدم.<br><br>اسألني أي شيء!</div></div></div>
+                <div class="chat-messages" id="chatMessages"><div class="message bot-message"><div class="message-bubble">👋 مرحباً! أنا NeuroSync Pro v5.0 - مساعدك الذكي المتقدم.<br><br>اسألني أي شيء!</div></div></div>
                 <div class="chat-input-area">
                     <input type="text" class="chat-input" id="chatInput" placeholder="اكتب سؤالك هنا..." onkeypress="handleChatKeyPress(event)">
                     <button class="send-btn" onclick="sendAIMessage()">إرسال</button>
@@ -663,6 +685,7 @@
                 <div class="inner-tab" data-inner="money-ledger">📒 سجل الحسابات</div>
             </div>
             <div id="money-expenses" class="inner-panel active">
+                <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchExpense" placeholder="بحث في المصروفات..." onkeyup="filterExpenses()"></div>
                 <div class="form-group"><label>البيان</label><input type="text" id="expenseName" class="form-input" placeholder="مثال: طعام، مواصلات"></div>
                 <div class="form-group"><label>المبلغ</label><input type="number" id="expenseAmount" class="form-input" step="any"></div>
                 <div class="form-group"><label>العملة</label><select id="expenseCurrency" class="form-select"><option value="USD">دولار</option><option value="LBP">ليرة</option><option value="EUR">يورو</option></select></div>
@@ -699,7 +722,7 @@
             </div>
         </div>
 
-        <!-- Time Panel (مختصر للطول) -->
+        <!-- Time Panel -->
         <div id="timePanel" class="content-panel">
             <div class="inner-tabs"><div class="inner-tab active" data-inner="time-add">➕ إضافة نشاط</div><div class="inner-tab" data-inner="time-list">📋 نشاطات اليوم</div><div class="inner-tab" data-inner="time-stats">📊 إحصائيات</div></div>
             <div id="time-add" class="inner-panel active"><div class="form-group"><label>نوع النشاط</label><select id="timeCategory" class="form-select"></select></div><div class="form-group"><label>المدة (ساعات)</label><input type="number" id="timeHours" class="form-input" step="0.5"></div><button class="send-btn" onclick="addTimeEntry()" style="width:100%">➕ إضافة</button></div>
@@ -710,7 +733,7 @@
         <!-- Health Panel -->
         <div id="healthPanel" class="content-panel">
             <div class="inner-tabs"><div class="inner-tab active" data-inner="health-add">➕ تسجيل نشاط</div><div class="inner-tab" data-inner="health-list">📋 نشاطات اليوم</div><div class="inner-tab" data-inner="health-stats">📊 إحصائيات</div></div>
-            <div id="health-add" class="inner-panel active"><div class="form-group"><label>نوع التمرين</label><select id="healthActivityType" class="form-select"></select></div><div class="form-group"><label>المدة (دقائق)</label><input type="number" id="healthDuration" class="form-input"></div><button class="send-btn" onclick="addHealthActivity()" style="width:100%">➕ تسجيل</button><div class="stat-card" style="margin-top: 16px;"><div class="stat-title">🔋 الطاقة الحالية</div><div class="progress-container"><div class="progress-fill" id="energyBar" style="width:100%">100%</div></div></div></div>
+            <div id="health-add" class="inner-panel active"><div class="form-group"><label>نوع التمرين</label><select id="healthActivityType" class="form-select"></select></div><div class="form-group"><label>المدة (دقائق)</label><input type="number" id="healthDuration" class="form-input"></div><button class="send-btn" onclick="addHealthActivity()" style="width:100%">➕ تسجيل</button><div class="stat-card" style="margin-top: 16px;"><div class="stat-title">🔋 الطاقة الحالية</div><div class="progress-container"><div class="progress-fill" id="energyBar" style="width:100%">100%</div></div><div class="quick-buttons"><button class="quick-btn" onclick="restoreEnergy()">🔄 استعادة الطاقة</button></div></div></div>
             <div id="health-list" class="inner-panel"><div id="healthActivitiesList"></div></div>
             <div id="health-stats" class="inner-panel"><canvas id="healthStatsChart" style="max-height: 200px;"></canvas></div>
         </div>
@@ -718,7 +741,7 @@
         <!-- Tasks Panel -->
         <div id="tasksPanel" class="content-panel">
             <div class="inner-tabs"><div class="inner-tab active" data-inner="tasks-add">➕ إضافة مهمة</div><div class="inner-tab" data-inner="tasks-list">📋 قائمة المهام</div></div>
-            <div id="tasks-add" class="inner-panel active"><div class="form-group"><label>عنوان المهمة</label><input type="text" id="taskTitle" class="form-input" placeholder="مثال: شراء مستلزمات المنزل"></div><div class="form-group"><label>الوصف (اختياري)</label><textarea id="taskDescription" rows="2" class="form-input"></textarea></div><div class="form-group"><label>الأولوية</label><select id="taskPriority" class="form-select"><option value="high">عالية</option><option value="medium">متوسطة</option><option value="low">منخفضة</option></select></div><button class="send-btn" onclick="addTask()" style="width:100%">➕ إضافة مهمة</button></div>
+            <div id="tasks-add" class="inner-panel active"><div class="form-group"><label>عنوان المهمة</label><input type="text" id="taskTitle" class="form-input" placeholder="مثال: شراء مستلزمات المنزل"></div><div class="form-group"><label>الوصف (اختياري)</label><textarea id="taskDescription" rows="2" class="form-input"></textarea></div><div class="form-group"><label>الأولوية</label><select id="taskPriority" class="form-select"><option value="high">عالية</option><option value="medium">متوسطة</option><option value="low">منخفضة</option></select></div><div class="form-group"><label>تاريخ الاستحقاق</label><input type="date" id="taskDueDate" class="form-input"></div><button class="send-btn" onclick="addTask()" style="width:100%">➕ إضافة مهمة</button></div>
             <div id="tasks-list" class="inner-panel"><div id="tasksList"></div></div>
         </div>
 
@@ -743,48 +766,158 @@
     </div>
 
     <script>
-        // ====================== NeuroSync Pro v4.1 ======================
+        // ====================== NeuroSync Pro v5.0 - النسخة المطورة ======================
+        
+        // هيكل البيانات الرئيسي
         let appData = {
-            expenses: {}, debts: {}, timeLogs: {}, healthActivities: {}, tasks: [], currentEnergy: 100,
-            monthlyBudget: 1000, paymentHistory: [], // <-- سجل المدفوعات
-            categories: [{ id: "food", name: "🍔 طعام", color: "#10b981" },{ id: "transport", name: "🚗 مواصلات", color: "#3b82f6" },{ id: "shopping", name: "🛍️ تسوق", color: "#ef4444" },{ id: "bills", name: "📄 فواتير", color: "#8b5cf6" },{ id: "other", name: "📦 أخرى", color: "#6b7280" }],
-            timeCategories: [{ id: "sleep", name: "😴 نوم" },{ id: "work", name: "💼 عمل" },{ id: "exercise", name: "🏃 رياضة" },{ id: "other", name: "📝 أخرى" }],
-            healthExercises: [{ id: "walking", name: "🚶 مشي", met: 3.0 },{ id: "running", name: "🏃 جري", met: 8.0 },{ id: "exercise", name: "💪 تمارين", met: 5.0 }],
-            staticKnowledge: {}, persons: [], apiSettings: { provider: "local", openaiKey: "", geminiKey: "" }, user: { weight: 70 }
+            expenses: {}, 
+            debts: {}, 
+            timeLogs: {}, 
+            healthActivities: {}, 
+            tasks: [], 
+            currentEnergy: 100,
+            monthlyBudget: 1000, 
+            paymentHistory: [],
+            categories: [
+                { id: "food", name: "🍔 طعام", color: "#10b981" },
+                { id: "transport", name: "🚗 مواصلات", color: "#3b82f6" },
+                { id: "shopping", name: "🛍️ تسوق", color: "#ef4444" },
+                { id: "bills", name: "📄 فواتير", color: "#8b5cf6" },
+                { id: "other", name: "📦 أخرى", color: "#6b7280" }
+            ],
+            timeCategories: [
+                { id: "sleep", name: "😴 نوم", energyGain: 5 },
+                { id: "work", name: "💼 عمل", energyLoss: 3 },
+                { id: "exercise", name: "🏃 رياضة", energyLoss: 2 },
+                { id: "other", name: "📝 أخرى", energyLoss: 1 }
+            ],
+            healthExercises: [
+                { id: "walking", name: "🚶 مشي", met: 3.0 },
+                { id: "running", name: "🏃 جري", met: 8.0 },
+                { id: "exercise", name: "💪 تمارين", met: 5.0 }
+            ],
+            staticKnowledge: {}, 
+            persons: [], 
+            apiSettings: { provider: "local", openaiKey: "", geminiKey: "" }, 
+            user: { weight: 70 }
         };
         
+        // المتغيرات العامة
         let currentViewDate = new Date().toISOString().slice(0, 10);
-        let overviewChart = null, expensePieChart = null, timeStatsChart = null, healthStatsChart = null;
-
-        // Helper Functions
+        let chartInstances = {};
+        
+        // دوال مساعدة
         function getTodayKey() { return new Date().toISOString().slice(0, 10); }
         function getMonthKey(date) { return date.slice(0, 7); }
+        
+        function getWeekKey(date) {
+            let d = new Date(date);
+            d.setHours(0, 0, 0, 0);
+            let day = d.getDay();
+            let diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            let weekStart = new Date(d.setDate(diff));
+            return weekStart.toISOString().slice(0,10);
+        }
+        
         function ensureDateData(date) {
             if (!appData.expenses[date]) appData.expenses[date] = [];
             if (!appData.debts[date]) appData.debts[date] = [];
             if (!appData.timeLogs[date]) appData.timeLogs[date] = { entries: [], totalHours: 0, sleepHours: 0 };
             if (!appData.healthActivities[date]) appData.healthActivities[date] = [];
         }
-        function showToast(msg, isError = false) { let t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; if(isError) t.style.background = 'rgba(255,68,68,0.9)'; else t.style.background = 'rgba(0,0,0,0.9)'; document.body.appendChild(t); setTimeout(() => t.remove(), 3000); }
-        function convertToUSD(amount, currency) { if(currency === 'USD') return amount; if(currency === 'LBP') return amount / 89500; if(currency === 'EUR') return amount * 1.09; return amount; }
-        function saveData() { localStorage.setItem('neurosync_pro_v4_1', JSON.stringify(appData)); }
-        function loadData() { let saved = localStorage.getItem('neurosync_pro_v4_1'); if(saved) { try { let data = JSON.parse(saved); appData = { ...appData, ...data }; } catch(e) { console.error(e); } } ensureDateData(getTodayKey()); updateAllDisplays(); }
+        
+        function showToast(msg, isError = false) { 
+            let t = document.createElement('div'); 
+            t.className = 'toast'; 
+            t.textContent = msg; 
+            if(isError) t.style.background = 'rgba(255,68,68,0.9)'; 
+            else t.style.background = 'rgba(0,0,0,0.9)'; 
+            document.body.appendChild(t); 
+            setTimeout(() => t.remove(), 3000); 
+        }
+        
+        function convertToUSD(amount, currency) { 
+            if(currency === 'USD') return amount; 
+            if(currency === 'LBP') return amount / 89500; 
+            if(currency === 'EUR') return amount * 1.09; 
+            return amount; 
+        }
+        
+        function saveData() { 
+            localStorage.setItem('neurosync_pro_v5_0', JSON.stringify(appData)); 
+        }
+        
+        function loadData() { 
+            let saved = localStorage.getItem('neurosync_pro_v5_0'); 
+            if(saved) { 
+                try { 
+                    let data = JSON.parse(saved); 
+                    appData = { ...appData, ...data }; 
+                } catch(e) { console.error(e); } 
+            } 
+            ensureDateData(getTodayKey()); 
+            updateAllDisplays(); 
+        }
+        
+        // تنبيهات الميزانية
+        function checkBudgetAlert() {
+            let month = getMonthKey(currentViewDate);
+            let total = 0;
+            for(let date in appData.expenses) 
+                if(date.startsWith(month)) 
+                    total += appData.expenses[date].reduce((s,e) => s + convertToUSD(e.amount, e.currency), 0);
+            
+            let percent = (total / appData.monthlyBudget) * 100;
+            let alertKey = `alert_${month}_90`;
+            
+            if(percent >= 90 && !localStorage.getItem(alertKey)) {
+                showToast(`⚠️ تحذير: استهلكت ${Math.round(percent)}% من الميزانية الشهرية!`, false);
+                localStorage.setItem(alertKey, true);
+            }
+            
+            if(percent >= 100 && !localStorage.getItem(`alert_${month}_100`)) {
+                showToast(`🚨 تنبيه: تجاوزت الميزانية الشهرية بنسبة ${Math.round(percent - 100)}%!`, true);
+                localStorage.setItem(`alert_${month}_100`, true);
+            }
+        }
         
         // سجل الحسابات
         function addToLedger(type, description, amountUSD, currency, date) {
             if(!appData.paymentHistory) appData.paymentHistory = [];
-            appData.paymentHistory.unshift({ id: Date.now(), type, description, amountUSD, currency, date: date || new Date().toISOString(), timestamp: Date.now() });
+            appData.paymentHistory.unshift({ 
+                id: Date.now(), 
+                type, 
+                description, 
+                amountUSD, 
+                currency, 
+                date: date || new Date().toISOString(), 
+                timestamp: Date.now() 
+            });
             saveData();
         }
         
         function updateLedgerDisplay() {
             let container = document.getElementById('ledgerList');
             if(!container) return;
-            if(!appData.paymentHistory || appData.paymentHistory.length === 0) { container.innerHTML = '<div style="text-align:center; color: var(--text-secondary);">لا توجد حركات مالية مسجلة</div>'; return; }
-            container.innerHTML = appData.paymentHistory.map(log => `<div class="list-item"><div><strong>${log.type === 'expense' ? '💰 مصروف' : '💸 تسديد دين'}</strong><br><span style="font-size:12px;">${log.description}<br>${log.amountUSD} USD (${log.currency})<br>${new Date(log.date).toLocaleString('ar')}</span></div></div>`).join('');
+            if(!appData.paymentHistory || appData.paymentHistory.length === 0) { 
+                container.innerHTML = '<div style="text-align:center; color: var(--text-secondary);">لا توجد حركات مالية مسجلة</div>'; 
+                return; 
+            }
+            container.innerHTML = appData.paymentHistory.slice(0, 50).map(log => 
+                `<div class="list-item"><div><strong>${log.type === 'expense' ? '💰 مصروف' : '💸 تسديد دين'}</strong><br>
+                <span style="font-size:12px;">${log.description}<br>${Math.round(log.amountUSD)} USD (${log.currency})<br>
+                ${new Date(log.date).toLocaleString('ar')}</span></div></div>`
+            ).join('');
         }
-
-        // إدارة المصروفات
+        
+        // إدارة المصروفات مع البحث
+        let currentExpenseFilter = '';
+        
+        function filterExpenses() {
+            currentExpenseFilter = document.getElementById('searchExpense')?.value.toLowerCase() || '';
+            updateExpensesList();
+        }
+        
         function addExpense() {
             let name = document.getElementById('expenseName').value.trim();
             let amount = parseFloat(document.getElementById('expenseAmount').value);
@@ -799,16 +932,42 @@
             saveData();
             updateAllDisplays();
             showToast('✅ تم إضافة المصروف');
-            document.getElementById('expenseName').value = ''; document.getElementById('expenseAmount').value = '';
+            document.getElementById('expenseName').value = ''; 
+            document.getElementById('expenseAmount').value = '';
+            checkBudgetAlert();
         }
-        function deleteExpense(date, id) { if(confirm('هل أنت متأكد من حذف هذا المصروف؟')) { appData.expenses[date] = appData.expenses[date].filter(e => e.id !== id); saveData(); updateAllDisplays(); showToast('✅ تم حذف المصروف'); } }
+        
+        function deleteExpense(date, id) { 
+            if(confirm('هل أنت متأكد من حذف هذا المصروف؟')) { 
+                appData.expenses[date] = appData.expenses[date].filter(e => e.id !== id); 
+                saveData(); 
+                updateAllDisplays(); 
+                showToast('✅ تم حذف المصروف'); 
+            } 
+        }
+        
         function updateExpensesList() {
             let container = document.getElementById('expensesList');
             let expenses = appData.expenses[currentViewDate] || [];
-            if (expenses.length === 0) { container.innerHTML = '<div style="text-align:center; color: var(--text-secondary);">لا توجد مصروفات</div>'; return; }
-            container.innerHTML = expenses.map(e => `<div class="list-item"><div><strong>${e.name}</strong><div style="font-size:12px;">${e.amount} ${e.currency} - ${appData.categories.find(c=>c.id===e.category)?.name || e.category}</div></div><button class="delete-btn" onclick="deleteExpense('${currentViewDate}', ${e.id})">🗑️</button></div>`).join('');
+            
+            if(currentExpenseFilter) {
+                expenses = expenses.filter(e => 
+                    e.name.toLowerCase().includes(currentExpenseFilter) || 
+                    (appData.categories.find(c=>c.id===e.category)?.name || '').toLowerCase().includes(currentExpenseFilter)
+                );
+            }
+            
+            if (expenses.length === 0) { 
+                container.innerHTML = '<div style="text-align:center; color: var(--text-secondary);">لا توجد مصروفات</div>'; 
+                return; 
+            }
+            container.innerHTML = expenses.map(e => 
+                `<div class="list-item"><div><strong>${e.name}</strong>
+                <div style="font-size:12px;">${e.amount} ${e.currency} - ${appData.categories.find(c=>c.id===e.category)?.name || e.category}</div>
+                </div><button class="delete-btn" onclick="deleteExpense('${currentViewDate}', ${e.id})">🗑️</button></div>`
+            ).join('');
         }
-
+        
         // الديون مع سجل المدفوعات
         function addDebtFromForm() {
             let name = document.getElementById('debtName').value.trim();
@@ -822,8 +981,10 @@
             saveData();
             updateAllDisplays();
             showToast('✅ تم إضافة الدين');
-            document.getElementById('debtName').value = ''; document.getElementById('debtAmount').value = '';
+            document.getElementById('debtName').value = ''; 
+            document.getElementById('debtAmount').value = '';
         }
+        
         function payDebt(date, id) {
             let debt = appData.debts[date].find(d => d.id === id);
             if (debt && !debt.isPaid) {
@@ -836,7 +997,16 @@
                 showToast('✅ تم تسجيل تسديد الدين');
             }
         }
-        function deleteDebt(date, id) { if(confirm('هل أنت متأكد من حذف هذا الدين؟')) { appData.debts[date] = appData.debts[date].filter(d => d.id !== id); saveData(); updateAllDisplays(); showToast('✅ تم حذف الدين'); } }
+        
+        function deleteDebt(date, id) { 
+            if(confirm('هل أنت متأكد من حذف هذا الدين؟')) { 
+                appData.debts[date] = appData.debts[date].filter(d => d.id !== id); 
+                saveData(); 
+                updateAllDisplays(); 
+                showToast('✅ تم حذف الدين'); 
+            } 
+        }
+        
         function updateDebtsList() {
             let container = document.getElementById('debtsList');
             let paidContainer = document.getElementById('paidDebtsList');
@@ -845,91 +1015,631 @@
             let activeDebts = debts.filter(d => !d.isPaid);
             let paidDebts = debts.filter(d => d.isPaid);
             
-            container.innerHTML = activeDebts.length ? activeDebts.map(d => `<div class="list-item"><div><strong>${d.name}</strong><div>${d.amount} ${d.currency} - ${d.type === 'debt' ? 'عليّ' : 'لي'}</div></div><div><button class="edit-btn" onclick="payDebt('${currentViewDate}', ${d.id})">✅ تسديد</button><button class="delete-btn" onclick="deleteDebt('${currentViewDate}', ${d.id})">🗑️</button></div></div>`).join('') : '<div style="text-align:center; color: var(--text-secondary);">لا توجد ديون حالية</div>';
-            paidContainer.innerHTML = paidDebts.length ? paidDebts.map(d => `<div class="list-item paid-debt"><div><strong>${d.name}</strong><div>${d.amount} ${d.currency}<br><span style="font-size:10px;">تم التسديد: ${new Date(d.paidDate).toLocaleDateString('ar')}</span></div></div></div>`).join('') : '<div style="text-align:center; color: var(--text-secondary);">لا توجد مدفوعات سابقة</div>';
+            container.innerHTML = activeDebts.length ? 
+                activeDebts.map(d => `<div class="list-item"><div><strong>${d.name}</strong>
+                <div>${d.amount} ${d.currency} - ${d.type === 'debt' ? 'عليّ' : 'لي'}</div>
+                </div><div><button class="edit-btn" onclick="payDebt('${currentViewDate}', ${d.id})">✅ تسديد</button>
+                <button class="delete-btn" onclick="deleteDebt('${currentViewDate}', ${d.id})">🗑️</button></div></div>`).join('') : 
+                '<div style="text-align:center; color: var(--text-secondary);">لا توجد ديون حالية</div>';
+            
+            paidContainer.innerHTML = paidDebts.length ? 
+                paidDebts.map(d => `<div class="list-item paid-debt"><div><strong>${d.name}</strong>
+                <div>${d.amount} ${d.currency}<br><span style="font-size:10px;">تم التسديد: ${new Date(d.paidDate).toLocaleDateString('ar')}</span></div>
+                </div></div>`).join('') : 
+                '<div style="text-align:center; color: var(--text-secondary);">لا توجد مدفوعات سابقة</div>';
         }
-
-        // باقي الدوال (الميزانية، التصنيفات، الوقت، الصحة، المهام، المعرفة) مع تحسينات بسيطة
-        function updateBudget() { let newBudget = parseFloat(document.getElementById('budgetAmount').value); if(!isNaN(newBudget) && newBudget>0){ appData.monthlyBudget = newBudget; saveData(); updateBudgetDisplay(); showToast('✅ تم تحديث الميزانية'); } }
-        function updateBudgetDisplay() { let month=getMonthKey(currentViewDate), total=0; for(let date in appData.expenses) if(date.startsWith(month)) total+=appData.expenses[date].reduce((s,e)=>s+convertToUSD(e.amount,e.currency),0); let percent=Math.min(100,(total/appData.monthlyBudget)*100); document.getElementById('budgetInfo').innerHTML=`<div class="stat-card"><div>الميزانية: ${appData.monthlyBudget} USD</div><div>المصروفات: ${Math.round(total)} USD</div><div class="progress-container"><div class="progress-fill" style="width:${percent}%; background: ${percent>90?'#ff4444':(percent>70?'#ff9800':'linear-gradient(90deg, var(--accent-gold), var(--accent-orange))')}">${Math.round(percent)}%</div></div><div>المتبقي: ${Math.max(0,appData.monthlyBudget-total).toFixed(2)} USD</div></div>`; }
-        function addCustomCategory() { let name=document.getElementById('newCategoryName').value.trim(); let color=document.getElementById('newCategoryColor').value; if(!name) return showToast('❌ أدخل اسم التصنيف', true); appData.categories.push({ id:'custom_'+Date.now(), name, color }); saveData(); updateCategoriesDisplay(); populateSelects(); document.getElementById('newCategoryName').value=''; showToast('✅ تم إضافة التصنيف'); }
-        function updateCategoriesDisplay() { let container=document.getElementById('categoriesList'); if(container) container.innerHTML=`<div class="stat-card"><div class="stat-title">التصنيفات المتاحة</div><div style="display: flex; flex-wrap: wrap; gap: 8px;">${appData.categories.map(c=>`<span style="display:inline-block;padding:4px 12px;background:${c.color};border-radius:20px;font-size:12px;">${c.name}</span>`).join('')}</div></div>`; }
         
-        // الوقت
-        function addTimeEntry() { let category=document.getElementById('timeCategory').value; let hours=parseFloat(document.getElementById('timeHours').value); if(isNaN(hours)||hours<=0) return showToast('❌ أدخل مدة صحيحة', true); let date=currentViewDate; ensureDateData(date); appData.timeLogs[date].entries.push({ id:Date.now(), category, hours, date }); appData.timeLogs[date].totalHours+=hours; if(category==='sleep') appData.timeLogs[date].sleepHours+=hours; saveData(); updateAllDisplays(); document.getElementById('timeHours').value=''; showToast('✅ تم إضافة النشاط'); }
-        function deleteTimeEntry(date,id) { let entry=appData.timeLogs[date].entries.find(e=>e.id===id); if(entry){ appData.timeLogs[date].totalHours-=entry.hours; if(entry.category==='sleep') appData.timeLogs[date].sleepHours-=entry.hours; appData.timeLogs[date].entries=appData.timeLogs[date].entries.filter(e=>e.id!==id); saveData(); updateAllDisplays(); showToast('✅ تم حذف النشاط'); } }
-        function updateTimeEntriesList() { let container=document.getElementById('timeEntriesList'); let entries=appData.timeLogs[currentViewDate]?.entries||[]; if(entries.length===0){ container.innerHTML='<div style="text-align:center; color: var(--text-secondary);">لا توجد نشاطات</div>'; return; } container.innerHTML=entries.map(e=>`<div class="list-item"><div>${appData.timeCategories.find(c=>c.id===e.category)?.name||e.category}<br><span style="font-size:12px;">${e.hours} ساعة</span></div><button class="delete-btn" onclick="deleteTimeEntry('${currentViewDate}', ${e.id})">🗑️</button></div>`).join(''); }
-        function updateTimeStats() { let ctx=document.getElementById('timeStatsChart')?.getContext('2d'); if(ctx){ let hours=[],labels=[]; for(let i=6;i>=0;i--){ let d=new Date(); d.setDate(d.getDate()-i); let dateStr=d.toISOString().slice(0,10); hours.push(appData.timeLogs[dateStr]?.totalHours||0); labels.push(i===0?'اليوم':`-${i}`); } if(timeStatsChart) timeStatsChart.destroy(); timeStatsChart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{data:hours,borderColor:'#3b82f6',tension:0.4,fill:true}]},options:{responsive:true,maintainAspectRatio:true}}); } }
+        // الميزانية
+        function updateBudget() { 
+            let newBudget = parseFloat(document.getElementById('budgetAmount').value); 
+            if(!isNaN(newBudget) && newBudget>0){ 
+                appData.monthlyBudget = newBudget; 
+                saveData(); 
+                updateBudgetDisplay(); 
+                showToast('✅ تم تحديث الميزانية'); 
+                checkBudgetAlert();
+            } 
+        }
         
-        // الصحة
-        function addHealthActivity() { let type=document.getElementById('healthActivityType').value; let duration=parseFloat(document.getElementById('healthDuration').value); if(isNaN(duration)||duration<=0) return showToast('❌ أدخل مدة صحيحة', true); let date=currentViewDate; let exercise=appData.healthExercises.find(e=>e.id===type); let calories=Math.round((exercise?.met||3)*(appData.user.weight||70)*(duration/60)); ensureDateData(date); appData.healthActivities[date].push({ id:Date.now(), type, duration, calories, date }); let energyDrop=Math.min(30,Math.max(5,Math.round(calories/50))); appData.currentEnergy=Math.max(0,appData.currentEnergy-energyDrop); saveData(); updateAllDisplays(); document.getElementById('healthDuration').value=''; showToast(`✅ تم تسجيل ${calories} سعرة حرارية`); }
-        function deleteHealthActivity(date,id) { if(confirm('هل أنت متأكد من حذف هذا النشاط؟')){ appData.healthActivities[date]=appData.healthActivities[date].filter(a=>a.id!==id); saveData(); updateAllDisplays(); showToast('✅ تم حذف النشاط'); } }
-        function updateHealthActivitiesList() { let container=document.getElementById('healthActivitiesList'); let acts=appData.healthActivities[currentViewDate]||[]; if(acts.length===0){ container.innerHTML='<div style="text-align:center; color: var(--text-secondary);">لا توجد نشاطات صحية</div>'; return; } container.innerHTML=acts.map(a=>`<div class="list-item"><div>${appData.healthExercises.find(e=>e.id===a.type)?.name||a.type}<br><span style="font-size:12px;">${a.calories} سعرة - ${a.duration} دقيقة</span></div><button class="delete-btn" onclick="deleteHealthActivity('${currentViewDate}', ${a.id})">🗑️</button></div>`).join(''); }
-        function updateHealthStats() { document.getElementById('energyBar').style.width=`${appData.currentEnergy}%`; document.getElementById('energyBar').textContent=`${appData.currentEnergy}%`; let ctx=document.getElementById('healthStatsChart')?.getContext('2d'); if(ctx){ let calories=[],labels=[]; for(let i=6;i>=0;i--){ let d=new Date(); d.setDate(d.getDate()-i); let dateStr=d.toISOString().slice(0,10); calories.push((appData.healthActivities[dateStr]||[]).reduce((s,a)=>s+a.calories,0)); labels.push(i===0?'اليوم':`-${i}`); } if(healthStatsChart) healthStatsChart.destroy(); healthStatsChart=new Chart(ctx,{type:'bar',data:{labels:labels,datasets:[{data:calories,backgroundColor:'#ef4444',borderRadius:8}]},options:{responsive:true,maintainAspectRatio:true}}); } }
+        function updateBudgetDisplay() { 
+            let month=getMonthKey(currentViewDate), total=0; 
+            for(let date in appData.expenses) if(date.startsWith(month)) total+=appData.expenses[date].reduce((s,e)=>s+convertToUSD(e.amount,e.currency),0); 
+            let percent=Math.min(100,(total/appData.monthlyBudget)*100); 
+            document.getElementById('budgetInfo').innerHTML=`<div class="stat-card"><div>الميزانية: ${appData.monthlyBudget} USD</div>
+            <div>المصروفات: ${Math.round(total)} USD</div>
+            <div class="progress-container"><div class="progress-fill" style="width:${percent}%; background: ${percent>90?'#ff4444':(percent>70?'#ff9800':'linear-gradient(90deg, var(--accent-gold), var(--accent-orange))')}">
+            ${Math.round(percent)}%</div></div><div>المتبقي: ${Math.max(0,appData.monthlyBudget-total).toFixed(2)} USD</div></div>`; 
+        }
         
-        // المهام
-        function addTask() { let title=document.getElementById('taskTitle').value.trim(); let description=document.getElementById('taskDescription').value.trim(); let priority=document.getElementById('taskPriority').value; if(!title) return showToast('❌ أدخل عنوان المهمة', true); appData.tasks.push({ id:Date.now(), title, description, priority, completed:false, createdAt:new Date().toISOString() }); saveData(); updateTasksList(); document.getElementById('taskTitle').value=''; document.getElementById('taskDescription').value=''; showToast('✅ تم إضافة المهمة'); }
-        function toggleTaskComplete(id) { let task=appData.tasks.find(t=>t.id===id); if(task){ task.completed=!task.completed; saveData(); updateTasksList(); showToast(task.completed?'✅ تم إكمال المهمة':'🔄 تم إعادة فتح المهمة'); } }
-        function deleteTask(id) { if(confirm('هل أنت متأكد من حذف هذه المهمة؟')){ appData.tasks=appData.tasks.filter(t=>t.id!==id); saveData(); updateTasksList(); showToast('✅ تم حذف المهمة'); } }
-        function updateTasksList() { let container=document.getElementById('tasksList'); if(!container) return; let activeTasks=appData.tasks.filter(t=>!t.completed); let completedTasks=appData.tasks.filter(t=>t.completed); let priorityColors={high:'#ff4444',medium:'#ff9800',low:'#4caf50'}; let html='<div class="stat-card"><div class="stat-title">📋 المهام النشطة</div>'; if(activeTasks.length===0) html+='<div style="text-align:center; color: var(--text-secondary);">لا توجد مهام نشطة</div>'; else activeTasks.forEach(t=>{ html+=`<div class="list-item" style="border-right: 4px solid ${priorityColors[t.priority]}"><div><strong>${t.title}</strong>${t.description?`<div style="font-size:11px;">${t.description}</div>`:''}<div style="font-size:10px;">${t.priority==='high'?'🔴 عالية':(t.priority==='medium'?'🟡 متوسطة':'🟢 منخفضة')}</div></div><div><button class="edit-btn" onclick="toggleTaskComplete(${t.id})">✅</button><button class="delete-btn" onclick="deleteTask(${t.id})">🗑️</button></div></div>`; }); html+='</div><div class="stat-card" style="margin-top: 16px;"><div class="stat-title">✅ المهام المكتملة</div>'; if(completedTasks.length===0) html+='<div style="text-align:center; color: var(--text-secondary);">لا توجد مهام مكتملة</div>'; else completedTasks.forEach(t=>{ html+=`<div class="list-item" style="opacity: 0.7;"><div><del><strong>${t.title}</strong></del></div><div><button class="edit-btn" onclick="toggleTaskComplete(${t.id})">🔄</button><button class="delete-btn" onclick="deleteTask(${t.id})">🗑️</button></div></div>`; }); html+='</div>'; container.innerHTML=html; }
+        // التصنيفات
+        function addCustomCategory() { 
+            let name=document.getElementById('newCategoryName').value.trim(); 
+            let color=document.getElementById('newCategoryColor').value; 
+            if(!name) return showToast('❌ أدخل اسم التصنيف', true); 
+            appData.categories.push({ id:'custom_'+Date.now(), name, color }); 
+            saveData(); 
+            updateCategoriesDisplay(); 
+            populateSelects(); 
+            document.getElementById('newCategoryName').value=''; 
+            showToast('✅ تم إضافة التصنيف'); 
+        }
+        
+        function updateCategoriesDisplay() { 
+            let container=document.getElementById('categoriesList'); 
+            if(container) container.innerHTML=`<div class="stat-card"><div class="stat-title">التصنيفات المتاحة</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">${appData.categories.map(c=>`<span style="display:inline-block;padding:4px 12px;background:${c.color};border-radius:20px;font-size:12px;">${c.name}</span>`).join('')}</div></div>`; 
+        }
+        
+        // الوقت مع تأثير على الطاقة
+        function addTimeEntry() { 
+            let category=document.getElementById('timeCategory').value; 
+            let hours=parseFloat(document.getElementById('timeHours').value); 
+            if(isNaN(hours)||hours<=0) return showToast('❌ أدخل مدة صحيحة', true); 
+            let date=currentViewDate; 
+            ensureDateData(date); 
+            let categoryData = appData.timeCategories.find(c => c.id === category);
+            appData.timeLogs[date].entries.push({ id:Date.now(), category, hours, date }); 
+            appData.timeLogs[date].totalHours += hours; 
+            if(category === 'sleep') {
+                appData.timeLogs[date].sleepHours += hours;
+                let energyGain = hours * (categoryData?.energyGain || 5);
+                appData.currentEnergy = Math.min(100, appData.currentEnergy + energyGain);
+                showToast(`😴 +${energyGain}% طاقة من النوم`);
+            } else {
+                let energyLoss = hours * (categoryData?.energyLoss || 2);
+                appData.currentEnergy = Math.max(0, appData.currentEnergy - energyLoss);
+                if(energyLoss > 0) showToast(`⚡ -${energyLoss}% طاقة مستهلكة`);
+            }
+            saveData(); 
+            updateAllDisplays(); 
+            document.getElementById('timeHours').value=''; 
+            showToast('✅ تم إضافة النشاط'); 
+        }
+        
+        function deleteTimeEntry(date,id) { 
+            let entry=appData.timeLogs[date].entries.find(e=>e.id===id); 
+            if(entry){ 
+                appData.timeLogs[date].totalHours -= entry.hours; 
+                if(entry.category==='sleep') appData.timeLogs[date].sleepHours -= entry.hours; 
+                appData.timeLogs[date].entries = appData.timeLogs[date].entries.filter(e=>e.id!==id); 
+                saveData(); 
+                updateAllDisplays(); 
+                showToast('✅ تم حذف النشاط'); 
+            } 
+        }
+        
+        function updateTimeEntriesList() { 
+            let container=document.getElementById('timeEntriesList'); 
+            let entries=appData.timeLogs[currentViewDate]?.entries||[]; 
+            if(entries.length===0){ container.innerHTML='<div style="text-align:center; color: var(--text-secondary);">لا توجد نشاطات</div>'; return; } 
+            container.innerHTML=entries.map(e=>`<div class="list-item"><div>${appData.timeCategories.find(c=>c.id===e.category)?.name||e.category}<br><span style="font-size:12px;">${e.hours} ساعة</span></div><button class="delete-btn" onclick="deleteTimeEntry('${currentViewDate}', ${e.id})">🗑️</button></div>`).join(''); 
+        }
+        
+        function updateTimeStats() { 
+            let ctx=document.getElementById('timeStatsChart')?.getContext('2d'); 
+            if(ctx){ 
+                let hours=[],labels=[]; 
+                for(let i=6;i>=0;i--){ 
+                    let d=new Date(); 
+                    d.setDate(d.getDate()-i); 
+                    let dateStr=d.toISOString().slice(0,10); 
+                    hours.push(appData.timeLogs[dateStr]?.totalHours||0); 
+                    labels.push(i===0?'اليوم':`-${i}`); 
+                } 
+                if(chartInstances.timeStatsChart) chartInstances.timeStatsChart.destroy(); 
+                chartInstances.timeStatsChart = new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{data:hours,borderColor:'#3b82f6',tension:0.4,fill:true}]},options:{responsive:true,maintainAspectRatio:true}}); 
+            } 
+        }
+        
+        // الصحة مع استعادة الطاقة
+        function restoreEnergy() {
+            appData.currentEnergy = 100;
+            saveData();
+            updateHealthStats();
+            showToast('✅ تم استعادة الطاقة بالكامل');
+        }
+        
+        function addHealthActivity() { 
+            let type=document.getElementById('healthActivityType').value; 
+            let duration=parseFloat(document.getElementById('healthDuration').value); 
+            if(isNaN(duration)||duration<=0) return showToast('❌ أدخل مدة صحيحة', true); 
+            let date=currentViewDate; 
+            let exercise=appData.healthExercises.find(e=>e.id===type); 
+            let calories=Math.round((exercise?.met||3)*(appData.user.weight||70)*(duration/60)); 
+            ensureDateData(date); 
+            appData.healthActivities[date].push({ id:Date.now(), type, duration, calories, date }); 
+            let energyDrop = Math.min(30, Math.max(5, Math.round(calories/50))); 
+            appData.currentEnergy = Math.max(0, appData.currentEnergy - energyDrop); 
+            saveData(); 
+            updateAllDisplays(); 
+            document.getElementById('healthDuration').value=''; 
+            showToast(`✅ تم تسجيل ${calories} سعرة حرارية ( -${energyDrop}% طاقة )`); 
+        }
+        
+        function deleteHealthActivity(date,id) { 
+            if(confirm('هل أنت متأكد من حذف هذا النشاط؟')){ 
+                appData.healthActivities[date]=appData.healthActivities[date].filter(a=>a.id!==id); 
+                saveData(); 
+                updateAllDisplays(); 
+                showToast('✅ تم حذف النشاط'); 
+            } 
+        }
+        
+        function updateHealthActivitiesList() { 
+            let container=document.getElementById('healthActivitiesList'); 
+            let acts=appData.healthActivities[currentViewDate]||[]; 
+            if(acts.length===0){ container.innerHTML='<div style="text-align:center; color: var(--text-secondary);">لا توجد نشاطات صحية</div>'; return; } 
+            container.innerHTML=acts.map(a=>`<div class="list-item"><div>${appData.healthExercises.find(e=>e.id===a.type)?.name||a.type}<br><span style="font-size:12px;">${a.calories} سعرة - ${a.duration} دقيقة</span></div><button class="delete-btn" onclick="deleteHealthActivity('${currentViewDate}', ${a.id})">🗑️</button></div>`).join(''); 
+        }
+        
+        function updateHealthStats() { 
+            document.getElementById('energyBar').style.width=`${appData.currentEnergy}%`; 
+            document.getElementById('energyBar').textContent=`${appData.currentEnergy}%`; 
+            let ctx=document.getElementById('healthStatsChart')?.getContext('2d'); 
+            if(ctx){ 
+                let calories=[],labels=[]; 
+                for(let i=6;i>=0;i--){ 
+                    let d=new Date(); 
+                    d.setDate(d.getDate()-i); 
+                    let dateStr=d.toISOString().slice(0,10); 
+                    calories.push((appData.healthActivities[dateStr]||[]).reduce((s,a)=>s+a.calories,0)); 
+                    labels.push(i===0?'اليوم':`-${i}`); 
+                } 
+                if(chartInstances.healthStatsChart) chartInstances.healthStatsChart.destroy(); 
+                chartInstances.healthStatsChart = new Chart(ctx,{type:'bar',data:{labels:labels,datasets:[{data:calories,backgroundColor:'#ef4444',borderRadius:8}]},options:{responsive:true,maintainAspectRatio:true}}); 
+            } 
+        }
+        
+        // المهام مع تواريخ الاستحقاق
+        function addTask() { 
+            let title=document.getElementById('taskTitle').value.trim(); 
+            let description=document.getElementById('taskDescription').value.trim(); 
+            let priority=document.getElementById('taskPriority').value; 
+            let dueDate=document.getElementById('taskDueDate').value;
+            if(!title) return showToast('❌ أدخل عنوان المهمة', true); 
+            appData.tasks.push({ 
+                id:Date.now(), 
+                title, 
+                description, 
+                priority, 
+                completed:false, 
+                createdAt:new Date().toISOString(),
+                dueDate: dueDate || null
+            }); 
+            saveData(); 
+            updateTasksList(); 
+            document.getElementById('taskTitle').value=''; 
+            document.getElementById('taskDescription').value=''; 
+            document.getElementById('taskDueDate').value='';
+            showToast('✅ تم إضافة المهمة'); 
+        }
+        
+        function toggleTaskComplete(id) { 
+            let task=appData.tasks.find(t=>t.id===id); 
+            if(task){ 
+                task.completed=!task.completed; 
+                saveData(); 
+                updateTasksList(); 
+                showToast(task.completed?'✅ تم إكمال المهمة':'🔄 تم إعادة فتح المهمة'); 
+            } 
+        }
+        
+        function deleteTask(id) { 
+            if(confirm('هل أنت متأكد من حذف هذه المهمة？')){ 
+                appData.tasks=appData.tasks.filter(t=>t.id!==id); 
+                saveData(); 
+                updateTasksList(); 
+                showToast('✅ تم حذف المهمة'); 
+            } 
+        }
+        
+        function updateTasksList() { 
+            let container=document.getElementById('tasksList'); 
+            if(!container) return; 
+            let activeTasks=appData.tasks.filter(t=>!t.completed); 
+            let completedTasks=appData.tasks.filter(t=>t.completed); 
+            let priorityColors={high:'#ff4444',medium:'#ff9800',low:'#4caf50'}; 
+            let today = new Date().toISOString().slice(0,10);
+            
+            let html='<div class="stat-card"><div class="stat-title">📋 المهام النشطة</div>'; 
+            if(activeTasks.length===0) html+='<div style="text-align:center; color: var(--text-secondary);">لا توجد مهام نشطة</div>'; 
+            else activeTasks.forEach(t=>{ 
+                let dueWarning = '';
+                if(t.dueDate && t.dueDate < today) dueWarning = '<span style="color:#ff4444; font-size:10px;"> (منتهية)</span>';
+                else if(t.dueDate && t.dueDate === today) dueWarning = '<span style="color:#ff9800; font-size:10px;"> (اليوم)</span>';
+                html+=`<div class="list-item" style="border-right: 4px solid ${priorityColors[t.priority]}"><div><strong>${t.title}</strong>${dueWarning}${t.description?`<div style="font-size:11px;">${t.description}</div>`:''}${t.dueDate?`<div style="font-size:10px;">📅 ${t.dueDate}</div>`:''}<div style="font-size:10px;">${t.priority==='high'?'🔴 عالية':(t.priority==='medium'?'🟡 متوسطة':'🟢 منخفضة')}</div></div><div><button class="edit-btn" onclick="toggleTaskComplete(${t.id})">✅</button><button class="delete-btn" onclick="deleteTask(${t.id})">🗑️</button></div></div>`; 
+            }); 
+            html+='</div><div class="stat-card" style="margin-top: 16px;"><div class="stat-title">✅ المهام المكتملة</div>'; 
+            if(completedTasks.length===0) html+='<div style="text-align:center; color: var(--text-secondary);">لا توجد مهام مكتملة</div>'; 
+            else completedTasks.forEach(t=>{ 
+                html+=`<div class="list-item" style="opacity: 0.7;"><div><del><strong>${t.title}</strong></del></div><div><button class="edit-btn" onclick="toggleTaskComplete(${t.id})">🔄</button><button class="delete-btn" onclick="deleteTask(${t.id})">🗑️</button></div></div>`; 
+            }); 
+            html+='</div>'; 
+            container.innerHTML=html; 
+        }
         
         // المعرفة والأشخاص
-        function teachAI() { let q=document.getElementById('teachQuestion').value.trim(); let a=document.getElementById('teachAnswer').value.trim(); if(q&&a){ appData.staticKnowledge[q.toLowerCase()]=a; saveData(); updateKnowledgeList(); showToast('✅ تم تعليم الذكاء'); document.getElementById('teachQuestion').value=''; document.getElementById('teachAnswer').value=''; } else showToast('❌ أدخل السؤال والإجابة', true); }
-        function updateKnowledgeList() { let container=document.getElementById('knowledgeList'); let entries=Object.entries(appData.staticKnowledge); if(entries.length===0){ container.innerHTML='<div style="text-align:center; color: var(--text-secondary);">لا توجد معلومات في قاعدة المعرفة</div>'; return; } container.innerHTML=entries.map(([q,a])=>`<div class="list-item"><div><strong>${q}</strong><div style="font-size:12px; margin-top:4px;">${a.substring(0,100)}${a.length>100?'...':''}</div></div></div>`).join(''); }
-        function addPerson() { let name=document.getElementById('personName').value.trim(); let desc=document.getElementById('personDescription').value.trim(); if(name&&desc){ appData.persons.push({ id:Date.now(), name, description:desc }); saveData(); updatePersonsList(); document.getElementById('personName').value=''; document.getElementById('personDescription').value=''; showToast('✅ تم إضافة الشخص'); } else showToast('❌ أدخل الاسم والمعلومات', true); }
-        function updatePersonsList() { let container=document.getElementById('personsList'); if(!container) return; if(appData.persons.length===0){ container.innerHTML='<div style="text-align:center; color: var(--text-secondary);">لا يوجد أشخاص مضافون</div>'; return; } container.innerHTML=appData.persons.map(p=>`<div class="list-item"><div><strong>${p.name}</strong><div style="font-size:12px;">${p.description}</div></div></div>`).join(''); }
-        function populateSelects() { let catSelect=document.getElementById('expenseCategory'); if(catSelect) catSelect.innerHTML=appData.categories.map(c=>`<option value="${c.id}">${c.name}</option>`).join(''); let timeSelect=document.getElementById('timeCategory'); if(timeSelect) timeSelect.innerHTML=appData.timeCategories.map(c=>`<option value="${c.id}">${c.name}</option>`).join(''); let healthSelect=document.getElementById('healthActivityType'); if(healthSelect) healthSelect.innerHTML=appData.healthExercises.map(e=>`<option value="${e.id}">${e.name}</option>`).join(''); }
+        function teachAI() { 
+            let q=document.getElementById('teachQuestion').value.trim(); 
+            let a=document.getElementById('teachAnswer').value.trim(); 
+            if(q&&a){ 
+                appData.staticKnowledge[q.toLowerCase()]=a; 
+                saveData(); 
+                updateKnowledgeList(); 
+                showToast('✅ تم تعليم الذكاء'); 
+                document.getElementById('teachQuestion').value=''; 
+                document.getElementById('teachAnswer').value=''; 
+            } else showToast('❌ أدخل السؤال والإجابة', true); 
+        }
         
-        // التقارير والتاريخ
-        function loadReport() { let type=document.getElementById('reportType').value; let date=document.getElementById('reportDate').value||getTodayKey(); if(type==='daily'){ ensureDateData(date); let expenses=appData.expenses[date]||[]; let totalExp=expenses.reduce((s,e)=>s+convertToUSD(e.amount,e.currency),0); let hours=appData.timeLogs[date]?.totalHours||0; let calories=(appData.healthActivities[date]||[]).reduce((s,a)=>s+a.calories,0); let debts=(appData.debts[date]||[]).filter(d=>!d.isPaid); let totalDebts=debts.reduce((s,d)=>s+convertToUSD(d.amount,d.currency),0); document.getElementById('reportContent').innerHTML=`<div class="report-card"><div class="report-title">📅 تقرير يوم ${date}</div><div>💰 المصروفات: ${Math.round(totalExp)} USD</div><div>⏰ الساعات المسجلة: ${hours.toFixed(1)} ساعة</div><div>🔥 السعرات المحروقة: ${Math.round(calories)}</div><div>💸 الديون المتبقية: ${Math.round(totalDebts)} USD</div></div>`; } else if(type==='weekly'){ let weekStart=getWeekKey(date); let totalExp=0,totalCal=0,totalHours=0; for(let d in appData.expenses) if(d>=weekStart&&d<=date) totalExp+=appData.expenses[d].reduce((s,e)=>s+convertToUSD(e.amount,e.currency),0); for(let d in appData.healthActivities) if(d>=weekStart&&d<=date) totalCal+=appData.healthActivities[d].reduce((s,a)=>s+a.calories,0); for(let d in appData.timeLogs) if(d>=weekStart&&d<=date) totalHours+=appData.timeLogs[d].totalHours||0; document.getElementById('reportContent').innerHTML=`<div class="report-card"><div class="report-title">📊 تقرير أسبوعي (من ${weekStart} إلى ${date})</div><div>💰 إجمالي المصروفات: ${Math.round(totalExp)} USD</div><div>⏰ إجمالي الساعات: ${totalHours.toFixed(1)} ساعة</div><div>🔥 إجمالي السعرات: ${Math.round(totalCal)}</div></div>`; } else { let month=getMonthKey(date); let totalExp=0,totalCal=0,totalHours=0; for(let d in appData.expenses) if(d.startsWith(month)) totalExp+=appData.expenses[d].reduce((s,e)=>s+convertToUSD(e.amount,e.currency),0); for(let d in appData.healthActivities) if(d.startsWith(month)) totalCal+=appData.healthActivities[d].reduce((s,a)=>s+a.calories,0); for(let d in appData.timeLogs) if(d.startsWith(month)) totalHours+=appData.timeLogs[d].totalHours||0; document.getElementById('reportContent').innerHTML=`<div class="report-card"><div class="report-title">📈 تقرير شهر ${month}</div><div>💰 إجمالي المصروفات: ${Math.round(totalExp)} USD</div><div>⏰ إجمالي الساعات: ${totalHours.toFixed(1)} ساعة</div><div>🔥 إجمالي السعرات: ${Math.round(totalCal)}</div><div>📊 مقارنة بالميزانية: ${Math.round((totalExp/appData.monthlyBudget)*100)}% من الميزانية</div></div>`; } }
-        function getWeekKey(date) { let d=new Date(date); let weekStart=new Date(d.setDate(d.getDate()-d.getDay())); return weekStart.toISOString().slice(0,10); }
-        function loadHistory() { let date=document.getElementById('historyDate').value||getTodayKey(); ensureDateData(date); let expenses=appData.expenses[date]||[]; let debts=appData.debts[date]||[]; let time=appData.timeLogs[date]||{entries:[],totalHours:0}; let health=appData.healthActivities[date]||[]; document.getElementById('historyContent').innerHTML=`<div class="report-card"><div class="report-title">📅 سجل يوم ${date}</div><div><strong>💰 المصروفات:</strong> ${expenses.map(e=>`${e.name}: ${e.amount} ${e.currency}`).join(' | ')||'لا يوجد'}</div><div><strong>💸 الديون:</strong> ${debts.filter(d=>!d.isPaid).map(d=>`${d.name}: ${d.amount} ${d.currency} (${d.type==='debt'?'عليّ':'لي'})`).join(' | ')||'لا يوجد'}</div><div><strong>⏰ النشاطات:</strong> ${time.entries.map(e=>`${appData.timeCategories.find(c=>c.id===e.category)?.name||e.category}: ${e.hours} ساعة`).join(' | ')||'لا يوجد'}</div><div><strong>💪 النشاطات الصحية:</strong> ${health.map(a=>`${appData.healthExercises.find(e=>e.id===a.type)?.name||a.type}: ${a.calories} سعرة`).join(' | ')||'لا يوجد'}</div></div>`; }
+        function updateKnowledgeList() { 
+            let container=document.getElementById('knowledgeList'); 
+            let entries=Object.entries(appData.staticKnowledge); 
+            if(entries.length===0){ container.innerHTML='<div style="text-align:center; color: var(--text-secondary);">لا توجد معلومات في قاعدة المعرفة</div>'; return; } 
+            container.innerHTML=entries.map(([q,a])=>`<div class="list-item"><div><strong>${q}</strong><div style="font-size:12px; margin-top:4px;">${a.substring(0,100)}${a.length>100?'...':''}</div></div></div>`).join(''); 
+        }
         
-        // الذكاء الاصطناعي
-        async function processAIQuery(query) { let lower=query.toLowerCase(); for(let [k,v] of Object.entries(appData.staticKnowledge)) if(lower.includes(k.toLowerCase())) return v; let person=appData.persons.find(p=>lower.includes(p.name.toLowerCase())); if(person) return `👤 ${person.name}: ${person.description}`; if(lower.includes('مصروف')||lower.includes('صرفت')){ let today=getTodayKey(); let total=(appData.expenses[today]||[]).reduce((s,e)=>s+convertToUSD(e.amount,e.currency),0); return `💰 مصروفات اليوم: ${Math.round(total)} USD`; } if(lower.includes('ساعة')||lower.includes('وقت')){ let today=getTodayKey(); let hours=appData.timeLogs[today]?.totalHours||0; return `⏰ ساعات اليوم المسجلة: ${hours.toFixed(1)} ساعة`; } if(lower.includes('سعرة')){ let today=getTodayKey(); let cal=(appData.healthActivities[today]||[]).reduce((s,a)=>s+a.calories,0); return `🔥 السعرات المحروقة اليوم: ${Math.round(cal)} سعرة`; } if(lower.includes('طاقة')) return `🔋 الطاقة المتبقية: ${appData.currentEnergy}% ${appData.currentEnergy<30?'⚠️ أنت بحاجة للراحة!':''}`; if(lower.includes('مهمة')){ let pending=appData.tasks.filter(t=>!t.completed).length; return `✅ لديك ${pending} مهام غير مكتملة`; } if(lower.includes('نصيحة')){ let todayExp=(appData.expenses[getTodayKey()]||[]).reduce((s,e)=>s+convertToUSD(e.amount,e.currency),0); if(todayExp>100) return `💡 نصيحة مالية: مصروفات اليوم مرتفعة (${todayExp} USD)، حاول تقليل النفقات غير الضرورية غداً.`; let todayHours=appData.timeLogs[getTodayKey()]?.totalHours||0; if(todayHours<6) return `💡 نصيحة إنتاجية: ساعات عملك اليوم قليلة (${todayHours} ساعة)، حاول تنظيم وقتك بشكل أفضل.`; return `💡 نصيحة: أداء ممتاز! استمر في الحفاظ على عاداتك الإيجابية.`; } return `🌐 لم أجد إجابة محددة. يمكنك تعليمي من خلال تبويب "قاعدة المعرفة".`; }
-        function addChatMessage(text,sender){ let container=document.getElementById('chatMessages'); let div=document.createElement('div'); div.className=`message ${sender}-message`; div.innerHTML=`<div class="message-bubble">${text.replace(/\n/g,'<br>')}</div>`; container.appendChild(div); container.scrollTop=container.scrollHeight; }
-        async function sendAIMessage(){ let input=document.getElementById('chatInput'); let msg=input.value.trim(); if(!msg) return; addChatMessage(msg,'user'); input.value=''; let response=await processAIQuery(msg); addChatMessage(response,'bot'); }
+        function addPerson() { 
+            let name=document.getElementById('personName').value.trim(); 
+            let desc=document.getElementById('personDescription').value.trim(); 
+            if(name&&desc){ 
+                appData.persons.push({ id:Date.now(), name, description:desc }); 
+                saveData(); 
+                updatePersonsList(); 
+                document.getElementById('personName').value=''; 
+                document.getElementById('personDescription').value=''; 
+                showToast('✅ تم إضافة الشخص'); 
+            } else showToast('❌ أدخل الاسم والمعلومات', true); 
+        }
+        
+        function updatePersonsList() { 
+            let container=document.getElementById('personsList'); 
+            if(!container) return; 
+            if(appData.persons.length===0){ container.innerHTML='<div style="text-align:center; color: var(--text-secondary);">لا يوجد أشخاص مضافون</div>'; return; } 
+            container.innerHTML=appData.persons.map(p=>`<div class="list-item"><div><strong>${p.name}</strong><div style="font-size:12px;">${p.description}</div></div></div>`).join(''); 
+        }
+        
+        function populateSelects() { 
+            let catSelect=document.getElementById('expenseCategory'); 
+            if(catSelect) catSelect.innerHTML=appData.categories.map(c=>`<option value="${c.id}">${c.name}</option>`).join(''); 
+            let timeSelect=document.getElementById('timeCategory'); 
+            if(timeSelect) timeSelect.innerHTML=appData.timeCategories.map(c=>`<option value="${c.id}">${c.name}</option>`).join(''); 
+            let healthSelect=document.getElementById('healthActivityType'); 
+            if(healthSelect) healthSelect.innerHTML=appData.healthExercises.map(e=>`<option value="${e.id}">${e.name}</option>`).join(''); 
+        }
+        
+        // التقارير
+        function loadReport() { 
+            let type=document.getElementById('reportType').value; 
+            let date=document.getElementById('reportDate').value||getTodayKey(); 
+            if(type==='daily'){ 
+                ensureDateData(date); 
+                let expenses=appData.expenses[date]||[]; 
+                let totalExp=expenses.reduce((s,e)=>s+convertToUSD(e.amount,e.currency),0); 
+                let hours=appData.timeLogs[date]?.totalHours||0; 
+                let calories=(appData.healthActivities[date]||[]).reduce((s,a)=>s+a.calories,0); 
+                let debts=(appData.debts[date]||[]).filter(d=>!d.isPaid); 
+                let totalDebts=debts.reduce((s,d)=>s+convertToUSD(d.amount,d.currency),0); 
+                document.getElementById('reportContent').innerHTML=`<div class="report-card"><div class="report-title">📅 تقرير يوم ${date}</div><div>💰 المصروفات: ${Math.round(totalExp)} USD</div><div>⏰ الساعات المسجلة: ${hours.toFixed(1)} ساعة</div><div>🔥 السعرات المحروقة: ${Math.round(calories)}</div><div>💸 الديون المتبقية: ${Math.round(totalDebts)} USD</div><div>🔋 الطاقة الحالية: ${appData.currentEnergy}%</div></div>`; 
+            } else if(type==='weekly'){ 
+                let weekStart=getWeekKey(date); 
+                let totalExp=0,totalCal=0,totalHours=0; 
+                for(let d in appData.expenses) if(d>=weekStart&&d<=date) totalExp+=appData.expenses[d].reduce((s,e)=>s+convertToUSD(e.amount,e.currency),0); 
+                for(let d in appData.healthActivities) if(d>=weekStart&&d<=date) totalCal+=appData.healthActivities[d].reduce((s,a)=>s+a.calories,0); 
+                for(let d in appData.timeLogs) if(d>=weekStart&&d<=date) totalHours+=appData.timeLogs[d].totalHours||0; 
+                document.getElementById('reportContent').innerHTML=`<div class="report-card"><div class="report-title">📊 تقرير أسبوعي (من ${weekStart} إلى ${date})</div><div>💰 إجمالي المصروفات: ${Math.round(totalExp)} USD</div><div>⏰ إجمالي الساعات: ${totalHours.toFixed(1)} ساعة</div><div>🔥 إجمالي السعرات: ${Math.round(totalCal)}</div></div>`; 
+            } else { 
+                let month=getMonthKey(date); 
+                let totalExp=0,totalCal=0,totalHours=0; 
+                for(let d in appData.expenses) if(d.startsWith(month)) totalExp+=appData.expenses[d].reduce((s,e)=>s+convertToUSD(e.amount,e.currency),0); 
+                for(let d in appData.healthActivities) if(d.startsWith(month)) totalCal+=appData.healthActivities[d].reduce((s,a)=>s+a.calories,0); 
+                for(let d in appData.timeLogs) if(d.startsWith(month)) totalHours+=appData.timeLogs[d].totalHours||0; 
+                document.getElementById('reportContent').innerHTML=`<div class="report-card"><div class="report-title">📈 تقرير شهر ${month}</div><div>💰 إجمالي المصروفات: ${Math.round(totalExp)} USD</div><div>⏰ إجمالي الساعات: ${totalHours.toFixed(1)} ساعة</div><div>🔥 إجمالي السعرات: ${Math.round(totalCal)}</div><div>📊 مقارنة بالميزانية: ${Math.round((totalExp/appData.monthlyBudget)*100)}% من الميزانية</div></div>`; 
+            } 
+        }
+        
+        function loadHistory() { 
+            let date=document.getElementById('historyDate').value||getTodayKey(); 
+            ensureDateData(date); 
+            let expenses=appData.expenses[date]||[]; 
+            let debts=appData.debts[date]||[]; 
+            let time=appData.timeLogs[date]||{entries:[],totalHours:0}; 
+            let health=appData.healthActivities[date]||[]; 
+            document.getElementById('historyContent').innerHTML=`<div class="report-card"><div class="report-title">📅 سجل يوم ${date}</div><div><strong>💰 المصروفات:</strong> ${expenses.map(e=>`${e.name}: ${e.amount} ${e.currency}`).join(' | ')||'لا يوجد'}</div><div><strong>💸 الديون:</strong> ${debts.filter(d=>!d.isPaid).map(d=>`${d.name}: ${d.amount} ${d.currency} (${d.type==='debt'?'عليّ':'لي'})`).join(' | ')||'لا يوجد'}</div><div><strong>⏰ النشاطات:</strong> ${time.entries.map(e=>`${appData.timeCategories.find(c=>c.id===e.category)?.name||e.category}: ${e.hours} ساعة`).join(' | ')||'لا يوجد'}</div><div><strong>💪 النشاطات الصحية:</strong> ${health.map(a=>`${appData.healthExercises.find(e=>e.id===a.type)?.name||a.type}: ${a.calories} سعرة`).join(' | ')||'لا يوجد'}</div></div>`; 
+        }
+        
+        // الذكاء الاصطناعي المحسن
+        async function processAIQuery(query) { 
+            let lower=query.toLowerCase(); 
+            for(let [k,v] of Object.entries(appData.staticKnowledge)) if(lower.includes(k.toLowerCase())) return v; 
+            let person=appData.persons.find(p=>lower.includes(p.name.toLowerCase())); 
+            if(person) return `👤 ${person.name}: ${person.description}`; 
+            if(lower.includes('مصروف')||lower.includes('صرفت')){ 
+                let today=getTodayKey(); 
+                let total=(appData.expenses[today]||[]).reduce((s,e)=>s+convertToUSD(e.amount,e.currency),0); 
+                return `💰 مصروفات اليوم: ${Math.round(total)} USD`; 
+            } 
+            if(lower.includes('ساعة')||lower.includes('وقت')){ 
+                let today=getTodayKey(); 
+                let hours=appData.timeLogs[today]?.totalHours||0; 
+                return `⏰ ساعات اليوم المسجلة: ${hours.toFixed(1)} ساعة`; 
+            } 
+            if(lower.includes('سعرة')){ 
+                let today=getTodayKey(); 
+                let cal=(appData.healthActivities[today]||[]).reduce((s,a)=>s+a.calories,0); 
+                return `🔥 السعرات المحروقة اليوم: ${Math.round(cal)} سعرة`; 
+            } 
+            if(lower.includes('طاقة')) return `🔋 الطاقة المتبقية: ${appData.currentEnergy}% ${appData.currentEnergy<30?'⚠️ أنت بحاجة للراحة!':appData.currentEnergy>80?'🌟 طاقتك ممتازة!':''}`; 
+            if(lower.includes('مهمة')){ 
+                let pending=appData.tasks.filter(t=>!t.completed).length; 
+                let highPriority = appData.tasks.filter(t=>!t.completed && t.priority === 'high').length;
+                return `✅ لديك ${pending} مهام غير مكتملة (${highPriority} منها عالية الأولوية)`; 
+            } 
+            if(lower.includes('نصيحة')){ 
+                let todayExp=(appData.expenses[getTodayKey()]||[]).reduce((s,e)=>s+convertToUSD(e.amount,e.currency),0); 
+                if(todayExp>100) return `💡 نصيحة مالية: مصروفات اليوم مرتفعة (${todayExp} USD)، حاول تقليل النفقات غير الضرورية غداً.`; 
+                let todayHours=appData.timeLogs[getTodayKey()]?.totalHours||0; 
+                if(todayHours<6) return `💡 نصيحة إنتاجية: ساعات عملك اليوم قليلة (${todayHours} ساعة)، حاول تنظيم وقتك بشكل أفضل.`; 
+                if(appData.currentEnergy<30) return `💡 نصيحة صحية: طاقتك منخفضة (${appData.currentEnergy}%)، خذ قسطاً من الراحة أو تناول وجبة خفيفة.`;
+                return `💡 نصيحة: أداء ممتاز! استمر في الحفاظ على عاداتك الإيجابية.`; 
+            } 
+            return `🌐 لم أجد إجابة محددة. يمكنك تعليمي من خلال تبويب "قاعدة المعرفة".`; 
+        }
+        
+        function addChatMessage(text,sender){ 
+            let container=document.getElementById('chatMessages'); 
+            let div=document.createElement('div'); 
+            div.className=`message ${sender}-message`; 
+            div.innerHTML=`<div class="message-bubble">${text.replace(/\n/g,'<br>')}</div>`; 
+            container.appendChild(div); 
+            container.scrollTop=container.scrollHeight; 
+        }
+        
+        async function sendAIMessage(){ 
+            let input=document.getElementById('chatInput'); 
+            let msg=input.value.trim(); 
+            if(!msg) return; 
+            addChatMessage(msg,'user'); 
+            input.value=''; 
+            let response=await processAIQuery(msg); 
+            addChatMessage(response,'bot'); 
+        }
+        
         function handleChatKeyPress(e){ if(e.key==='Enter') sendAIMessage(); }
-        function startVoiceInput(){ if(!('webkitSpeechRecognition' in window)) return showToast('المتصفح لا يدعم الصوت', true); let rec=new webkitSpeechRecognition(); rec.lang='ar-SA'; rec.onresult=(e)=>{ document.getElementById('chatInput').value=e.results[0][0].transcript; sendAIMessage(); }; rec.start(); }
-        function saveApiKey(){ appData.apiSettings.provider=document.getElementById('aiProvider').value; let key=document.getElementById('apiKeyInput').value; if(appData.apiSettings.provider==='openai') appData.apiSettings.openaiKey=key; if(appData.apiSettings.provider==='gemini') appData.apiSettings.geminiKey=key; saveData(); showToast('✅ تم حفظ المفتاح'); }
+        
+        function startVoiceInput(){ 
+            if(!('webkitSpeechRecognition' in window)) return showToast('المتصفح لا يدعم الصوت', true); 
+            let rec=new webkitSpeechRecognition(); 
+            rec.lang='ar-SA'; 
+            rec.onresult=(e)=>{ document.getElementById('chatInput').value=e.results[0][0].transcript; sendAIMessage(); }; 
+            rec.start(); 
+        }
+        
+        function saveApiKey(){ 
+            appData.apiSettings.provider=document.getElementById('aiProvider').value; 
+            let key=document.getElementById('apiKeyInput').value; 
+            if(appData.apiSettings.provider==='openai') appData.apiSettings.openaiKey=key; 
+            if(appData.apiSettings.provider==='gemini') appData.apiSettings.geminiKey=key; 
+            saveData(); 
+            showToast('✅ تم حفظ المفتاح'); 
+        }
         
         // تصدير واستيراد
-        function exportAllData(){ let blob=new Blob([JSON.stringify(appData,null,2)],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`neurosync_backup_${Date.now()}.json`; a.click(); showToast('✅ تم تصدير البيانات'); }
-        function importData(){ let input=document.createElement('input'); input.type='file'; input.accept='application/json'; input.onchange=(e)=>{ let file=e.target.files[0]; let reader=new FileReader(); reader.onload=(event)=>{ try{ let data=JSON.parse(event.target.result); appData={...appData,...data}; saveData(); updateAllDisplays(); showToast('✅ تم استيراد البيانات بنجاح'); } catch(err){ showToast('❌ خطأ في استيراد الملف',true); } }; reader.readAsText(file); }; input.click(); }
+        function exportAllData(){ 
+            let blob=new Blob([JSON.stringify(appData,null,2)],{type:'application/json'}); 
+            let a=document.createElement('a'); 
+            a.href=URL.createObjectURL(blob); 
+            a.download=`neurosync_backup_${Date.now()}.json`; 
+            a.click(); 
+            showToast('✅ تم تصدير البيانات'); 
+        }
         
-        function toggleTheme(){ document.body.classList.toggle('light-mode'); localStorage.setItem('light_mode',document.body.classList.contains('light-mode')); }
-        function requestNotificationPermission(){ if(Notification.permission==='default'){ Notification.requestPermission().then(perm=>{ showToast(perm==='granted'?'🔔 تم تفعيل الإشعارات':'❌ تم رفض الإشعارات'); }); } else if(Notification.permission==='granted') showToast('🔔 الإشعارات مفعلة بالفعل'); else showToast('❌ الإشعارات مرفوضة من المتصفح',true); }
+        function importData(){ 
+            let input=document.createElement('input'); 
+            input.type='file'; 
+            input.accept='application/json'; 
+            input.onchange=(e)=>{ 
+                let file=e.target.files[0]; 
+                let reader=new FileReader(); 
+                reader.onload=(event)=>{ 
+                    try{ 
+                        let data=JSON.parse(event.target.result); 
+                        appData={...appData,...data}; 
+                        saveData(); 
+                        updateAllDisplays(); 
+                        showToast('✅ تم استيراد البيانات بنجاح'); 
+                    } catch(err){ 
+                        showToast('❌ خطأ في استيراد الملف',true); 
+                    } 
+                }; 
+                reader.readAsText(file); 
+            }; 
+            input.click(); 
+        }
         
-        function changeViewDate(delta){ let d=new Date(currentViewDate); d.setDate(d.getDate()+delta); currentViewDate=d.toISOString().slice(0,10); ensureDateData(currentViewDate); updateAllDisplays(); }
-        function resetToToday(){ currentViewDate=getTodayKey(); ensureDateData(currentViewDate); updateAllDisplays(); }
-        function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); }
+        function toggleTheme(){ 
+            document.body.classList.toggle('light-mode'); 
+            localStorage.setItem('light_mode',document.body.classList.contains('light-mode')); 
+        }
         
-        // تحديث شامل
+        function requestNotificationPermission(){ 
+            if(Notification.permission==='default'){ 
+                Notification.requestPermission().then(perm=>{ 
+                    showToast(perm==='granted'?'🔔 تم تفعيل الإشعارات':'❌ تم رفض الإشعارات'); 
+                }); 
+            } else if(Notification.permission==='granted') showToast('🔔 الإشعارات مفعلة بالفعل'); 
+            else showToast('❌ الإشعارات مرفوضة من المتصفح',true); 
+        }
+        
+        function changeViewDate(delta){ 
+            let d=new Date(currentViewDate); 
+            d.setDate(d.getDate()+delta); 
+            currentViewDate=d.toISOString().slice(0,10); 
+            ensureDateData(currentViewDate); 
+            updateAllDisplays(); 
+        }
+        
+        function resetToToday(){ 
+            currentViewDate=getTodayKey(); 
+            ensureDateData(currentViewDate); 
+            updateAllDisplays(); 
+        }
+        
+        function toggleSidebar(){ 
+            document.getElementById('sidebar').classList.toggle('open'); 
+            document.getElementById('overlay').classList.toggle('show'); 
+        }
+        
+        // تحديث شامل مع تحسين الأداء
         function updateDashboard() {
-            let today=currentViewDate; ensureDateData(today);
-            let monthExpenses=0; for(let date in appData.expenses) if(date.startsWith(getMonthKey(today))) monthExpenses+=appData.expenses[date].reduce((s,e)=>s+convertToUSD(e.amount,e.currency),0);
+            let today=currentViewDate; 
+            ensureDateData(today);
+            let monthExpenses=0; 
+            for(let date in appData.expenses) if(date.startsWith(getMonthKey(today))) monthExpenses+=appData.expenses[date].reduce((s,e)=>s+convertToUSD(e.amount,e.currency),0);
             let todayExpenses=appData.expenses[today].reduce((s,e)=>s+convertToUSD(e.amount,e.currency),0);
             let todayHours=appData.timeLogs[today].totalHours;
             let todayCalories=appData.healthActivities[today].reduce((s,a)=>s+(a.calories||0),0);
             let pendingTasks=appData.tasks.filter(t=>!t.completed).length;
             document.getElementById('currentDateDisplay').innerHTML=today;
-            document.getElementById('dashboardStats').innerHTML=`<div class="stat-card"><div class="stat-title"><i class="fas fa-wallet"></i> مصروفات اليوم</div><div class="stat-value">${Math.round(todayExpenses)} USD</div></div><div class="stat-card"><div class="stat-title"><i class="fas fa-chart-line"></i> مصروفات الشهر</div><div class="stat-value">${Math.round(monthExpenses)} USD</div></div><div class="stat-card"><div class="stat-title"><i class="fas fa-clock"></i> ساعات اليوم</div><div class="stat-value">${todayHours.toFixed(1)} ساعة</div></div><div class="stat-card"><div class="stat-title"><i class="fas fa-heartbeat"></i> سعرات اليوم</div><div class="stat-value">${Math.round(todayCalories)}</div></div><div class="stat-card"><div class="stat-title"><i class="fas fa-tasks"></i> مهام متبقية</div><div class="stat-value">${pendingTasks}</div></div>`;
+            document.getElementById('dashboardStats').innerHTML=`<div class="stat-card"><div class="stat-title"><i class="fas fa-wallet"></i> مصروفات اليوم</div><div class="stat-value">${Math.round(todayExpenses)} USD</div></div><div class="stat-card"><div class="stat-title"><i class="fas fa-chart-line"></i> مصروفات الشهر</div><div class="stat-value">${Math.round(monthExpenses)} USD</div></div><div class="stat-card"><div class="stat-title"><i class="fas fa-clock"></i> ساعات اليوم</div><div class="stat-value">${todayHours.toFixed(1)} ساعة</div></div><div class="stat-card"><div class="stat-title"><i class="fas fa-heartbeat"></i> سعرات اليوم</div><div class="stat-value">${Math.round(todayCalories)}</div></div><div class="stat-card"><div class="stat-title"><i class="fas fa-tasks"></i> مهام متبقية</div><div class="stat-value">${pendingTasks}</div></div><div class="stat-card"><div class="stat-title"><i class="fas fa-bolt"></i> الطاقة</div><div class="stat-value">${appData.currentEnergy}%</div></div>`;
+            
             let ctx=document.getElementById('overviewChart')?.getContext('2d');
-            if(ctx){ if(overviewChart) overviewChart.destroy(); overviewChart=new Chart(ctx,{type:'bar',data:{labels:['مصروفات (USD)','ساعات','سعرات/100'],datasets:[{data:[todayExpenses,todayHours,todayCalories/100],backgroundColor:['#10b981','#3b82f6','#ef4444'],borderRadius:8}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}}}}); }
+            if(ctx){ 
+                if(chartInstances.overviewChart) chartInstances.overviewChart.destroy(); 
+                chartInstances.overviewChart = new Chart(ctx,{type:'bar',data:{labels:['مصروفات (USD)','ساعات','سعرات/100'],datasets:[{data:[todayExpenses,todayHours,todayCalories/100],backgroundColor:['#10b981','#3b82f6','#ef4444'],borderRadius:8}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}}}}); 
+            }
+            
             let pieCtx=document.getElementById('expensePieChart')?.getContext('2d');
-            if(pieCtx){ let categoriesMap={}; appData.expenses[today].forEach(exp=>{ let cat=exp.category; let amount=convertToUSD(exp.amount,exp.currency); categoriesMap[cat]=(categoriesMap[cat]||0)+amount; }); let labels=[],data=[],colors=[]; for(let [cat,amount] of Object.entries(categoriesMap)){ let category=appData.categories.find(c=>c.id===cat); if(category){ labels.push(category.name); colors.push(category.color); data.push(amount); } } if(expensePieChart) expensePieChart.destroy(); if(data.length>0) expensePieChart=new Chart(pieCtx,{type:'pie',data:{labels:labels,datasets:[{data:data,backgroundColor:colors}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom'}}}}); }
+            if(pieCtx){ 
+                let categoriesMap={}; 
+                appData.expenses[today].forEach(exp=>{ 
+                    let cat=exp.category; 
+                    let amount=convertToUSD(exp.amount,exp.currency); 
+                    categoriesMap[cat]=(categoriesMap[cat]||0)+amount; 
+                }); 
+                let labels=[],data=[],colors=[]; 
+                for(let [cat,amount] of Object.entries(categoriesMap)){ 
+                    let category=appData.categories.find(c=>c.id===cat); 
+                    if(category){ 
+                        labels.push(category.name); 
+                        colors.push(category.color); 
+                        data.push(amount); 
+                    } 
+                } 
+                if(chartInstances.expensePieChart) chartInstances.expensePieChart.destroy(); 
+                if(data.length>0) chartInstances.expensePieChart = new Chart(pieCtx,{type:'pie',data:{labels:labels,datasets:[{data:data,backgroundColor:colors}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom'}}}}); 
+            }
         }
-        function updateAllDisplays() { updateDashboard(); updateExpensesList(); updateDebtsList(); updateBudgetDisplay(); updateTimeEntriesList(); updateTimeStats(); updateHealthActivitiesList(); updateHealthStats(); updateKnowledgeList(); updatePersonsList(); updateCategoriesDisplay(); updateTasksList(); updateLedgerDisplay(); populateSelects(); }
+        
+        function updateAllDisplays() { 
+            updateDashboard(); 
+            updateExpensesList(); 
+            updateDebtsList(); 
+            updateBudgetDisplay(); 
+            updateTimeEntriesList(); 
+            updateTimeStats(); 
+            updateHealthActivitiesList(); 
+            updateHealthStats(); 
+            updateKnowledgeList(); 
+            updatePersonsList(); 
+            updateCategoriesDisplay(); 
+            updateTasksList(); 
+            updateLedgerDisplay(); 
+            populateSelects(); 
+        }
         
         // تهيئة التبويبات
         function initSidebarTabs() {
-            document.querySelectorAll('.sidebar-item').forEach(item=>{ item.onclick=()=>{ document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active')); item.classList.add('active'); let panel=item.dataset.panel; document.querySelectorAll('.content-panel').forEach(p=>p.classList.remove('active')); document.getElementById(`${panel}Panel`).classList.add('active'); toggleSidebar(); if(panel==='reports') loadReport(); if(panel==='history') loadHistory(); }; });
-            document.querySelectorAll('.inner-tab').forEach(tab=>{ tab.onclick=()=>{ let parent=tab.closest('.content-panel'); parent.querySelectorAll('.inner-tab').forEach(t=>t.classList.remove('active')); parent.querySelectorAll('.inner-panel').forEach(p=>p.classList.remove('active')); tab.classList.add('active'); document.getElementById(tab.dataset.inner).classList.add('active'); }; });
+            document.querySelectorAll('.sidebar-item').forEach(item=>{ 
+                item.onclick=()=>{ 
+                    document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active')); 
+                    item.classList.add('active'); 
+                    let panel=item.dataset.panel; 
+                    document.querySelectorAll('.content-panel').forEach(p=>p.classList.remove('active')); 
+                    document.getElementById(`${panel}Panel`).classList.add('active'); 
+                    toggleSidebar(); 
+                    if(panel==='reports') loadReport(); 
+                    if(panel==='history') loadHistory(); 
+                }; 
+            });
+            
+            document.querySelectorAll('.inner-tab').forEach(tab=>{ 
+                tab.onclick=()=>{ 
+                    let parent=tab.closest('.content-panel'); 
+                    parent.querySelectorAll('.inner-tab').forEach(t=>t.classList.remove('active')); 
+                    parent.querySelectorAll('.inner-panel').forEach(p=>p.classList.remove('active')); 
+                    tab.classList.add('active'); 
+                    document.getElementById(tab.dataset.inner).classList.add('active'); 
+                }; 
+            });
         }
         
-        function init() { loadData(); initSidebarTabs(); if(localStorage.getItem('light_mode')==='true') document.body.classList.add('light-mode'); document.getElementById('reportDate').value=getTodayKey(); document.getElementById('historyDate').value=getTodayKey(); document.getElementById('budgetAmount').value=appData.monthlyBudget; document.getElementById('aiProvider').value=appData.apiSettings.provider; document.getElementById('apiKeyInput').value=appData.apiSettings.openaiKey; setInterval(()=>{ let today=getTodayKey(); ensureDateData(today); if(currentViewDate===today) updateAllDisplays(); saveData(); },60000); }
+        // تنبيهات المهام المتأخرة
+        function checkOverdueTasks() {
+            let today = new Date().toISOString().slice(0,10);
+            let overdueTasks = appData.tasks.filter(t => !t.completed && t.dueDate && t.dueDate < today);
+            if(overdueTasks.length > 0 && !localStorage.getItem('overdue_notified_today')) {
+                showToast(`⚠️ لديك ${overdueTasks.length} مهام منتهية الصلاحية!`, false);
+                localStorage.setItem('overdue_notified_today', Date.now().toString());
+            }
+            // إعادة تعيين الإشعار يومياً
+            let lastNotify = localStorage.getItem('overdue_notified_today');
+            if(lastNotify && (Date.now() - parseInt(lastNotify) > 86400000)) {
+                localStorage.removeItem('overdue_notified_today');
+            }
+        }
         
-        window.addExpense=addExpense; window.deleteExpense=deleteExpense; window.addDebtFromForm=addDebtFromForm; window.payDebt=payDebt; window.deleteDebt=deleteDebt; window.addTimeEntry=addTimeEntry; window.deleteTimeEntry=deleteTimeEntry; window.addHealthActivity=addHealthActivity; window.deleteHealthActivity=deleteHealthActivity; window.teachAI=teachAI; window.addPerson=addPerson; window.addTask=addTask; window.toggleTaskComplete=toggleTaskComplete; window.deleteTask=deleteTask; window.sendAIMessage=sendAIMessage; window.startVoiceInput=startVoiceInput; window.exportAllData=exportAllData; window.importData=importData; window.toggleTheme=toggleTheme; window.saveApiKey=saveApiKey; window.changeViewDate=changeViewDate; window.resetToToday=resetToToday; window.toggleSidebar=toggleSidebar; window.loadReport=loadReport; window.loadHistory=loadHistory; window.requestNotificationPermission=requestNotificationPermission; window.updateBudget=updateBudget; window.addCustomCategory=addCustomCategory;
+        function init() { 
+            loadData(); 
+            initSidebarTabs(); 
+            if(localStorage.getItem('light_mode')==='true') document.body.classList.add('light-mode'); 
+            document.getElementById('reportDate').value=getTodayKey(); 
+            document.getElementById('historyDate').value=getTodayKey(); 
+            document.getElementById('budgetAmount').value=appData.monthlyBudget; 
+            document.getElementById('aiProvider').value=appData.apiSettings.provider; 
+            document.getElementById('apiKeyInput').value=appData.apiSettings.openaiKey; 
+            
+            setInterval(()=>{ 
+                let today=getTodayKey(); 
+                ensureDateData(today); 
+                if(currentViewDate===today) updateAllDisplays(); 
+                saveData(); 
+                checkOverdueTasks();
+                checkBudgetAlert();
+            }, 60000); 
+        }
+        
+        // ربط الدوال العامة
+        window.addExpense=addExpense; 
+        window.deleteExpense=deleteExpense; 
+        window.addDebtFromForm=addDebtFromForm; 
+        window.payDebt=payDebt; 
+        window.deleteDebt=deleteDebt; 
+        window.addTimeEntry=addTimeEntry; 
+        window.deleteTimeEntry=deleteTimeEntry; 
+        window.addHealthActivity=addHealthActivity; 
+        window.deleteHealthActivity=deleteHealthActivity; 
+        window.teachAI=teachAI; 
+        window.addPerson=addPerson; 
+        window.addTask=addTask; 
+        window.toggleTaskComplete=toggleTaskComplete; 
+        window.deleteTask=deleteTask; 
+        window.sendAIMessage=sendAIMessage; 
+        window.startVoiceInput=startVoiceInput; 
+        window.exportAllData=exportAllData; 
+        window.importData=importData; 
+        window.toggleTheme=toggleTheme; 
+        window.saveApiKey=saveApiKey; 
+        window.changeViewDate=changeViewDate; 
+        window.resetToToday=resetToToday; 
+        window.toggleSidebar=toggleSidebar; 
+        window.loadReport=loadReport; 
+        window.loadHistory=loadHistory; 
+        window.requestNotificationPermission=requestNotificationPermission; 
+        window.updateBudget=updateBudget; 
+        window.addCustomCategory=addCustomCategory;
+        window.filterExpenses=filterExpenses;
+        window.restoreEnergy=restoreEnergy;
         
         init();
     </script>
