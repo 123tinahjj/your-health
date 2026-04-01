@@ -6,2232 +6,1816 @@
     <meta name="theme-color" content="#FFD700">
     <meta name="description" content="NeuroSync Pro - المساعد الذكي المتكامل">
     <title>NeuroSync Pro - المساعد الذكي</title>
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --bg-primary: #0f172a;
-    --bg-secondary: #1e293b;
-    --bg-card: #334155;
-    --accent-gold: #fbbf24;
-    --accent-orange: #f97316;
-    --success: #22c55e;
-    --danger: #ef4444;
-    --warning: #f59e0b;
-    --info: #3b82f6;
-    --text-primary: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --border: #475569;
-    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-}
-
-body.light-mode {
-    --bg-primary: #f8fafc;
-    --bg-secondary: #ffffff;
-    --bg-card: #f1f5f9;
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --border: #e2e8f0;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    transition: all 0.3s ease;
-}
-
-/* Login Styles */
-.login-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-    padding: 20px;
-}
-
-.login-card {
-    background: var(--bg-card);
-    padding: 40px;
-    border-radius: 24px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-}
-
-.login-logo {
-    text-align: center;
-    margin-bottom: 32px;
-}
-
-.login-logo-icon {
-    font-size: 64px;
-    margin-bottom: 16px;
-}
-
-.login-logo h1 {
-    color: var(--accent-gold);
-    font-size: 28px;
-    margin-bottom: 8px;
-}
-
-.input-group {
-    margin-bottom: 20px;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 12px 16px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    color: var(--text-primary);
-    font-size: 16px;
-    transition: all 0.3s;
-}
-
-.input-group input:focus {
-    outline: none;
-    border-color: var(--accent-gold);
-}
-
-.btn {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
-    color: #000;
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
-}
-
-.btn-secondary {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    border: 1px solid var(--border);
-    margin-top: 12px;
-}
-
-/* Main App Styles */
-.app-container {
-    display: none;
-    min-height: 100vh;
-}
-
-/* Sidebar */
-.sidebar {
-    position: fixed;
-    top: 0;
-    right: -280px;
-    width: 280px;
-    height: 100vh;
-    background: var(--bg-card);
-    z-index: 1000;
-    transition: right 0.3s;
-    overflow-y: auto;
-    border-left: 1px solid var(--border);
-}
-
-.sidebar.open {
-    right: 0;
-}
-
-.sidebar-header {
-    padding: 24px;
-    text-align: center;
-    border-bottom: 1px solid var(--border);
-}
-
-.sidebar-header .avatar {
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 40px;
-    margin: 0 auto 16px;
-}
-
-.sidebar-menu {
-    padding: 16px;
-}
-
-.menu-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    margin-bottom: 8px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s;
-    color: var(--text-secondary);
-}
-
-.menu-item:hover,
-.menu-item.active {
-    background: var(--bg-secondary);
-    color: var(--accent-gold);
-}
-
-.menu-item i {
-    width: 24px;
-}
-
-/* Overlay */
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    display: none;
-}
-
-.overlay.show {
-    display: block;
-}
-
-/* Header */
-.header {
-    background: var(--bg-card);
-    padding: 16px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.menu-toggle {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    background: var(--bg-secondary);
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.menu-toggle:hover {
-    background: var(--accent-gold);
-    color: #000;
-}
-
-.profile-section {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    padding: 8px 16px;
-    border-radius: 40px;
-    background: var(--bg-secondary);
-}
-
-.profile-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-}
-
-.header-actions {
-    display: flex;
-    gap: 12px;
-}
-
-.icon-btn {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    background: var(--bg-secondary);
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.icon-btn:hover {
-    background: var(--accent-gold);
-    color: #000;
-}
-
-/* Main Content */
-.main-content {
-    padding: 24px;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-.panel {
-    display: none;
-    animation: fadeIn 0.3s;
-}
-
-.panel.active {
-    display: block;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Dashboard Grid */
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-bottom: 24px;
-}
-
-.stat-card {
-    background: var(--bg-card);
-    padding: 20px;
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    transition: all 0.3s;
-}
-
-.stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
-}
-
-.stat-title {
-    color: var(--text-secondary);
-    font-size: 14px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.stat-value {
-    font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-.stat-change {
-    font-size: 12px;
-    color: var(--success);
-}
-
-.charts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 20px;
-    margin-top: 24px;
-}
-
-.chart-card {
-    background: var(--bg-card);
-    padding: 20px;
-    border-radius: 16px;
-    border: 1px solid var(--border);
-}
-
-.chart-card canvas {
-    max-height: 300px;
-}
-
-/* Forms */
-.form-group {
-    margin-bottom: 16px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--text-secondary);
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 10px 12px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--text-primary);
-    font-size: 14px;
-    transition: all 0.3s;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: var(--accent-gold);
-}
-
-/* Tabs */
-.tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 24px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 12px;
-}
-
-.tab {
-    padding: 8px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.3s;
-    color: var(--text-secondary);
-}
-
-.tab.active {
-    background: var(--accent-gold);
-    color: #000;
-}
-
-.tab-content {
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-/* Lists */
-.list-item {
-    background: var(--bg-secondary);
-    padding: 12px;
-    border-radius: 12px;
-    margin-bottom: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-.list-item-info {
-    flex: 1;
-}
-
-.list-item-title {
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.list-item-sub {
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-
-.list-item-actions {
-    display: flex;
-    gap: 8px;
-}
-
-.btn-icon {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 8px;
-    transition: all 0.3s;
-    font-size: 16px;
-}
-
-.btn-edit {
-    color: var(--accent-gold);
-}
-
-.btn-delete {
-    color: var(--danger);
-}
-
-.btn-complete {
-    color: var(--success);
-}
-
-/* Progress Bar */
-.progress-container {
-    background: var(--border);
-    height: 8px;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-top: 8px;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent-gold), var(--accent-orange));
-    transition: width 0.3s;
-}
-
-/* Quick Actions */
-.quick-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 16px;
-}
-
-.quick-btn {
-    padding: 6px 12px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 12px;
-    transition: all 0.3s;
-    color: var(--text-secondary);
-}
-
-.quick-btn:hover {
-    background: var(--accent-gold);
-    color: #000;
-}
-
-/* Chat */
-.chat-container {
-    background: var(--bg-secondary);
-    border-radius: 16px;
-    overflow: hidden;
-}
-
-.chat-messages {
-    height: 400px;
-    overflow-y: auto;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.message {
-    display: flex;
-    animation: slideIn 0.3s;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.message.user {
-    justify-content: flex-end;
-}
-
-.message.bot {
-    justify-content: flex-start;
-}
-
-.message-bubble {
-    max-width: 70%;
-    padding: 10px 14px;
-    border-radius: 18px;
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-.message.user .message-bubble {
-    background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
-    color: #000;
-}
-
-.message.bot .message-bubble {
-    background: var(--bg-card);
-    color: var(--text-primary);
-}
-
-.chat-input-area {
-    display: flex;
-    gap: 12px;
-    padding: 16px;
-    border-top: 1px solid var(--border);
-}
-
-.chat-input {
-    flex: 1;
-    padding: 12px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    color: var(--text-primary);
-    font-size: 14px;
-}
-
-/* Toast */
-.toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--bg-card);
-    color: var(--text-primary);
-    padding: 12px 24px;
-    border-radius: 40px;
-    z-index: 2000;
-    animation: slideUp 0.3s;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--accent-gold);
-}
-
-@keyframes slideUp {
-    from {
-        bottom: -50px;
-        opacity: 0;
-    }
-    to {
-        bottom: 24px;
-        opacity: 1;
-    }
-}
-
-/* Modal */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 3000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal.active {
-    display: flex;
-}
-
-.modal-content {
-    background: var(--bg-card);
-    padding: 32px;
-    border-radius: 24px;
-    width: 90%;
-    max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
-    border: 1px solid var(--accent-gold);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-}
-
-.modal-close {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: var(--bg-secondary);
-    cursor: pointer;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .main-content {
-        padding: 16px;
-    }
-    
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .charts-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .message-bubble {
-        max-width: 85%;
-    }
-    
-    .sidebar {
-        width: 260px;
-    }
-}
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --accent-gold: #fbbf24;
+            --accent-orange: #f97316;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #475569;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        /* Login Styles */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-logo-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .login-logo h1 {
+            color: var(--accent-gold);
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            margin-top: 12px;
+        }
+
+        /* Main App Styles */
+        .app-container {
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -280px;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-card);
+            z-index: 1000;
+            transition: right 0.3s;
+            overflow-y: auto;
+            border-left: 1px solid var(--border);
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-header .avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 16px;
+        }
+
+        .sidebar-menu {
+            padding: 16px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text-secondary);
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            background: var(--bg-secondary);
+            color: var(--accent-gold);
+        }
+
+        .menu-item i {
+            width: 24px;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .menu-toggle {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .menu-toggle:hover {
+            background: var(--accent-gold);
+            color: #000;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 40px;
+            background: var(--bg-secondary);
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .icon-btn:hover {
+            background: var(--accent-gold);
+            color: #000;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .panel {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-title {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            color: var(--success);
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .chart-card canvas {
+            max-height: 300px;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text-secondary);
+        }
+
+        .tab.active {
+            background: var(--accent-gold);
+            color: #000;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Lists */
+        .list-item {
+            background: var(--bg-secondary);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .list-item-info {
+            flex: 1;
+        }
+
+        .list-item-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .list-item-sub {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .list-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        .btn-edit {
+            color: var(--accent-gold);
+        }
+
+        .btn-delete {
+            color: var(--danger);
+        }
+
+        .btn-complete {
+            color: var(--success);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: var(--border);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-orange));
+            transition: width 0.3s;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .quick-btn {
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+            color: var(--text-secondary);
+        }
+
+        .quick-btn:hover {
+            background: var(--accent-gold);
+            color: #000;
+        }
+
+        /* Chat */
+        .chat-container {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            display: flex;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+            color: #000;
+        }
+
+        .message.bot .message-bubble {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            padding: 12px 24px;
+            border-radius: 40px;
+            z-index: 2000;
+            animation: slideUp 0.3s;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--accent-gold);
+        }
+
+        @keyframes slideUp {
+            from {
+                bottom: -50px;
+                opacity: 0;
+            }
+            to {
+                bottom: 24px;
+                opacity: 1;
+            }
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            padding: 32px;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--accent-gold);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 16px;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .message-bubble {
+                max-width: 85%;
+            }
+            
+            .sidebar {
+                width: 260px;
+            }
+        }
     </style>
 </head>
 <body>
     <div id="app"></div>
     <script>
         // ====================== NeuroSync Pro v8.0 ======================
-// نظام متكامل ومحسن بالكامل
+        // نظام متكامل ومحسن بالكامل
 
-// State Management
-class AppState {
-    constructor() {
-        this.currentUser = null;
-        this.users = new Map();
-        this.currentViewDate = new Date().toISOString().slice(0, 10);
-        this.activePanel = 'dashboard';
-        this.charts = {};
-        this.theme = localStorage.getItem('theme') || 'dark';
-    }
-}
+        // Data Manager
+        class DataManager {
+            constructor() {
+                this.data = {
+                    expenses: {},
+                    debts: {},
+                    timeLogs: {},
+                    healthActivities: {},
+                    tasks: [],
+                    goals: [],
+                    knowledge: {},
+                    persons: []
+                };
+                this.profile = {
+                    name: '',
+                    avatar: '🧠',
+                    exchangeRate: 89500
+                };
+                this.currentEnergy = 100;
+                this.monthlyBudget = 1000;
+                this.exchangeRates = { USD: 1, LBP: 89500, EUR: 0.92 };
+                this.categories = {
+                    expenses: [
+                        { id: 'food', name: '🍔 طعام', icon: 'fa-utensils', color: '#22c55e' },
+                        { id: 'transport', name: '🚗 مواصلات', icon: 'fa-car', color: '#3b82f6' },
+                        { id: 'shopping', name: '🛍️ تسوق', icon: 'fa-shopping-bag', color: '#ef4444' },
+                        { id: 'bills', name: '📄 فواتير', icon: 'fa-file-invoice', color: '#8b5cf6' },
+                        { id: 'entertainment', name: '🎮 ترفيه', icon: 'fa-gamepad', color: '#f59e0b' },
+                        { id: 'other', name: '📦 أخرى', icon: 'fa-box', color: '#6b7280' }
+                    ],
+                    time: [
+                        { id: 'sleep', name: '😴 نوم', energyEffect: +5 },
+                        { id: 'work', name: '💼 عمل', energyEffect: -3 },
+                        { id: 'study', name: '📚 دراسة', energyEffect: -2 },
+                        { id: 'exercise', name: '🏃 رياضة', energyEffect: -4 },
+                        { id: 'leisure', name: '🎮 ترفيه', energyEffect: -1 }
+                    ],
+                    health: [
+                        { id: 'walking', name: '🚶 مشي', caloriesPerMinute: 5 },
+                        { id: 'running', name: '🏃 جري', caloriesPerMinute: 10 },
+                        { id: 'cycling', name: '🚴 دراجة', caloriesPerMinute: 8 },
+                        { id: 'swimming', name: '🏊 سباحة', caloriesPerMinute: 7 },
+                        { id: 'gym', name: '💪 تمارين', caloriesPerMinute: 6 }
+                    ]
+                };
+            }
 
-class DataManager {
-    constructor() {
-        this.data = {
-            expenses: {},
-            debts: {},
-            timeLogs: {},
-            healthActivities: {},
-            tasks: [],
-            goals: [],
-            knowledge: {},
-            persons: []
-        };
-        this.categories = {
-            expenses: [
-                { id: 'food', name: '🍔 طعام', icon: 'fa-utensils', color: '#22c55e' },
-                { id: 'transport', name: '🚗 مواصلات', icon: 'fa-car', color: '#3b82f6' },
-                { id: 'shopping', name: '🛍️ تسوق', icon: 'fa-shopping-bag', color: '#ef4444' },
-                { id: 'bills', name: '📄 فواتير', icon: 'fa-file-invoice', color: '#8b5cf6' },
-                { id: 'entertainment', name: '🎮 ترفيه', icon: 'fa-gamepad', color: '#f59e0b' },
-                { id: 'other', name: '📦 أخرى', icon: 'fa-box', color: '#6b7280' }
-            ],
-            time: [
-                { id: 'sleep', name: '😴 نوم', energyEffect: +5 },
-                { id: 'work', name: '💼 عمل', energyEffect: -3 },
-                { id: 'study', name: '📚 دراسة', energyEffect: -2 },
-                { id: 'exercise', name: '🏃 رياضة', energyEffect: -4 },
-                { id: 'leisure', name: '🎮 ترفيه', energyEffect: -1 }
-            ],
-            health: [
-                { id: 'walking', name: '🚶 مشي', caloriesPerMinute: 5 },
-                { id: 'running', name: '🏃 جري', caloriesPerMinute: 10 },
-                { id: 'cycling', name: '🚴 دراجة', caloriesPerMinute: 8 },
-                { id: 'swimming', name: '🏊 سباحة', caloriesPerMinute: 7 },
-                { id: 'gym', name: '💪 تمارين', caloriesPerMinute: 6 }
-            ]
-        };
-        this.currentEnergy = 100;
-        this.monthlyBudget = 1000;
-        this.exchangeRates = { USD: 1, LBP: 89500, EUR: 0.92 };
-    }
+            getTodayKey() {
+                return new Date().toISOString().slice(0, 10);
+            }
 
-    getTodayKey() {
-        return new Date().toISOString().slice(0, 10);
-    }
+            ensureDateData(date) {
+                if (!this.data.expenses[date]) this.data.expenses[date] = [];
+                if (!this.data.debts[date]) this.data.debts[date] = [];
+                if (!this.data.timeLogs[date]) this.data.timeLogs[date] = { entries: [], totalHours: 0 };
+                if (!this.data.healthActivities[date]) this.data.healthActivities[date] = [];
+            }
 
-    ensureDateData(date) {
-        if (!this.data.expenses[date]) this.data.expenses[date] = [];
-        if (!this.data.debts[date]) this.data.debts[date] = [];
-        if (!this.data.timeLogs[date]) this.data.timeLogs[date] = { entries: [], totalHours: 0 };
-        if (!this.data.healthActivities[date]) this.data.healthActivities[date] = [];
-    }
+            convertToUSD(amount, currency) {
+                if (currency === 'USD') return amount;
+                if (currency === 'LBP') return amount / this.exchangeRates.LBP;
+                if (currency === 'EUR') return amount * this.exchangeRates.EUR;
+                return amount;
+            }
 
-    convertToUSD(amount, currency) {
-        if (currency === 'USD') return amount;
-        if (currency === 'LBP') return amount / this.exchangeRates.LBP;
-        if (currency === 'EUR') return amount * this.exchangeRates.EUR;
-        return amount;
-    }
+            saveToLocalStorage(email) {
+                const userData = {
+                    profile: this.profile,
+                    data: this.data,
+                    currentEnergy: this.currentEnergy,
+                    monthlyBudget: this.monthlyBudget
+                };
+                localStorage.setItem(`neurosync_${email}`, JSON.stringify(userData));
+            }
 
-    saveToLocalStorage(email) {
-        const userData = {
-            profile: this.profile,
-            data: this.data,
-            currentEnergy: this.currentEnergy,
-            monthlyBudget: this.monthlyBudget
-        };
-        localStorage.setItem(`neurosync_${email}`, JSON.stringify(userData));
-    }
-
-    loadFromLocalStorage(email) {
-        const saved = localStorage.getItem(`neurosync_${email}`);
-        if (saved) {
-            const data = JSON.parse(saved);
-            this.data = data.data;
-            this.currentEnergy = data.currentEnergy;
-            this.monthlyBudget = data.monthlyBudget;
-            if (data.profile) this.profile = data.profile;
-            return true;
+            loadFromLocalStorage(email) {
+                const saved = localStorage.getItem(`neurosync_${email}`);
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    this.data = data.data;
+                    this.currentEnergy = data.currentEnergy;
+                    this.monthlyBudget = data.monthlyBudget;
+                    if (data.profile) this.profile = data.profile;
+                    return true;
+                }
+                return false;
+            }
         }
-        return false;
-    }
-}
 
-// UI Components
-class UI {
-    constructor() {
-        this.toastTimeout = null;
-    }
+        // UI Components
+        class UI {
+            constructor() {
+                this.toastTimeout = null;
+            }
 
-    showToast(message, type = 'success') {
-        const existingToast = document.querySelector('.toast');
-        if (existingToast) existingToast.remove();
-        
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
-        toast.style.background = type === 'success' ? 'var(--success)' : 'var(--danger)';
-        document.body.appendChild(toast);
-        
-        setTimeout(() => toast.remove(), 3000);
-    }
+            showToast(message, type = 'success') {
+                const existingToast = document.querySelector('.toast');
+                if (existingToast) existingToast.remove();
+                
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+                toast.style.background = type === 'success' ? 'var(--success)' : 'var(--danger)';
+                document.body.appendChild(toast);
+                
+                setTimeout(() => toast.remove(), 3000);
+            }
 
-    updateProgressBar(elementId, percentage, color = null) {
-        const fill = document.getElementById(elementId);
-        if (fill) {
-            fill.style.width = `${Math.min(100, Math.max(0, percentage))}%`;
-            if (color) fill.style.background = color;
+            formatCurrency(amount, currency = 'USD') {
+                return new Intl.NumberFormat('ar-EG', {
+                    style: 'currency',
+                    currency: currency,
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2
+                }).format(amount);
+            }
+
+            formatDate(date) {
+                if (!date) return '';
+                return new Date(date).toLocaleDateString('ar-EG', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
         }
-    }
 
-    formatCurrency(amount, currency = 'USD') {
-        return new Intl.NumberFormat('ar-EG', {
-            style: 'currency',
-            currency: currency,
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2
-        }).format(amount);
-    }
+        // Auth Manager
+        class AuthManager {
+            constructor(dataManager, ui) {
+                this.dataManager = dataManager;
+                this.ui = ui;
+                this.currentUser = null;
+                this.currentViewDate = new Date().toISOString().slice(0, 10);
+                this.activePanel = 'dashboard';
+            }
 
-    formatDate(date) {
-        return new Date(date).toLocaleDateString('ar-EG', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    }
-}
+            init() {
+                const savedSession = localStorage.getItem('neurosync_session');
+                if (savedSession) {
+                    const session = JSON.parse(savedSession);
+                    if (session.expiry > Date.now()) {
+                        this.login(session.email, null, true);
+                        return true;
+                    }
+                }
+                return false;
+            }
 
-// Auth Manager
-class AuthManager {
-    constructor(dataManager, ui) {
-        this.dataManager = dataManager;
-        this.ui = ui;
-        this.state = new AppState();
-    }
-
-    init() {
-        const savedSession = localStorage.getItem('neurosync_session');
-        if (savedSession) {
-            const session = JSON.parse(savedSession);
-            if (session.expiry > Date.now()) {
-                this.login(session.email, null, true);
+            login(email, password, fromSession = false) {
+                if (!fromSession) {
+                    const savedUser = localStorage.getItem(`neurosync_${email}`);
+                    if (!savedUser) {
+                        // تسجيل مستخدم جديد
+                        const newUser = {
+                            email,
+                            password,
+                            createdAt: new Date().toISOString(),
+                            profile: {
+                                name: email.split('@')[0],
+                                avatar: '🧠',
+                                exchangeRate: 89500
+                            }
+                        };
+                        localStorage.setItem(`neurosync_${email}`, JSON.stringify({
+                            profile: newUser.profile,
+                            data: this.dataManager.data,
+                            currentEnergy: 100,
+                            monthlyBudget: 1000
+                        }));
+                        localStorage.setItem(`neurosync_user_${email}`, JSON.stringify(newUser));
+                    } else if (password) {
+                        const user = JSON.parse(localStorage.getItem(`neurosync_user_${email}`));
+                        if (user && user.password !== password) {
+                            this.ui.showToast('كلمة المرور غير صحيحة', 'error');
+                            return false;
+                        }
+                    }
+                }
+                
+                this.currentUser = email;
+                this.dataManager.loadFromLocalStorage(email);
+                
+                localStorage.setItem('neurosync_session', JSON.stringify({
+                    email,
+                    expiry: Date.now() + 30 * 24 * 60 * 60 * 1000
+                }));
+                
                 return true;
             }
-        }
-        return false;
-    }
 
-    login(email, password, fromSession = false) {
-        if (!fromSession) {
-            const savedUser = localStorage.getItem(`neurosync_${email}`);
-            if (!savedUser) {
-                // تسجيل مستخدم جديد
-                const newUser = {
-                    email,
-                    password,
-                    createdAt: new Date().toISOString(),
-                    profile: {
-                        name: email.split('@')[0],
-                        avatar: '🧠',
-                        exchangeRate: 89500
+            logout() {
+                this.currentUser = null;
+                localStorage.removeItem('neurosync_session');
+                this.ui.showToast('تم تسجيل الخروج بنجاح');
+                location.reload();
+            }
+
+            updateProfile(profileData) {
+                if (this.currentUser) {
+                    const user = JSON.parse(localStorage.getItem(`neurosync_user_${this.currentUser}`));
+                    if (user) {
+                        user.profile = { ...user.profile, ...profileData };
+                        localStorage.setItem(`neurosync_user_${this.currentUser}`, JSON.stringify(user));
                     }
-                };
-                localStorage.setItem(`neurosync_${email}`, JSON.stringify({
-                    profile: newUser.profile,
-                    data: this.dataManager.data,
-                    currentEnergy: 100,
-                    monthlyBudget: 1000
-                }));
-                localStorage.setItem(`neurosync_user_${email}`, JSON.stringify(newUser));
-            } else if (password) {
-                const user = JSON.parse(localStorage.getItem(`neurosync_user_${email}`));
-                if (user && user.password !== password) {
-                    this.ui.showToast('كلمة المرور غير صحيحة', 'error');
-                    return false;
+                    this.dataManager.profile = { ...this.dataManager.profile, ...profileData };
+                    this.dataManager.saveToLocalStorage(this.currentUser);
+                    this.ui.showToast('تم تحديث الملف الشخصي');
+                    return true;
                 }
+                return false;
             }
         }
-        
-        this.state.currentUser = email;
-        this.dataManager.loadFromLocalStorage(email);
-        
-        localStorage.setItem('neurosync_session', JSON.stringify({
-            email,
-            expiry: Date.now() + 30 * 24 * 60 * 60 * 1000
-        }));
-        
-        return true;
-    }
 
-    logout() {
-        this.state.currentUser = null;
-        localStorage.removeItem('neurosync_session');
-        this.ui.showToast('تم تسجيل الخروج بنجاح');
-        location.reload();
-    }
-
-    updateProfile(profileData) {
-        if (this.state.currentUser) {
-            const user = JSON.parse(localStorage.getItem(`neurosync_user_${this.state.currentUser}`));
-            user.profile = { ...user.profile, ...profileData };
-            localStorage.setItem(`neurosync_user_${this.state.currentUser}`, JSON.stringify(user));
-            this.dataManager.profile = user.profile;
-            this.dataManager.saveToLocalStorage(this.state.currentUser);
-            this.ui.showToast('تم تحديث الملف الشخصي');
-            return true;
-        }
-        return false;
-    }
-}
-
-// Dashboard Manager
-class DashboardManager {
-    constructor(dataManager, ui, state) {
-        this.dataManager = dataManager;
-        this.ui = ui;
-        this.state = state;
-        this.charts = {};
-    }
-
-    update() {
-        const today = this.state.currentViewDate;
-        this.dataManager.ensureDateData(today);
-        
-        // حساب الإحصائيات
-        const todayExpenses = this.dataManager.data.expenses[today].reduce((sum, e) => 
-            sum + this.dataManager.convertToUSD(e.amount, e.currency), 0);
-        
-        const monthExpenses = Object.entries(this.dataManager.data.expenses)
-            .filter(([date]) => date.startsWith(today.slice(0, 7)))
-            .reduce((sum, [_, expenses]) => sum + expenses.reduce((s, e) => 
-                s + this.dataManager.convertToUSD(e.amount, e.currency), 0), 0);
-        
-        const todayHours = this.dataManager.data.timeLogs[today]?.totalHours || 0;
-        const todayCalories = this.dataManager.data.healthActivities[today].reduce((sum, a) => sum + a.calories, 0);
-        const pendingTasks = this.dataManager.data.tasks.filter(t => !t.completed).length;
-        const activeGoals = this.dataManager.data.goals.filter(g => !g.completed).length;
-        
-        // تحديث البطاقات
-        const statsHtml = `
-            <div class="stat-card">
-                <div class="stat-title"><i class="fas fa-wallet"></i> مصروفات اليوم</div>
-                <div class="stat-value">${this.ui.formatCurrency(todayExpenses)}</div>
-                <div class="stat-change">${todayExpenses > 0 ? '📈' : '📉'} اليوم</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-title"><i class="fas fa-chart-line"></i> مصروفات الشهر</div>
-                <div class="stat-value">${this.ui.formatCurrency(monthExpenses)}</div>
-                <div class="stat-change">من ${this.ui.formatCurrency(this.dataManager.monthlyBudget)}</div>
-                <div class="progress-container">
-                    <div class="progress-fill" style="width: ${Math.min(100, (monthExpenses / this.dataManager.monthlyBudget) * 100)}%"></div>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-title"><i class="fas fa-clock"></i> ساعات اليوم</div>
-                <div class="stat-value">${todayHours.toFixed(1)} ساعة</div>
-                <div class="stat-change">${todayHours > 8 ? '⚡ منتج' : '😴 قليل'}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-title"><i class="fas fa-heartbeat"></i> سعرات اليوم</div>
-                <div class="stat-value">${Math.round(todayCalories)}</div>
-                <div class="stat-change">${todayCalories > 200 ? '🔥 ممتاز' : '💪 ابدأ التحرك'}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-title"><i class="fas fa-tasks"></i> المهام</div>
-                <div class="stat-value">${pendingTasks}</div>
-                <div class="stat-change">مهمة متبقية</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-title"><i class="fas fa-bullseye"></i> الأهداف</div>
-                <div class="stat-value">${activeGoals}</div>
-                <div class="stat-change">هدف نشط</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-title"><i class="fas fa-bolt"></i> الطاقة</div>
-                <div class="stat-value">${this.dataManager.currentEnergy}%</div>
-                <div class="progress-container">
-                    <div class="progress-fill" style="width: ${this.dataManager.currentEnergy}%; background: ${this.dataManager.currentEnergy > 50 ? '#22c55e' : '#ef4444'}"></div>
-                </div>
-            </div>
-        `;
-        
-        document.getElementById('dashboardStats').innerHTML = statsHtml;
-        
-        // تحديث المخططات
-        this.updateCharts(todayExpenses, todayHours, todayCalories / 100);
-    }
-    
-    updateCharts(expenses, hours, calories) {
-        const ctx = document.getElementById('overviewChart')?.getContext('2d');
-        if (ctx) {
-            if (this.charts.overview) this.charts.overview.destroy();
-            this.charts.overview = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['المصروفات (USD)', 'الساعات', 'السعرات/100'],
-                    datasets: [{
-                        data: [expenses, hours, calories],
-                        backgroundColor: ['#22c55e', '#3b82f6', '#ef4444'],
-                        borderRadius: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: { legend: { display: false } }
-                }
-            });
-        }
-    }
-}
-
-// Expenses Manager
-class ExpensesManager {
-    constructor(dataManager, ui, authManager) {
-        this.dataManager = dataManager;
-        this.ui = ui;
-        this.authManager = authManager;
-    }
-
-    addExpense(name, amount, currency, category) {
-        if (!name || !amount || amount <= 0) {
-            this.ui.showToast('الرجاء إدخال بيانات صحيحة', 'error');
-            return false;
-        }
-        
-        const date = this.authManager.state.currentViewDate;
-        this.dataManager.ensureDateData(date);
-        
-        const expense = {
-            id: Date.now(),
-            name,
-            amount: parseFloat(amount),
-            currency,
-            category,
-            date,
-            amountUSD: this.dataManager.convertToUSD(amount, currency),
-            createdAt: new Date().toISOString()
-        };
-        
-        this.dataManager.data.expenses[date].push(expense);
-        this.dataManager.saveToLocalStorage(this.authManager.state.currentUser);
-        this.ui.showToast('تم إضافة المصروف بنجاح');
-        return true;
-    }
-    
-    deleteExpense(date, id) {
-        if (confirm('هل أنت متأكد من حذف هذا المصروف؟')) {
-            this.dataManager.data.expenses[date] = this.dataManager.data.expenses[date].filter(e => e.id !== id);
-            this.dataManager.saveToLocalStorage(this.authManager.state.currentUser);
-            this.ui.showToast('تم حذف المصروف');
-            return true;
-        }
-        return false;
-    }
-    
-    getExpensesList(date) {
-        return this.dataManager.data.expenses[date] || [];
-    }
-    
-    getTotalByCategory(date) {
-        const expenses = this.getExpensesList(date);
-        const totals = {};
-        expenses.forEach(e => {
-            const category = e.category;
-            totals[category] = (totals[category] || 0) + e.amountUSD;
-        });
-        return totals;
-    }
-}
-
-// Tasks Manager
-class TasksManager {
-    constructor(dataManager, ui, authManager) {
-        this.dataManager = dataManager;
-        this.ui = ui;
-        this.authManager = authManager;
-    }
-    
-    addTask(title, description, priority, dueDate) {
-        if (!title) {
-            this.ui.showToast('الرجاء إدخال عنوان المهمة', 'error');
-            return false;
-        }
-        
-        const task = {
-            id: Date.now(),
-            title,
-            description: description || '',
-            priority,
-            dueDate: dueDate || null,
-            completed: false,
-            createdAt: new Date().toISOString()
-        };
-        
-        this.dataManager.data.tasks.push(task);
-        this.dataManager.saveToLocalStorage(this.authManager.state.currentUser);
-        this.ui.showToast('تم إضافة المهمة');
-        return true;
-    }
-    
-    toggleComplete(id) {
-        const task = this.dataManager.data.tasks.find(t => t.id === id);
-        if (task) {
-            task.completed = !task.completed;
-            this.dataManager.saveToLocalStorage(this.authManager.state.currentUser);
-            this.ui.showToast(task.completed ? '🎉 مبروك! تم إكمال المهمة' : 'تم إعادة فتح المهمة');
-            return true;
-        }
-        return false;
-    }
-    
-    deleteTask(id) {
-        if (confirm('هل أنت متأكد من حذف هذه المهمة؟')) {
-            this.dataManager.data.tasks = this.dataManager.data.tasks.filter(t => t.id !== id);
-            this.dataManager.saveToLocalStorage(this.authManager.state.currentUser);
-            this.ui.showToast('تم حذف المهمة');
-            return true;
-        }
-        return false;
-    }
-    
-    getTasksByStatus(completed = false) {
-        return this.dataManager.data.tasks.filter(t => t.completed === completed);
-    }
-}
-
-// Goals Manager
-class GoalsManager {
-    constructor(dataManager, ui, authManager) {
-        this.dataManager = dataManager;
-        this.ui = ui;
-        this.authManager = authManager;
-    }
-    
-    addGoal(title, description, target, current, type) {
-        if (!title || !target || target <= 0) {
-            this.ui.showToast('الرجاء إدخال بيانات صحيحة', 'error');
-            return false;
-        }
-        
-        const goal = {
-            id: Date.now(),
-            title,
-            description: description || '',
-            target: parseFloat(target),
-            current: parseFloat(current) || 0,
-            type,
-            completed: false,
-            createdAt: new Date().toISOString()
-        };
-        
-        this.dataManager.data.goals.push(goal);
-        this.dataManager.saveToLocalStorage(this.authManager.state.currentUser);
-        this.ui.showToast('تم إضافة الهدف');
-        return true;
-    }
-    
-    updateProgress(id, newValue) {
-        const goal = this.dataManager.data.goals.find(g => g.id === id);
-        if (goal) {
-            goal.current = Math.min(goal.target, Math.max(0, newValue));
-            if (goal.current >= goal.target && !goal.completed) {
-                goal.completed = true;
-                this.ui.showToast(`🎉 هنيئاً! لقد حققت هدف "${goal.title}"!`);
+        // Main Application
+        class NeuroSyncApp {
+            constructor() {
+                this.ui = new UI();
+                this.dataManager = new DataManager();
+                this.authManager = new AuthManager(this.dataManager, this.ui);
+                this.init();
             }
-            this.dataManager.saveToLocalStorage(this.authManager.state.currentUser);
-            return true;
-        }
-        return false;
-    }
-    
-    deleteGoal(id) {
-        if (confirm('هل أنت متأكد من حذف هذا الهدف؟')) {
-            this.dataManager.data.goals = this.dataManager.data.goals.filter(g => g.id !== id);
-            this.dataManager.saveToLocalStorage(this.authManager.state.currentUser);
-            this.ui.showToast('تم حذف الهدف');
-            return true;
-        }
-        return false;
-    }
-}
-
-// AI Assistant
-class AIAssistant {
-    constructor(dataManager, ui, authManager, tasksManager, goalsManager) {
-        this.dataManager = dataManager;
-        this.ui = ui;
-        this.authManager = authManager;
-        this.tasksManager = tasksManager;
-        this.goalsManager = goalsManager;
-        this.responses = {
-            greeting: ['مرحباً! كيف يمكنني مساعدتك اليوم؟', 'أهلاً بك! أخبرني ماذا تريد؟', 'السلام عليكم! جاهز لخدمتك'],
-            advice: {
-                money: 'نصيحة مالية: حاول تتبع مصروفاتك يومياً وتخصيص 20% من دخلك للادخار.',
-                time: 'نصيحة إنتاجية: استخدم تقنية بومودورو (25 دقيقة عمل، 5 دقائق راحة) لزيادة التركيز.',
-                health: 'نصيحة صحية: اشرب كوبين من الماء فور الاستيقاظ لتنشيط الجسم.'
-            }
-        };
-    }
-    
-    async processQuery(query) {
-        const lower = query.toLowerCase();
-        
-        // التحقق من المعرفة المخزنة
-        for (const [key, value] of Object.entries(this.dataManager.data.knowledge)) {
-            if (lower.includes(key.toLowerCase())) {
-                return `📚 ${value}`;
-            }
-        }
-        
-        // التحقق من الأشخاص
-        const person = this.dataManager.data.persons.find(p => lower.includes(p.name.toLowerCase()));
-        if (person) {
-            return `👤 ${person.name}: ${person.description}`;
-        }
-        
-        // ردود سريعة
-        if (lower.includes('مرحب') || lower.includes('السلام')) {
-            return this.responses.greeting[Math.floor(Math.random() * this.responses.greeting.length)];
-        }
-        
-        if (lower.includes('مصروف') || lower.includes('صرفت')) {
-            const today = this.authManager.state.currentViewDate;
-            const expenses = this.dataManager.data.expenses[today] || [];
-            const total = expenses.reduce((sum, e) => sum + this.dataManager.convertToUSD(e.amount, e.currency), 0);
-            return `💰 مصروفات اليوم: ${this.ui.formatCurrency(total)}\n\n${expenses.length ? 'التفاصيل:\n' + expenses.map(e => `• ${e.name}: ${e.amount} ${e.currency}`).join('\n') : 'لا توجد مصروفات مسجلة'}`;
-        }
-        
-        if (lower.includes('مهمة') || lower.includes('مهام')) {
-            const tasks = this.tasksManager.getTasksByStatus(false);
-            if (tasks.length === 0) return '✅ لا توجد مهام متبقية! أحسنت!';
-            return `📋 المهام المتبقية (${tasks.length}):\n${tasks.map(t => `• ${t.title}${t.priority === 'high' ? ' 🔴 عالية الأولوية' : ''}`).join('\n')}`;
-        }
-        
-        if (lower.includes('هدف') || lower.includes('أهداف')) {
-            const goals = this.dataManager.data.goals.filter(g => !g.completed);
-            if (goals.length === 0) return '🎯 لا توجد أهداف نشطة حالياً. أضف هدفاً جديداً للبدء!';
-            return `🎯 الأهداف النشطة:\n${goals.map(g => `• ${g.title}: ${g.current}/${g.target} (${Math.round((g.current/g.target)*100)}%)`).join('\n')}`;
-        }
-        
-        if (lower.includes('طاقة')) {
-            return `🔋 الطاقة الحالية: ${this.dataManager.currentEnergy}%\n${this.dataManager.currentEnergy < 30 ? '⚠️ أنت بحاجة للراحة!' : this.dataManager.currentEnergy > 70 ? '🌟 طاقتك ممتازة! استمر!' : '⚡ مستوى طاقة جيد'}`;
-        }
-        
-        if (lower.includes('نصيحة')) {
-            if (lower.includes('مال') || lower.includes('فلوس')) return this.responses.advice.money;
-            if (lower.includes('وقت') || lower.includes('انتاج')) return this.responses.advice.time;
-            if (lower.includes('صح') || lower.includes('طاقة')) return this.responses.advice.health;
-            return `💡 إليك نصيحة عشوائية:\n${this.responses.advice[Object.keys(this.responses.advice)[Math.floor(Math.random() * 3)]]}`;
-        }
-        
-        return `🌐 لم أجد إجابة محددة. يمكنك تعليمي الإجابة من خلال قسم "قاعدة المعرفة".\n\n💡 جرب:\n- "عرض مصروفات اليوم"\n- "عرض مهامي"\n- "عرض أهدافي"\n- "نصيحة مالية"`;
-    }
-}
-
-// Main Application
-class NeuroSyncApp {
-    constructor() {
-        this.ui = new UI();
-        this.dataManager = new DataManager();
-        this.authManager = new AuthManager(this.dataManager, this.ui);
-        this.dashboardManager = new DashboardManager(this.dataManager, this.ui, this.authManager.state);
-        this.expensesManager = new ExpensesManager(this.dataManager, this.ui, this.authManager);
-        this.tasksManager = new TasksManager(this.dataManager, this.ui, this.authManager);
-        this.goalsManager = new GoalsManager(this.dataManager, this.ui, this.authManager);
-        this.aiAssistant = new AIAssistant(this.dataManager, this.ui, this.authManager, this.tasksManager, this.goalsManager);
-        
-        this.init();
-    }
-    
-    init() {
-        if (!this.authManager.init()) {
-            this.showLogin();
-        } else {
-            this.showApp();
-            this.loadUserData();
-        }
-        this.bindEvents();
-    }
-    
-    showLogin() {
-        document.getElementById('app').innerHTML = `
-            <div class="login-container">
-                <div class="login-card">
-                    <div class="login-logo">
-                        <div class="login-logo-icon">🧠</div>
-                        <h1>NeuroSync Pro</h1>
-                        <p>المساعد الذكي المتكامل v8.0</p>
-                    </div>
-                    <div class="input-group">
-                        <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" autocomplete="email">
-                    </div>
-                    <div class="input-group">
-                        <input type="password" id="loginPassword" placeholder="كلمة المرور" autocomplete="current-password">
-                    </div>
-                    <button class="btn btn-primary" id="loginBtn">تسجيل الدخول</button>
-                    <button class="btn btn-secondary" id="registerBtn">إنشاء حساب جديد</button>
-                </div>
-            </div>
-        `;
-        
-        document.getElementById('loginBtn').onclick = () => this.handleLogin();
-        document.getElementById('registerBtn').onclick = () => this.handleRegister();
-        document.getElementById('loginPassword').onkeypress = (e) => {
-            if (e.key === 'Enter') this.handleLogin();
-        };
-    }
-    
-    handleLogin() {
-        const email = document.getElementById('loginEmail').value.trim();
-        const password = document.getElementById('loginPassword').value;
-        
-        if (!email) {
-            this.ui.showToast('الرجاء إدخال البريد الإلكتروني', 'error');
-            return;
-        }
-        
-        if (this.authManager.login(email, password)) {
-            this.showApp();
-            this.loadUserData();
-        } else if (!password) {
-            this.ui.showToast('الرجاء إدخال كلمة المرور', 'error');
-        }
-    }
-    
-    handleRegister() {
-        const email = document.getElementById('loginEmail').value.trim();
-        const password = document.getElementById('loginPassword').value;
-        
-        if (!email || !password) {
-            this.ui.showToast('الرجاء إدخال البريد الإلكتروني وكلمة المرور', 'error');
-            return;
-        }
-        
-        if (this.authManager.login(email, password)) {
-            this.ui.showToast('تم إنشاء الحساب بنجاح!');
-            this.showApp();
-            this.loadUserData();
-        }
-    }
-    
-    showApp() {
-        document.getElementById('app').innerHTML = `
-            <div class="app-container">
-                <div class="sidebar" id="sidebar">
-                    <div class="sidebar-header">
-                        <div class="avatar" id="sidebarAvatar">🧠</div>
-                        <h3 id="sidebarName">المستخدم</h3>
-                        <small>NeuroSync Pro v8.0</small>
-                    </div>
-                    <div class="sidebar-menu">
-                        ${this.getMenuItems()}
-                    </div>
-                </div>
-                <div class="overlay" id="overlay"></div>
-                
-                <div class="header">
-                    <div class="menu-toggle" id="menuToggle">
-                        <i class="fas fa-bars"></i>
-                    </div>
-                    <div class="profile-section" id="profileBtn">
-                        <div class="profile-avatar" id="headerAvatar">🧠</div>
-                        <div class="profile-name" id="headerName">المستخدم</div>
-                    </div>
-                    <div class="header-actions">
-                        <div class="icon-btn" id="themeToggle"><i class="fas fa-moon"></i></div>
-                        <div class="icon-btn" id="exportBtn"><i class="fas fa-download"></i></div>
-                    </div>
-                </div>
-                
-                <div class="main-content">
-                    ${this.getPanels()}
-                </div>
-            </div>
-        `;
-        
-        this.bindAppEvents();
-    }
-    
-    getMenuItems() {
-        const items = [
-            { icon: 'fa-chart-line', name: 'لوحة التحكم', panel: 'dashboard' },
-            { icon: 'fa-robot', name: 'المساعد الذكي', panel: 'ai' },
-            { icon: 'fa-wallet', name: 'المال والمصروفات', panel: 'money' },
-            { icon: 'fa-clock', name: 'الوقت والنشاطات', panel: 'time' },
-            { icon: 'fa-heartbeat', name: 'الصحة والطاقة', panel: 'health' },
-            { icon: 'fa-tasks', name: 'المهام', panel: 'tasks' },
-            { icon: 'fa-bullseye', name: 'الأهداف', panel: 'goals' },
-            { icon: 'fa-database', name: 'قاعدة المعرفة', panel: 'knowledge' },
-            { icon: 'fa-sign-out-alt', name: 'تسجيل الخروج', panel: 'logout' }
-        ];
-        
-        return items.map(item => `
-            <div class="menu-item" data-panel="${item.panel}">
-                <i class="fas ${item.icon}"></i>
-                <span>${item.name}</span>
-            </div>
-        `).join('');
-    }
-    
-    getPanels() {
-        return `
-            <div id="dashboardPanel" class="panel active">
-                <div class="dashboard-grid" id="dashboardStats"></div>
-                <div class="charts-grid">
-                    <div class="chart-card">
-                        <canvas id="overviewChart"></canvas>
-                    </div>
-                </div>
-            </div>
             
-            <div id="aiPanel" class="panel">
-                <div class="chat-container">
-                    <div class="chat-messages" id="chatMessages"></div>
-                    <div class="chat-input-area">
-                        <input type="text" class="chat-input" id="chatInput" placeholder="اكتب سؤالك هنا...">
-                        <button class="btn btn-primary" id="sendBtn" style="width: auto; padding: 12px 24px;">إرسال</button>
-                    </div>
-                </div>
-                <div class="quick-actions">
-                    <button class="quick-btn" data-question="نصيحة مالية">💰 نصيحة مالية</button>
-                    <button class="quick-btn" data-question="عرض مصروفات اليوم">📊 مصروفات اليوم</button>
-                    <button class="quick-btn" data-question="عرض مهامي">✅ مهامي</button>
-                    <button class="quick-btn" data-question="عرض أهدافي">🎯 أهدافي</button>
-                    <button class="quick-btn" data-question="نصيحة صحية">💪 نصيحة صحية</button>
-                </div>
-            </div>
-            
-            <div id="moneyPanel" class="panel">
-                <div class="tabs">
-                    <div class="tab active" data-tab="add-expense">➕ إضافة مصروف</div>
-                    <div class="tab" data-tab="expenses-list">📋 قائمة المصروفات</div>
-                </div>
-                <div id="add-expense" class="tab-content active">
-                    <div class="form-group">
-                        <label>البيان</label>
-                        <input type="text" id="expenseName" placeholder="مثال: غداء، بنزين...">
-                    </div>
-                    <div class="form-group">
-                        <label>المبلغ</label>
-                        <input type="number" id="expenseAmount" placeholder="المبلغ">
-                    </div>
-                    <div class="form-group">
-                        <label>العملة</label>
-                        <select id="expenseCurrency">
-                            <option value="USD">🇺🇸 دولار</option>
-                            <option value="LBP">🇱🇧 ليرة</option>
-                            <option value="EUR">🇪🇺 يورو</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>التصنيف</label>
-                        <select id="expenseCategory">
-                            ${this.dataManager.categories.expenses.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
-                        </select>
-                    </div>
-                    <button class="btn btn-primary" id="addExpenseBtn">➕ إضافة مصروف</button>
-                </div>
-                <div id="expenses-list" class="tab-content">
-                    <div id="expensesList"></div>
-                </div>
-            </div>
-            
-            <div id="timePanel" class="panel">
-                <div class="tabs">
-                    <div class="tab active" data-tab="add-activity">➕ إضافة نشاط</div>
-                    <div class="tab" data-tab="activities-list">📋 نشاطات اليوم</div>
-                </div>
-                <div id="add-activity" class="tab-content active">
-                    <div class="form-group">
-                        <label>نوع النشاط</label>
-                        <select id="activityType">
-                            ${this.dataManager.categories.time.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>المدة (ساعات)</label>
-                        <input type="number" id="activityHours" step="0.5" placeholder="مثال: 1.5">
-                    </div>
-                    <button class="btn btn-primary" id="addActivityBtn">➕ إضافة نشاط</button>
-                </div>
-                <div id="activities-list" class="tab-content">
-                    <div id="activitiesList"></div>
-                </div>
-            </div>
-            
-            <div id="healthPanel" class="panel">
-                <div class="tabs">
-                    <div class="tab active" data-tab="add-health">➕ تسجيل نشاط</div>
-                    <div class="tab" data-tab="health-list">📋 النشاطات</div>
-                </div>
-                <div id="add-health" class="tab-content active">
-                    <div class="form-group">
-                        <label>نوع التمرين</label>
-                        <select id="healthType">
-                            ${this.dataManager.categories.health.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>المدة (دقائق)</label>
-                        <input type="number" id="healthDuration" placeholder="مثال: 30">
-                    </div>
-                    <button class="btn btn-primary" id="addHealthBtn">➕ تسجيل</button>
-                </div>
-                <div id="health-list" class="tab-content">
-                    <div id="healthList"></div>
-                </div>
-                <div class="stat-card" style="margin-top: 20px;">
-                    <div class="stat-title">🔋 الطاقة الحالية</div>
-                    <div class="progress-container">
-                        <div class="progress-fill" id="energyFill" style="width: 100%"></div>
-                    </div>
-                    <button class="quick-btn" id="restoreEnergyBtn" style="margin-top: 12px;">🔄 استعادة الطاقة</button>
-                </div>
-            </div>
-            
-            <div id="tasksPanel" class="panel">
-                <div class="tabs">
-                    <div class="tab active" data-tab="add-task">➕ إضافة مهمة</div>
-                    <div class="tab" data-tab="tasks-list">📋 المهام</div>
-                </div>
-                <div id="add-task" class="tab-content active">
-                    <div class="form-group">
-                        <label>عنوان المهمة</label>
-                        <input type="text" id="taskTitle" placeholder="أدخل عنوان المهمة">
-                    </div>
-                    <div class="form-group">
-                        <label>الوصف (اختياري)</label>
-                        <textarea id="taskDesc" rows="2" placeholder="وصف المهمة"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>الأولوية</label>
-                        <select id="taskPriority">
-                            <option value="high">🔴 عالية</option>
-                            <option value="medium">🟡 متوسطة</option>
-                            <option value="low">🟢 منخفضة</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>تاريخ الاستحقاق</label>
-                        <input type="date" id="taskDueDate">
-                    </div>
-                    <button class="btn btn-primary" id="addTaskBtn">➕ إضافة مهمة</button>
-                </div>
-                <div id="tasks-list" class="tab-content">
-                    <div id="tasksList"></div>
-                </div>
-            </div>
-            
-            <div id="goalsPanel" class="panel">
-                <div class="tabs">
-                    <div class="tab active" data-tab="add-goal">🎯 إضافة هدف</div>
-                    <div class="tab" data-tab="goals-list">📊 أهدافي</div>
-                </div>
-                <div id="add-goal" class="tab-content active">
-                    <div class="form-group">
-                        <label>عنوان الهدف</label>
-                        <input type="text" id="goalTitle" placeholder="مثال: توفير 1000 دولار">
-                    </div>
-                    <div class="form-group">
-                        <label>الوصف</label>
-                        <textarea id="goalDesc" rows="2" placeholder="وصف الهدف"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>القيمة المستهدفة</label>
-                        <input type="number" id="goalTarget" placeholder="المبلغ أو العدد المستهدف">
-                    </div>
-                    <div class="form-group">
-                        <label>القيمة الحالية</label>
-                        <input type="number" id="goalCurrent" placeholder="المبلغ الحالي" value="0">
-                    </div>
-                    <div class="form-group">
-                        <label>نوع الهدف</label>
-                        <select id="goalType">
-                            <option value="financial">💰 مالي</option>
-                            <option value="health">💪 صحي</option>
-                            <option value="productivity">⏰ إنتاجي</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-primary" id="addGoalBtn">🎯 إضافة هدف</button>
-                </div>
-                <div id="goals-list" class="tab-content">
-                    <div id="goalsList"></div>
-                </div>
-            </div>
-            
-            <div id="knowledgePanel" class="panel">
-                <div class="tabs">
-                    <div class="tab active" data-tab="teach-ai">📚 تعليم الذكاء</div>
-                    <div class="tab" data-tab="knowledge-list">📖 قاعدة المعرفة</div>
-                    <div class="tab" data-tab="persons-list">👥 جهات الاتصال</div>
-                </div>
-                <div id="teach-ai" class="tab-content active">
-                    <div class="form-group">
-                        <label>السؤال/المفتاح</label>
-                        <input type="text" id="teachQuestion" placeholder="مثال: ما هو اسمي؟">
-                    </div>
-                    <div class="form-group">
-                        <label>الإجابة</label>
-                        <textarea id="teachAnswer" rows="3" placeholder="الإجابة التي يقدمها الذكاء"></textarea>
-                    </div>
-                    <button class="btn btn-primary" id="teachBtn">📚 تعليم</button>
-                </div>
-                <div id="knowledge-list" class="tab-content">
-                    <div id="knowledgeList"></div>
-                </div>
-                <div id="persons-list" class="tab-content">
-                    <div class="form-group">
-                        <label>اسم الشخص</label>
-                        <input type="text" id="personName" placeholder="أدخل اسم الشخص">
-                    </div>
-                    <div class="form-group">
-                        <label>معلومات عن الشخص</label>
-                        <textarea id="personInfo" rows="3" placeholder="معلومات مهمة عن هذا الشخص"></textarea>
-                    </div>
-                    <button class="btn btn-primary" id="addPersonBtn">➕ إضافة شخص</button>
-                    <div id="personsList" style="margin-top: 20px;"></div>
-                </div>
-            </div>
-        `;
-    }
-    
-    bindAppEvents() {
-        // Sidebar
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        const menuToggle = document.getElementById('menuToggle');
-        
-        menuToggle.onclick = () => {
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('show');
-        };
-        
-        overlay.onclick = () => {
-            sidebar.classList.remove('open');
-            overlay.classList.remove('show');
-        };
-        
-        // Menu items
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.onclick = () => {
-                const panel = item.dataset.panel;
-                if (panel === 'logout') {
-                    this.authManager.logout();
+            init() {
+                if (!this.authManager.init()) {
+                    this.showLogin();
                 } else {
-                    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-                    document.getElementById(`${panel}Panel`).classList.add('active');
-                    sidebar.classList.remove('open');
-                    overlay.classList.remove('show');
-                    
-                    document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-                    item.classList.add('active');
-                    
-                    if (panel === 'dashboard') this.dashboardManager.update();
-                    if (panel === 'money') this.updateExpensesList();
-                    if (panel === 'time') this.updateActivitiesList();
-                    if (panel === 'health') this.updateHealthList();
-                    if (panel === 'tasks') this.updateTasksList();
-                    if (panel === 'goals') this.updateGoalsList();
-                    if (panel === 'knowledge') {
-                        this.updateKnowledgeList();
-                        this.updatePersonsList();
+                    this.showApp();
+                    this.loadUserData();
+                }
+            }
+            
+            showLogin() {
+                document.getElementById('app').innerHTML = `
+                    <div class="login-container">
+                        <div class="login-card">
+                            <div class="login-logo">
+                                <div class="login-logo-icon">🧠</div>
+                                <h1>NeuroSync Pro</h1>
+                                <p>المساعد الذكي المتكامل v8.0</p>
+                            </div>
+                            <div class="input-group">
+                                <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" autocomplete="email">
+                            </div>
+                            <div class="input-group">
+                                <input type="password" id="loginPassword" placeholder="كلمة المرور" autocomplete="current-password">
+                            </div>
+                            <button class="btn btn-primary" id="loginBtn">تسجيل الدخول</button>
+                            <button class="btn btn-secondary" id="registerBtn">إنشاء حساب جديد</button>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('loginBtn').onclick = () => this.handleLogin();
+                document.getElementById('registerBtn').onclick = () => this.handleRegister();
+                const passwordInput = document.getElementById('loginPassword');
+                if (passwordInput) {
+                    passwordInput.onkeypress = (e) => {
+                        if (e.key === 'Enter') this.handleLogin();
+                    };
+                }
+            }
+            
+            handleLogin() {
+                const email = document.getElementById('loginEmail').value.trim();
+                const password = document.getElementById('loginPassword').value;
+                
+                if (!email) {
+                    this.ui.showToast('الرجاء إدخال البريد الإلكتروني', 'error');
+                    return;
+                }
+                
+                if (this.authManager.login(email, password)) {
+                    this.showApp();
+                    this.loadUserData();
+                } else if (!password) {
+                    this.ui.showToast('الرجاء إدخال كلمة المرور', 'error');
+                }
+            }
+            
+            handleRegister() {
+                const email = document.getElementById('loginEmail').value.trim();
+                const password = document.getElementById('loginPassword').value;
+                
+                if (!email || !password) {
+                    this.ui.showToast('الرجاء إدخال البريد الإلكتروني وكلمة المرور', 'error');
+                    return;
+                }
+                
+                if (this.authManager.login(email, password)) {
+                    this.ui.showToast('تم إنشاء الحساب بنجاح!');
+                    this.showApp();
+                    this.loadUserData();
+                }
+            }
+            
+            showApp() {
+                document.getElementById('app').innerHTML = `
+                    <div class="app-container">
+                        <div class="sidebar" id="sidebar">
+                            <div class="sidebar-header">
+                                <div class="avatar" id="sidebarAvatar">🧠</div>
+                                <h3 id="sidebarName">المستخدم</h3>
+                                <small>NeuroSync Pro v8.0</small>
+                            </div>
+                            <div class="sidebar-menu">
+                                <div class="menu-item active" data-panel="dashboard"><i class="fas fa-chart-line"></i><span>لوحة التحكم</span></div>
+                                <div class="menu-item" data-panel="ai"><i class="fas fa-robot"></i><span>المساعد الذكي</span></div>
+                                <div class="menu-item" data-panel="money"><i class="fas fa-wallet"></i><span>المال والمصروفات</span></div>
+                                <div class="menu-item" data-panel="tasks"><i class="fas fa-tasks"></i><span>المهام</span></div>
+                                <div class="menu-item" data-panel="goals"><i class="fas fa-bullseye"></i><span>الأهداف</span></div>
+                                <div class="menu-item" data-panel="knowledge"><i class="fas fa-database"></i><span>قاعدة المعرفة</span></div>
+                                <div class="menu-item" data-panel="logout"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></div>
+                            </div>
+                        </div>
+                        <div class="overlay" id="overlay"></div>
+                        
+                        <div class="header">
+                            <div class="menu-toggle" id="menuToggle">
+                                <i class="fas fa-bars"></i>
+                            </div>
+                            <div class="profile-section" id="profileBtn">
+                                <div class="profile-avatar" id="headerAvatar">🧠</div>
+                                <div class="profile-name" id="headerName">المستخدم</div>
+                            </div>
+                            <div class="header-actions">
+                                <div class="icon-btn" id="themeToggle"><i class="fas fa-moon"></i></div>
+                                <div class="icon-btn" id="exportBtn"><i class="fas fa-download"></i></div>
+                            </div>
+                        </div>
+                        
+                        <div class="main-content">
+                            <div id="dashboardPanel" class="panel active">
+                                <div class="dashboard-grid" id="dashboardStats"></div>
+                                <div class="charts-grid">
+                                    <div class="chart-card">
+                                        <canvas id="overviewChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="aiPanel" class="panel">
+                                <div class="chat-container">
+                                    <div class="chat-messages" id="chatMessages"></div>
+                                    <div class="chat-input-area">
+                                        <input type="text" class="chat-input" id="chatInput" placeholder="اكتب سؤالك هنا...">
+                                        <button class="btn btn-primary" id="sendBtn" style="width: auto; padding: 12px 24px;">إرسال</button>
+                                    </div>
+                                </div>
+                                <div class="quick-actions">
+                                    <button class="quick-btn" data-question="نصيحة مالية">💰 نصيحة مالية</button>
+                                    <button class="quick-btn" data-question="عرض مصروفات اليوم">📊 مصروفات اليوم</button>
+                                    <button class="quick-btn" data-question="عرض مهامي">✅ مهامي</button>
+                                    <button class="quick-btn" data-question="عرض أهدافي">🎯 أهدافي</button>
+                                </div>
+                            </div>
+                            
+                            <div id="moneyPanel" class="panel">
+                                <div class="tabs">
+                                    <div class="tab active" data-tab="add-expense">➕ إضافة مصروف</div>
+                                    <div class="tab" data-tab="expenses-list">📋 قائمة المصروفات</div>
+                                </div>
+                                <div id="add-expense" class="tab-content active">
+                                    <div class="form-group">
+                                        <label>البيان</label>
+                                        <input type="text" id="expenseName" placeholder="مثال: غداء، بنزين...">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>المبلغ</label>
+                                        <input type="number" id="expenseAmount" placeholder="المبلغ">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>العملة</label>
+                                        <select id="expenseCurrency">
+                                            <option value="USD">🇺🇸 دولار</option>
+                                            <option value="LBP">🇱🇧 ليرة</option>
+                                            <option value="EUR">🇪🇺 يورو</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>التصنيف</label>
+                                        <select id="expenseCategory">
+                                            ${this.dataManager.categories.expenses.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-primary" id="addExpenseBtn">➕ إضافة مصروف</button>
+                                </div>
+                                <div id="expenses-list" class="tab-content">
+                                    <div id="expensesList"></div>
+                                </div>
+                            </div>
+                            
+                            <div id="tasksPanel" class="panel">
+                                <div class="tabs">
+                                    <div class="tab active" data-tab="add-task">➕ إضافة مهمة</div>
+                                    <div class="tab" data-tab="tasks-list">📋 المهام</div>
+                                </div>
+                                <div id="add-task" class="tab-content active">
+                                    <div class="form-group">
+                                        <label>عنوان المهمة</label>
+                                        <input type="text" id="taskTitle" placeholder="أدخل عنوان المهمة">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>الوصف (اختياري)</label>
+                                        <textarea id="taskDesc" rows="2" placeholder="وصف المهمة"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>الأولوية</label>
+                                        <select id="taskPriority">
+                                            <option value="high">🔴 عالية</option>
+                                            <option value="medium">🟡 متوسطة</option>
+                                            <option value="low">🟢 منخفضة</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>تاريخ الاستحقاق</label>
+                                        <input type="date" id="taskDueDate">
+                                    </div>
+                                    <button class="btn btn-primary" id="addTaskBtn">➕ إضافة مهمة</button>
+                                </div>
+                                <div id="tasks-list" class="tab-content">
+                                    <div id="tasksList"></div>
+                                </div>
+                            </div>
+                            
+                            <div id="goalsPanel" class="panel">
+                                <div class="tabs">
+                                    <div class="tab active" data-tab="add-goal">🎯 إضافة هدف</div>
+                                    <div class="tab" data-tab="goals-list">📊 أهدافي</div>
+                                </div>
+                                <div id="add-goal" class="tab-content active">
+                                    <div class="form-group">
+                                        <label>عنوان الهدف</label>
+                                        <input type="text" id="goalTitle" placeholder="مثال: توفير 1000 دولار">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>الوصف</label>
+                                        <textarea id="goalDesc" rows="2" placeholder="وصف الهدف"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>القيمة المستهدفة</label>
+                                        <input type="number" id="goalTarget" placeholder="المبلغ أو العدد المستهدف">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>القيمة الحالية</label>
+                                        <input type="number" id="goalCurrent" placeholder="المبلغ الحالي" value="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>نوع الهدف</label>
+                                        <select id="goalType">
+                                            <option value="financial">💰 مالي</option>
+                                            <option value="health">💪 صحي</option>
+                                            <option value="productivity">⏰ إنتاجي</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-primary" id="addGoalBtn">🎯 إضافة هدف</button>
+                                </div>
+                                <div id="goals-list" class="tab-content">
+                                    <div id="goalsList"></div>
+                                </div>
+                            </div>
+                            
+                            <div id="knowledgePanel" class="panel">
+                                <div class="tabs">
+                                    <div class="tab active" data-tab="teach-ai">📚 تعليم الذكاء</div>
+                                    <div class="tab" data-tab="knowledge-list">📖 قاعدة المعرفة</div>
+                                </div>
+                                <div id="teach-ai" class="tab-content active">
+                                    <div class="form-group">
+                                        <label>السؤال/المفتاح</label>
+                                        <input type="text" id="teachQuestion" placeholder="مثال: ما هو اسمي؟">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>الإجابة</label>
+                                        <textarea id="teachAnswer" rows="3" placeholder="الإجابة التي يقدمها الذكاء"></textarea>
+                                    </div>
+                                    <button class="btn btn-primary" id="teachBtn">📚 تعليم</button>
+                                </div>
+                                <div id="knowledge-list" class="tab-content">
+                                    <div id="knowledgeList"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                this.bindAppEvents();
+            }
+            
+            loadUserData() {
+                const profile = this.dataManager.profile;
+                const name = profile?.name || this.authManager.currentUser?.split('@')[0] || 'المستخدم';
+                const avatar = profile?.avatar || '🧠';
+                
+                const sidebarName = document.getElementById('sidebarName');
+                const sidebarAvatar = document.getElementById('sidebarAvatar');
+                const headerName = document.getElementById('headerName');
+                const headerAvatar = document.getElementById('headerAvatar');
+                
+                if (sidebarName) sidebarName.innerHTML = name;
+                if (sidebarAvatar) sidebarAvatar.innerHTML = avatar;
+                if (headerName) headerName.innerHTML = name;
+                if (headerAvatar) headerAvatar.innerHTML = avatar;
+                
+                const theme = localStorage.getItem('theme');
+                if (theme === 'light') document.body.classList.add('light-mode');
+                
+                this.updateDashboard();
+                this.addChatMessage('🌟 مرحباً! أنا NeuroSync Pro، مساعدك الذكي. كيف يمكنني مساعدتك اليوم؟', 'bot');
+            }
+            
+            bindAppEvents() {
+                // Sidebar
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('overlay');
+                const menuToggle = document.getElementById('menuToggle');
+                
+                if (menuToggle) {
+                    menuToggle.onclick = () => {
+                        if (sidebar) sidebar.classList.toggle('open');
+                        if (overlay) overlay.classList.toggle('show');
+                    };
+                }
+                
+                if (overlay) {
+                    overlay.onclick = () => {
+                        if (sidebar) sidebar.classList.remove('open');
+                        overlay.classList.remove('show');
+                    };
+                }
+                
+                // Menu items
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.onclick = () => {
+                        const panel = item.dataset.panel;
+                        if (panel === 'logout') {
+                            this.authManager.logout();
+                        } else {
+                            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                            const targetPanel = document.getElementById(`${panel}Panel`);
+                            if (targetPanel) targetPanel.classList.add('active');
+                            
+                            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+                            item.classList.add('active');
+                            
+                            if (panel === 'dashboard') this.updateDashboard();
+                            if (panel === 'money') this.updateExpensesList();
+                            if (panel === 'tasks') this.updateTasksList();
+                            if (panel === 'goals') this.updateGoalsList();
+                            if (panel === 'knowledge') {
+                                this.updateKnowledgeList();
+                            }
+                            
+                            if (sidebar) sidebar.classList.remove('open');
+                            if (overlay) overlay.classList.remove('show');
+                        }
+                    };
+                });
+                
+                // Tabs
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.onclick = () => {
+                        const parent = tab.closest('.panel');
+                        const tabId = tab.dataset.tab;
+                        if (parent) {
+                            parent.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                            parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                            tab.classList.add('active');
+                            const content = document.getElementById(tabId);
+                            if (content) content.classList.add('active');
+                        }
+                    };
+                });
+                
+                // Theme toggle
+                const themeToggle = document.getElementById('themeToggle');
+                if (themeToggle) {
+                    themeToggle.onclick = () => {
+                        document.body.classList.toggle('light-mode');
+                        const isLight = document.body.classList.contains('light-mode');
+                        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+                    };
+                }
+                
+                // Export
+                const exportBtn = document.getElementById('exportBtn');
+                if (exportBtn) {
+                    exportBtn.onclick = () => this.exportData();
+                }
+                
+                // Profile
+                const profileBtn = document.getElementById('profileBtn');
+                if (profileBtn) {
+                    profileBtn.onclick = () => this.showProfileModal();
+                }
+                
+                // AI
+                const chatInput = document.getElementById('chatInput');
+                const sendBtn = document.getElementById('sendBtn');
+                
+                if (sendBtn) {
+                    sendBtn.onclick = () => this.sendMessage();
+                }
+                if (chatInput) {
+                    chatInput.onkeypress = (e) => {
+                        if (e.key === 'Enter') this.sendMessage();
+                    };
+                }
+                
+                document.querySelectorAll('[data-question]').forEach(btn => {
+                    btn.onclick = () => {
+                        if (chatInput) {
+                            chatInput.value = btn.dataset.question;
+                            this.sendMessage();
+                        }
+                    };
+                });
+                
+                // Expenses
+                const addExpenseBtn = document.getElementById('addExpenseBtn');
+                if (addExpenseBtn) {
+                    addExpenseBtn.onclick = () => {
+                        const name = document.getElementById('expenseName')?.value;
+                        const amount = document.getElementById('expenseAmount')?.value;
+                        const currency = document.getElementById('expenseCurrency')?.value;
+                        const category = document.getElementById('expenseCategory')?.value;
+                        
+                        if (!name || !amount || amount <= 0) {
+                            this.ui.showToast('الرجاء إدخال بيانات صحيحة', 'error');
+                            return;
+                        }
+                        
+                        const date = this.authManager.currentViewDate;
+                        this.dataManager.ensureDateData(date);
+                        
+                        const expense = {
+                            id: Date.now(),
+                            name,
+                            amount: parseFloat(amount),
+                            currency,
+                            category,
+                            date,
+                            amountUSD: this.dataManager.convertToUSD(amount, currency),
+                            createdAt: new Date().toISOString()
+                        };
+                        
+                        this.dataManager.data.expenses[date].push(expense);
+                        this.dataManager.saveToLocalStorage(this.authManager.currentUser);
+                        this.ui.showToast('تم إضافة المصروف بنجاح');
+                        
+                        const expenseNameInput = document.getElementById('expenseName');
+                        const expenseAmountInput = document.getElementById('expenseAmount');
+                        if (expenseNameInput) expenseNameInput.value = '';
+                        if (expenseAmountInput) expenseAmountInput.value = '';
+                        this.updateExpensesList();
+                        this.updateDashboard();
+                    };
+                }
+                
+                // Tasks
+                const addTaskBtn = document.getElementById('addTaskBtn');
+                if (addTaskBtn) {
+                    addTaskBtn.onclick = () => {
+                        const title = document.getElementById('taskTitle')?.value;
+                        const description = document.getElementById('taskDesc')?.value;
+                        const priority = document.getElementById('taskPriority')?.value;
+                        const dueDate = document.getElementById('taskDueDate')?.value;
+                        
+                        if (!title) {
+                            this.ui.showToast('الرجاء إدخال عنوان المهمة', 'error');
+                            return;
+                        }
+                        
+                        const task = {
+                            id: Date.now(),
+                            title,
+                            description: description || '',
+                            priority,
+                            dueDate: dueDate || null,
+                            completed: false,
+                            createdAt: new Date().toISOString()
+                        };
+                        
+                        this.dataManager.data.tasks.push(task);
+                        this.dataManager.saveToLocalStorage(this.authManager.currentUser);
+                        this.ui.showToast('تم إضافة المهمة');
+                        
+                        const taskTitleInput = document.getElementById('taskTitle');
+                        const taskDescInput = document.getElementById('taskDesc');
+                        if (taskTitleInput) taskTitleInput.value = '';
+                        if (taskDescInput) taskDescInput.value = '';
+                        this.updateTasksList();
+                        this.updateDashboard();
+                    };
+                }
+                
+                // Goals
+                const addGoalBtn = document.getElementById('addGoalBtn');
+                if (addGoalBtn) {
+                    addGoalBtn.onclick = () => {
+                        const title = document.getElementById('goalTitle')?.value;
+                        const description = document.getElementById('goalDesc')?.value;
+                        const target = document.getElementById('goalTarget')?.value;
+                        const current = document.getElementById('goalCurrent')?.value;
+                        const type = document.getElementById('goalType')?.value;
+                        
+                        if (!title || !target || target <= 0) {
+                            this.ui.showToast('الرجاء إدخال بيانات صحيحة', 'error');
+                            return;
+                        }
+                        
+                        const goal = {
+                            id: Date.now(),
+                            title,
+                            description: description || '',
+                            target: parseFloat(target),
+                            current: parseFloat(current) || 0,
+                            type,
+                            completed: false,
+                            createdAt: new Date().toISOString()
+                        };
+                        
+                        this.dataManager.data.goals.push(goal);
+                        this.dataManager.saveToLocalStorage(this.authManager.currentUser);
+                        this.ui.showToast('تم إضافة الهدف');
+                        
+                        const goalTitleInput = document.getElementById('goalTitle');
+                        const goalDescInput = document.getElementById('goalDesc');
+                        const goalTargetInput = document.getElementById('goalTarget');
+                        const goalCurrentInput = document.getElementById('goalCurrent');
+                        if (goalTitleInput) goalTitleInput.value = '';
+                        if (goalDescInput) goalDescInput.value = '';
+                        if (goalTargetInput) goalTargetInput.value = '';
+                        if (goalCurrentInput) goalCurrentInput.value = '0';
+                        this.updateGoalsList();
+                        this.updateDashboard();
+                    };
+                }
+                
+                // Knowledge
+                const teachBtn = document.getElementById('teachBtn');
+                if (teachBtn) {
+                    teachBtn.onclick = () => {
+                        const question = document.getElementById('teachQuestion')?.value.trim();
+                        const answer = document.getElementById('teachAnswer')?.value.trim();
+                        
+                        if (question && answer) {
+                            this.dataManager.data.knowledge[question.toLowerCase()] = answer;
+                            this.dataManager.saveToLocalStorage(this.authManager.currentUser);
+                            this.ui.showToast('✅ تم تعليم الذكاء بنجاح');
+                            const teachQuestionInput = document.getElementById('teachQuestion');
+                            const teachAnswerInput = document.getElementById('teachAnswer');
+                            if (teachQuestionInput) teachQuestionInput.value = '';
+                            if (teachAnswerInput) teachAnswerInput.value = '';
+                            this.updateKnowledgeList();
+                        } else {
+                            this.ui.showToast('الرجاء إدخال السؤال والإجابة', 'error');
+                        }
+                    };
+                }
+            }
+            
+            updateDashboard() {
+                const today = this.authManager.currentViewDate;
+                this.dataManager.ensureDateData(today);
+                
+                const todayExpenses = (this.dataManager.data.expenses[today] || []).reduce((sum, e) => 
+                    sum + this.dataManager.convertToUSD(e.amount, e.currency), 0);
+                
+                const monthExpenses = Object.entries(this.dataManager.data.expenses)
+                    .filter(([date]) => date.startsWith(today.slice(0, 7)))
+                    .reduce((sum, [_, expenses]) => sum + expenses.reduce((s, e) => 
+                        s + this.dataManager.convertToUSD(e.amount, e.currency), 0), 0);
+                
+                const pendingTasks = this.dataManager.data.tasks.filter(t => !t.completed).length;
+                const activeGoals = this.dataManager.data.goals.filter(g => !g.completed).length;
+                
+                const statsHtml = `
+                    <div class="stat-card">
+                        <div class="stat-title"><i class="fas fa-wallet"></i> مصروفات اليوم</div>
+                        <div class="stat-value">${this.ui.formatCurrency(todayExpenses)}</div>
+                        <div class="stat-change">${todayExpenses > 0 ? '📈' : '📉'} اليوم</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title"><i class="fas fa-chart-line"></i> مصروفات الشهر</div>
+                        <div class="stat-value">${this.ui.formatCurrency(monthExpenses)}</div>
+                        <div class="stat-change">من ${this.ui.formatCurrency(this.dataManager.monthlyBudget)}</div>
+                        <div class="progress-container">
+                            <div class="progress-fill" style="width: ${Math.min(100, (monthExpenses / this.dataManager.monthlyBudget) * 100)}%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title"><i class="fas fa-tasks"></i> المهام</div>
+                        <div class="stat-value">${pendingTasks}</div>
+                        <div class="stat-change">مهمة متبقية</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title"><i class="fas fa-bullseye"></i> الأهداف</div>
+                        <div class="stat-value">${activeGoals}</div>
+                        <div class="stat-change">هدف نشط</div>
+                    </div>
+                `;
+                
+                const statsContainer = document.getElementById('dashboardStats');
+                if (statsContainer) statsContainer.innerHTML = statsHtml;
+                
+                // Update chart
+                this.updateChart(todayExpenses);
+            }
+            
+            updateChart(expenses) {
+                const canvas = document.getElementById('overviewChart');
+                if (!canvas) return;
+                
+                const ctx = canvas.getContext('2d');
+                if (window.overviewChart) window.overviewChart.destroy();
+                
+                window.overviewChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['المصروفات (USD)'],
+                        datasets: [{
+                            data: [expenses],
+                            backgroundColor: ['#22c55e'],
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+            
+            async sendMessage() {
+                const input = document.getElementById('chatInput');
+                const message = input?.value.trim();
+                if (!message) return;
+                
+                this.addChatMessage(message, 'user');
+                if (input) input.value = '';
+                
+                const response = await this.processAIQuery(message);
+                this.addChatMessage(response, 'bot');
+            }
+            
+            async processAIQuery(query) {
+                const lower = query.toLowerCase();
+                
+                // التحقق من المعرفة المخزنة
+                for (const [key, value] of Object.entries(this.dataManager.data.knowledge)) {
+                    if (lower.includes(key.toLowerCase())) {
+                        return `📚 ${value}`;
                     }
                 }
-            };
-        });
-        
-        // Tabs
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.onclick = () => {
-                const parent = tab.closest('.panel');
-                const tabId = tab.dataset.tab;
-                parent.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                tab.classList.add('active');
-                document.getElementById(tabId).classList.add('active');
-            };
-        });
-        
-        // Theme toggle
-        document.getElementById('themeToggle').onclick = () => {
-            document.body.classList.toggle('light-mode');
-            const isLight = document.body.classList.contains('light-mode');
-            localStorage.setItem('theme', isLight ? 'light' : 'dark');
-        };
-        
-        // Export
-        document.getElementById('exportBtn').onclick = () => this.exportData();
-        
-        // Profile
-        document.getElementById('profileBtn').onclick = () => this.showProfileModal();
-        
-        // AI
-        const chatInput = document.getElementById('chatInput');
-        const sendBtn = document.getElementById('sendBtn');
-        
-        sendBtn.onclick = () => this.sendMessage();
-        chatInput.onkeypress = (e) => {
-            if (e.key === 'Enter') this.sendMessage();
-        };
-        
-        document.querySelectorAll('[data-question]').forEach(btn => {
-            btn.onclick = () => {
-                chatInput.value = btn.dataset.question;
-                this.sendMessage();
-            };
-        });
-        
-        // Expenses
-        document.getElementById('addExpenseBtn').onclick = () => {
-            const name = document.getElementById('expenseName').value;
-            const amount = document.getElementById('expenseAmount').value;
-            const currency = document.getElementById('expenseCurrency').value;
-            const category = document.getElementById('expenseCategory').value;
-            
-            if (this.expensesManager.addExpense(name, amount, currency, category)) {
-                document.getElementById('expenseName').value = '';
-                document.getElementById('expenseAmount').value = '';
-                this.updateExpensesList();
-                this.dashboardManager.update();
-            }
-        };
-        
-        // Time
-        document.getElementById('addActivityBtn').onclick = () => {
-            const type = document.getElementById('activityType').value;
-            const hours = parseFloat(document.getElementById('activityHours').value);
-            
-            if (!hours || hours <= 0) {
-                this.ui.showToast('الرجاء إدخال مدة صحيحة', 'error');
-                return;
+                
+                // ردود سريعة
+                if (lower.includes('مرحب') || lower.includes('السلام')) {
+                    return 'مرحباً! كيف يمكنني مساعدتك اليوم؟';
+                }
+                
+                if (lower.includes('مصروف') || lower.includes('صرفت')) {
+                    const today = this.authManager.currentViewDate;
+                    const expenses = this.dataManager.data.expenses[today] || [];
+                    const total = expenses.reduce((sum, e) => sum + this.dataManager.convertToUSD(e.amount, e.currency), 0);
+                    if (expenses.length === 0) return '💰 لا توجد مصروفات مسجلة اليوم';
+                    return `💰 مصروفات اليوم: ${this.ui.formatCurrency(total)}\n\nالتفاصيل:\n${expenses.map(e => `• ${e.name}: ${e.amount} ${e.currency}`).join('\n')}`;
+                }
+                
+                if (lower.includes('مهمة') || lower.includes('مهام')) {
+                    const tasks = this.dataManager.data.tasks.filter(t => !t.completed);
+                    if (tasks.length === 0) return '✅ لا توجد مهام متبقية! أحسنت!';
+                    return `📋 المهام المتبقية (${tasks.length}):\n${tasks.map(t => `• ${t.title}${t.priority === 'high' ? ' 🔴 عالية الأولوية' : ''}`).join('\n')}`;
+                }
+                
+                if (lower.includes('هدف') || lower.includes('أهداف')) {
+                    const goals = this.dataManager.data.goals.filter(g => !g.completed);
+                    if (goals.length === 0) return '🎯 لا توجد أهداف نشطة حالياً. أضف هدفاً جديداً للبدء!';
+                    return `🎯 الأهداف النشطة:\n${goals.map(g => `• ${g.title}: ${g.current}/${g.target} (${Math.round((g.current/g.target)*100)}%)`).join('\n')}`;
+                }
+                
+                if (lower.includes('نصيحة')) {
+                    if (lower.includes('مال')) return '💡 نصيحة مالية: حاول تتبع مصروفاتك يومياً وتخصيص 20% من دخلك للادخار.';
+                    if (lower.includes('وقت')) return '💡 نصيحة إنتاجية: استخدم تقنية بومودورو (25 دقيقة عمل، 5 دقائق راحة) لزيادة التركيز.';
+                    return '💡 نصيحة صحية: اشرب كوبين من الماء فور الاستيقاظ لتنشيط الجسم.';
+                }
+                
+                return `🌐 لم أجد إجابة محددة. يمكنك تعليمي الإجابة من خلال قسم "قاعدة المعرفة".\n\n💡 جرب:\n- "عرض مصروفات اليوم"\n- "عرض مهامي"\n- "عرض أهدافي"\n- "نصيحة مالية"`;
             }
             
-            const date = this.authManager.state.currentViewDate;
-            this.dataManager.ensureDateData(date);
-            
-            const category = this.dataManager.categories.time.find(c => c.id === type);
-            const energyChange = category.energyEffect * hours;
-            
-            this.dataManager.data.timeLogs[date].entries.push({
-                id: Date.now(),
-                type,
-                hours,
-                date
-            });
-            this.dataManager.data.timeLogs[date].totalHours += hours;
-            this.dataManager.currentEnergy = Math.min(100, Math.max(0, this.dataManager.currentEnergy + energyChange));
-            
-            this.dataManager.saveToLocalStorage(this.authManager.state.currentUser);
-            this.ui.showToast(`✅ تم إضافة ${category.name} (${hours} ساعة)${energyChange !== 0 ? ` - الطاقة ${energyChange > 0 ? '+' : ''}${energyChange}%` : ''}`);
-            
-            document.getElementById('activityHours').value = '';
-            this.updateActivitiesList();
-            this.dashboardManager.update();
-            this.updateHealthStats();
-        };
-        
-        // Health
-        document.getElementById('addHealthBtn').onclick = () => {
-            const type = document.getElementById('healthType').value;
-            const duration = parseFloat(document.getElementById('healthDuration').value);
-            
-            if (!duration || duration <= 0) {
-                this.ui.showToast('الرجاء إدخال مدة صحيحة', 'error');
-                return;
+            addChatMessage(text, sender) {
+                const container = document.getElementById('chatMessages');
+                if (!container) return;
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+                messageDiv.innerHTML = `<div class="message-bubble">${text.replace(/\n/g, '<br>')}</div>`;
+                container.appendChild(messageDiv);
+                container.scrollTop = container.scrollHeight;
             }
             
-            const exercise = this.dataManager.categories.health.find(e => e.id === type);
-            const calories = Math.round(exercise.caloriesPerMinute * duration * 70 / 60);
-            
-            const date = this.authManager.state.currentViewDate;
-            this.dataManager.ensureDateData(date);
-            
-            this.dataManager.data.healthActivities[date].push({
-                id: Date.now(),
-                type,
-                duration,
-                calories,
-                date
-            });
-            
-            const energyDrop = Math.min(20, Math.max(3, Math.round(calories / 100)));
-            this.dataManager.currentEnergy = Math.max(0, this.dataManager.currentEnergy - energyDrop);
-            
-            this.dataManager.saveToLocalStorage(this.authManager.state.currentUser);
-            this.ui.showToast(`✅ تم تسجيل ${duration} دقيقة من ${exercise.name} - ${calories} سعرة حرارية`);
-            
-            document.getElementById('healthDuration').value = '';
-            this.updateHealthList();
-            this.dashboardManager.update();
-            this.updateHealthStats();
-        };
-        
-        document.getElementById('restoreEnergyBtn').onclick = () => {
-            this.dataManager.currentEnergy = 100;
-            this.dataManager.saveToLocalStorage(this.authManager.state.currentUser);
-            this.ui.showToast('✅ تم استعادة الطاقة بالكامل');
-            this.updateHealthStats();
-            this.dashboardManager.update();
-        };
-        
-        // Tasks
-        document.getElementById('addTaskBtn').onclick = () => {
-            const title = document.getElementById('taskTitle').value;
-            const description = document.getElementById('taskDesc').value;
-            const priority = document.getElementById('taskPriority').value;
-            const dueDate = document.getElementById('taskDueDate').value;
-            
-            if (this.tasksManager.addTask(title, description, priority, dueDate)) {
-                document.getElementById('taskTitle').value = '';
-                document.getElementById('taskDesc').value = '';
-                document.getElementById('taskDueDate').value = '';
-                this.updateTasksList();
-                this.dashboardManager.update();
-            }
-        };
-        
-        // Goals
-        document.getElementById('addGoalBtn').onclick = () => {
-            const title = document.getElementById('goalTitle').value;
-            const description = document.getElementById('goalDesc').value;
-            const target = document.getElementById('goalTarget').value;
-            const current = document.getElementById('goalCurrent').value;
-            const type = document.getElementById('goalType').value;
-            
-            if (this.goalsManager.addGoal(title, description, target, current, type)) {
-                document.getElementById('goalTitle').value = '';
-                document.getElementById('goalDesc').value = '';
-                document.getElementById('goalTarget').value = '';
-                document.getElementById('goalCurrent').value = '';
-                this.updateGoalsList();
-                this.dashboardManager.update();
-            }
-        };
-        
-        // Knowledge
-        document.getElementById('teachBtn').onclick = () => {
-            const question = document.getElementById('teachQuestion').value.trim();
-            const answer = document.getElementById('teachAnswer').value.trim();
-            
-            if (question && answer) {
-                this.dataManager.data.knowledge[question.toLowerCase()] = answer;
-                this.dataManager.saveToLocalStorage(this.authManager.state.currentUser);
-                this.ui.showToast('✅ تم تعليم الذكاء بنجاح');
-                document.getElementById('teachQuestion').value = '';
-                document.getElementById('teachAnswer').value = '';
-                this.updateKnowledgeList();
-            } else {
-                this.ui.showToast('الرجاء إدخال السؤال والإجابة', 'error');
-            }
-        };
-        
-        document.getElementById('addPersonBtn').onclick = () => {
-            const name = document.getElementById('personName').value.trim();
-            const info = document.getElementById('personInfo').value.trim();
-            
-            if (name && info) {
-                this.dataManager.data.persons.push({
-                    id: Date.now(),
-                    name,
-                    description: info
-                });
-                this.dataManager.saveToLocalStorage(this.authManager.state.currentUser);
-                this.ui.showToast('✅ تم إضافة الشخص');
-                document.getElementById('personName').value = '';
-                document.getElementById('personInfo').value = '';
-                this.updatePersonsList();
-            } else {
-                this.ui.showToast('الرجاء إدخال الاسم والمعلومات', 'error');
-            }
-        };
-        
-        // Initial load
-        this.dashboardManager.update();
-        
-        // Welcome message
-        setTimeout(() => {
-            const profile = this.authManager.dataManager?.profile;
-            const name = profile?.name || 'صديقي';
-            this.addChatMessage(`🌟 مرحباً ${name}! أنا NeuroSync Pro، مساعدك الذكي.`, 'bot');
-            this.addChatMessage(`💡 يمكنك سؤالي عن أي شيء: المصروفات، المهام، الأهداف، أو طلب نصائح مخصصة.`, 'bot');
-        }, 500);
-    }
-    
-    loadUserData() {
-        const profile = this.authManager.dataManager?.profile;
-        const name = profile?.name || this.authManager.state.currentUser?.split('@')[0] || 'المستخدم';
-        const avatar = profile?.avatar || '🧠';
-        
-        document.getElementById('sidebarName').innerHTML = name;
-        document.getElementById('sidebarAvatar').innerHTML = avatar;
-        document.getElementById('headerName').innerHTML = name;
-        document.getElementById('headerAvatar').innerHTML = avatar;
-        
-        const theme = localStorage.getItem('theme');
-        if (theme === 'light') document.body.classList.add('light-mode');
-    }
-    
-    async sendMessage() {
-        const input = document.getElementById('chatInput');
-        const message = input.value.trim();
-        if (!message) return;
-        
-        this.addChatMessage(message, 'user');
-        input.value = '';
-        
-        const response = await this.aiAssistant.processQuery(message);
-        this.addChatMessage(response, 'bot');
-    }
-    
-    addChatMessage(text, sender) {
-        const container = document.getElementById('chatMessages');
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${sender}`;
-        messageDiv.innerHTML = `<div class="message-bubble">${text.replace(/\n/g, '<br>')}</div>`;
-        container.appendChild(messageDiv);
-        container.scrollTop = container.scrollHeight;
-    }
-    
-    updateExpensesList() {
-        const container = document.getElementById('expensesList');
-        const date = this.authManager.state.currentViewDate;
-        const expenses = this.expensesManager.getExpensesList(date);
-        
-        if (expenses.length === 0) {
-            container.innerHTML = '<div class="stat-card" style="text-align: center;">لا توجد مصروفات لهذا اليوم</div>';
-            return;
-        }
-        
-        container.innerHTML = expenses.map(e => `
-            <div class="list-item">
-                <div class="list-item-info">
-                    <div class="list-item-title">${e.name}</div>
-                    <div class="list-item-sub">${e.amount} ${e.currency} - ${this.dataManager.categories.expenses.find(c => c.id === e.category)?.name || e.category}</div>
-                </div>
-                <div class="list-item-actions">
-                    <button class="btn-icon btn-delete" onclick="window.app.expensesManager.deleteExpense('${date}', ${e.id})">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-        `).join('');
-    }
-    
-    updateActivitiesList() {
-        const container = document.getElementById('activitiesList');
-        const date = this.authManager.state.currentViewDate;
-        const activities = this.dataManager.data.timeLogs[date]?.entries || [];
-        
-        if (activities.length === 0) {
-            container.innerHTML = '<div class="stat-card" style="text-align: center;">لا توجد نشاطات مسجلة اليوم</div>';
-            return;
-        }
-        
-        container.innerHTML = activities.map(a => {
-            const category = this.dataManager.categories.time.find(c => c.id === a.type);
-            return `
-                <div class="list-item">
-                    <div class="list-item-info">
-                        <div class="list-item-title">${category?.name || a.type}</div>
-                        <div class="list-item-sub">${a.hours} ساعة</div>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    }
-    
-    updateHealthList() {
-        const container = document.getElementById('healthList');
-        const date = this.authManager.state.currentViewDate;
-        const activities = this.dataManager.data.healthActivities[date] || [];
-        
-        if (activities.length === 0) {
-            container.innerHTML = '<div class="stat-card" style="text-align: center;">لا توجد نشاطات صحية مسجلة اليوم</div>';
-            return;
-        }
-        
-        container.innerHTML = activities.map(a => {
-            const exercise = this.dataManager.categories.health.find(e => e.id === a.type);
-            return `
-                <div class="list-item">
-                    <div class="list-item-info">
-                        <div class="list-item-title">${exercise?.name || a.type}</div>
-                        <div class="list-item-sub">${a.duration} دقيقة - ${a.calories} سعرة حرارية</div>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    }
-    
-    updateHealthStats() {
-        const fill = document.getElementById('energyFill');
-        if (fill) {
-            fill.style.width = `${this.dataManager.currentEnergy}%`;
-            fill.style.background = this.dataManager.currentEnergy > 50 ? '#22c55e' : '#ef4444';
-        }
-    }
-    
-    updateTasksList() {
-        const container = document.getElementById('tasksList');
-        const activeTasks = this.tasksManager.getTasksByStatus(false);
-        const completedTasks = this.tasksManager.getTasksByStatus(true);
-        
-        const priorityColors = { high: '#ef4444', medium: '#f59e0b', low: '#22c55e' };
-        const today = new Date().toISOString().slice(0, 10);
-        
-        let html = '<div class="stat-card"><div class="stat-title">📋 المهام النشطة</div>';
-        
-        if (activeTasks.length === 0) {
-            html += '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">لا توجد مهام نشطة ✨</div>';
-        } else {
-            activeTasks.forEach(t => {
-                const isOverdue = t.dueDate && t.dueDate < today;
-                html += `
-                    <div class="list-item" style="border-right: 4px solid ${priorityColors[t.priority]}">
+            updateExpensesList() {
+                const container = document.getElementById('expensesList');
+                if (!container) return;
+                const date = this.authManager.currentViewDate;
+                const expenses = this.dataManager.data.expenses[date] || [];
+                
+                if (expenses.length === 0) {
+                    container.innerHTML = '<div class="stat-card" style="text-align: center;">لا توجد مصروفات لهذا اليوم</div>';
+                    return;
+                }
+                
+                container.innerHTML = expenses.map(e => `
+                    <div class="list-item">
                         <div class="list-item-info">
-                            <div class="list-item-title">
-                                ${t.title}
-                                ${isOverdue ? '<span style="color: #ef4444; font-size: 12px;"> (منتهية)</span>' : ''}
-                                ${t.dueDate === today ? '<span style="color: #f59e0b; font-size: 12px;"> (اليوم)</span>' : ''}
+                            <div class="list-item-title">${e.name}</div>
+                            <div class="list-item-sub">${e.amount} ${e.currency} - ${this.dataManager.categories.expenses.find(c => c.id === e.category)?.name || e.category}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            updateTasksList() {
+                const container = document.getElementById('tasksList');
+                if (!container) return;
+                
+                const activeTasks = this.dataManager.data.tasks.filter(t => !t.completed);
+                const completedTasks = this.dataManager.data.tasks.filter(t => t.completed);
+                
+                const priorityColors = { high: '#ef4444', medium: '#f59e0b', low: '#22c55e' };
+                const today = new Date().toISOString().slice(0, 10);
+                
+                let html = '<div class="stat-card"><div class="stat-title">📋 المهام النشطة</div>';
+                
+                if (activeTasks.length === 0) {
+                    html += '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">لا توجد مهام نشطة ✨</div>';
+                } else {
+                    activeTasks.forEach(t => {
+                        const isOverdue = t.dueDate && t.dueDate < today;
+                        html += `
+                            <div class="list-item" style="border-right: 4px solid ${priorityColors[t.priority]}">
+                                <div class="list-item-info">
+                                    <div class="list-item-title">
+                                        ${t.title}
+                                        ${isOverdue ? '<span style="color: #ef4444; font-size: 12px;"> (منتهية)</span>' : ''}
+                                    </div>
+                                    ${t.description ? `<div class="list-item-sub">${t.description}</div>` : ''}
+                                </div>
+                                <div class="list-item-actions">
+                                    <button class="btn-icon btn-complete" onclick="window.app.completeTask(${t.id})">
+                                        <i class="fas fa-check-circle"></i>
+                                    </button>
+                                </div>
                             </div>
-                            ${t.description ? `<div class="list-item-sub">${t.description}</div>` : ''}
-                            ${t.dueDate ? `<div class="list-item-sub">📅 ${this.ui.formatDate(t.dueDate)}</div>` : ''}
-                        </div>
-                        <div class="list-item-actions">
-                            <button class="btn-icon btn-complete" onclick="window.app.tasksManager.toggleComplete(${t.id})">
-                                <i class="fas fa-check-circle"></i>
-                            </button>
-                            <button class="btn-icon btn-delete" onclick="window.app.tasksManager.deleteTask(${t.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-        
-        html += '</div><div class="stat-card" style="margin-top: 20px;"><div class="stat-title">✅ المهام المكتملة</div>';
-        
-        if (completedTasks.length === 0) {
-            html += '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">لا توجد مهام مكتملة</div>';
-        } else {
-            completedTasks.forEach(t => {
-                html += `
-                    <div class="list-item" style="opacity: 0.7;">
-                        <div class="list-item-info">
-                            <div class="list-item-title"><del>${t.title}</del></div>
-                        </div>
-                        <div class="list-item-actions">
-                            <button class="btn-icon" onclick="window.app.tasksManager.toggleComplete(${t.id})">
-                                <i class="fas fa-undo"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-        
-        html += '</div>';
-        container.innerHTML = html;
-    }
-    
-    updateGoalsList() {
-        const container = document.getElementById('goalsList');
-        const goals = this.dataManager.data.goals;
-        
-        if (goals.length === 0) {
-            container.innerHTML = '<div class="stat-card" style="text-align: center;">لا توجد أهداف حالياً</div>';
-            return;
-        }
-        
-        container.innerHTML = goals.map(g => {
-            const percent = (g.current / g.target) * 100;
-            const typeIcon = { financial: '💰', health: '💪', productivity: '⏰' }[g.type] || '🎯';
-            
-            return `
-                <div class="stat-card" style="margin-bottom: 16px;">
-                    <div class="stat-title">${typeIcon} ${g.title} ${g.completed ? '✅' : ''}</div>
-                    ${g.description ? `<div class="list-item-sub" style="margin-bottom: 12px;">${g.description}</div>` : ''}
-                    <div class="stat-value" style="font-size: 20px;">${g.current.toFixed(1)} / ${g.target.toFixed(1)}</div>
-                    <div class="progress-container">
-                        <div class="progress-fill" style="width: ${percent}%"></div>
-                    </div>
-                    ${!g.completed ? `
-                        <div style="display: flex; gap: 8px; margin-top: 12px;">
-                            <input type="number" id="goalProgress_${g.id}" class="form-group" style="flex: 1;" placeholder="تحديث التقدم">
-                            <button class="quick-btn" onclick="window.app.goalsManager.updateProgress(${g.id}, parseFloat(document.getElementById('goalProgress_${g.id}').value))">تحديث</button>
-                            <button class="btn-icon btn-delete" onclick="window.app.goalsManager.deleteGoal(${g.id})"><i class="fas fa-trash"></i></button>
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-        }).join('');
-    }
-    
-    updateKnowledgeList() {
-        const container = document.getElementById('knowledgeList');
-        const knowledge = Object.entries(this.dataManager.data.knowledge);
-        
-        if (knowledge.length === 0) {
-            container.innerHTML = '<div class="stat-card" style="text-align: center;">لا توجد معلومات في قاعدة المعرفة</div>';
-            return;
-        }
-        
-        container.innerHTML = knowledge.map(([q, a]) => `
-            <div class="list-item">
-                <div class="list-item-info">
-                    <div class="list-item-title">❓ ${q}</div>
-                    <div class="list-item-sub">💡 ${a.substring(0, 100)}${a.length > 100 ? '...' : ''}</div>
-                </div>
-            </div>
-        `).join('');
-    }
-    
-    updatePersonsList() {
-        const container = document.getElementById('personsList');
-        const persons = this.dataManager.data.persons;
-        
-        if (persons.length === 0) {
-            container.innerHTML = '<div class="stat-card" style="text-align: center;">لا توجد جهات اتصال</div>';
-            return;
-        }
-        
-        container.innerHTML = persons.map(p => `
-            <div class="list-item">
-                <div class="list-item-info">
-                    <div class="list-item-title">👤 ${p.name}</div>
-                    <div class="list-item-sub">${p.description}</div>
-                </div>
-            </div>
-        `).join('');
-    }
-    
-    showProfileModal() {
-        const profile = this.authManager.dataManager?.profile || { name: '', avatar: '🧠', exchangeRate: 89500 };
-        
-        const modal = document.createElement('div');
-        modal.className = 'modal active';
-        modal.innerHTML = `
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>👤 الملف الشخصي</h3>
-                    <div class="modal-close"><i class="fas fa-times"></i></div>
-                </div>
-                <div class="form-group">
-                    <label>اسم المستخدم</label>
-                    <input type="text" id="profileNameInput" value="${profile.name || ''}" placeholder="أدخل اسمك">
-                </div>
-                <div class="form-group">
-                    <label>الصورة الرمزية</label>
-                    <input type="text" id="profileAvatarInput" value="${profile.avatar || '🧠'}" maxlength="2" placeholder="😊">
-                </div>
-                <div class="form-group">
-                    <label>سعر صرف الدولار (ليرة)</label>
-                    <input type="number" id="profileRateInput" value="${profile.exchangeRate || 89500}">
-                </div>
-                <button class="btn btn-primary" id="saveProfileBtn">حفظ التغييرات</button>
-            </div>
-        `;
-        
-        document.body.appendChild(modal);
-        
-        modal.querySelector('.modal-close').onclick = () => modal.remove();
-        modal.querySelector('#saveProfileBtn').onclick = () => {
-            const newName = document.getElementById('profileNameInput').value;
-            const newAvatar = document.getElementById('profileAvatarInput').value;
-            const newRate = parseFloat(document.getElementById('profileRateInput').value);
-            
-            this.authManager.updateProfile({
-                name: newName,
-                avatar: newAvatar,
-                exchangeRate: newRate
-            });
-            
-            if (newRate) {
-                this.dataManager.exchangeRates.LBP = newRate;
+                        `;
+                    });
+                }
+                
+                html += '</div><div class="stat-card" style="margin-top: 20px;"><div class="stat-title">✅ المهام المكتملة</div>';
+                
+                if (completedTasks.length === 0) {
+                    html += '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">لا توجد مهام مكتملة</div>';
+                } else {
+                    completedTasks.forEach(t => {
+                        html += `
+                            <div class="list-item" style="opacity: 0.7;">
+                                <div class="list-item-info">
+                                    <div class="list-item-title"><del>${t.title}</del></div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                html += '</div>';
+                container.innerHTML = html;
             }
             
-            this.loadUserData();
-            modal.remove();
-            this.ui.showToast('تم تحديث الملف الشخصي');
-        };
-    }
-    
-    exportData() {
-        const exportData = {
-            user: this.authManager.state.currentUser,
-            profile: this.authManager.dataManager?.profile,
-            data: this.dataManager.data,
-            currentEnergy: this.dataManager.currentEnergy,
-            monthlyBudget: this.dataManager.monthlyBudget,
-            exportDate: new Date().toISOString()
-        };
-        
-        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `neurosync_backup_${Date.now()}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-        
-        this.ui.showToast('✅ تم تصدير البيانات بنجاح');
-    }
-}
+            completeTask(id) {
+                const task = this.dataManager.data.tasks.find(t => t.id === id);
+                if (task) {
+                    task.completed = !task.completed;
+                    this.dataManager.saveToLocalStorage(this.authManager.currentUser);
+                    this.ui.showToast(task.completed ? '🎉 مبروك! تم إكمال المهمة' : 'تم إعادة فتح المهمة');
+                    this.updateTasksList();
+                    this.updateDashboard();
+                }
+            }
+            
+            updateGoalsList() {
+                const container = document.getElementById('goalsList');
+                if (!container) return;
+                const goals = this.dataManager.data.goals;
+                
+                if (goals.length === 0) {
+                    container.innerHTML = '<div class="stat-card" style="text-align: center;">لا توجد أهداف حالياً</div>';
+                    return;
+                }
+                
+                container.innerHTML = goals.map(g => {
+                    const percent = (g.current / g.target) * 100;
+                    const typeIcon = { financial: '💰', health: '💪', productivity: '⏰' }[g.type] || '🎯';
+                    
+                    return `
+                        <div class="stat-card" style="margin-bottom: 16px;">
+                            <div class="stat-title">${typeIcon} ${g.title} ${g.completed ? '✅' : ''}</div>
+                            ${g.description ? `<div class="list-item-sub" style="margin-bottom: 12px;">${g.description}</div>` : ''}
+                            <div class="stat-value" style="font-size: 20px;">${g.current.toFixed(1)} / ${g.target.toFixed(1)}</div>
+                            <div class="progress-container">
+                                <div class="progress-fill" style="width: ${percent}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            updateKnowledgeList() {
+                const container = document.getElementById('knowledgeList');
+                if (!container) return;
+                const knowledge = Object.entries(this.dataManager.data.knowledge);
+                
+                if (knowledge.length === 0) {
+                    container.innerHTML = '<div class="stat-card" style="text-align: center;">لا توجد معلومات في قاعدة المعرفة</div>';
+                    return;
+                }
+                
+                container.innerHTML = knowledge.map(([q, a]) => `
+                    <div class="list-item">
+                        <div class="list-item-info">
+                            <div class="list-item-title">❓ ${q}</div>
+                            <div class="list-item-sub">💡 ${a.substring(0, 100)}${a.length > 100 ? '...' : ''}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            showProfileModal() {
+                const profile = this.dataManager.profile;
+                
+                const modal = document.createElement('div');
+                modal.className = 'modal active';
+                modal.innerHTML = `
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>👤 الملف الشخصي</h3>
+                            <div class="modal-close"><i class="fas fa-times"></i></div>
+                        </div>
+                        <div class="form-group">
+                            <label>اسم المستخدم</label>
+                            <input type="text" id="profileNameInput" value="${profile.name || ''}" placeholder="أدخل اسمك">
+                        </div>
+                        <div class="form-group">
+                            <label>الصورة الرمزية</label>
+                            <input type="text" id="profileAvatarInput" value="${profile.avatar || '🧠'}" maxlength="2" placeholder="😊">
+                        </div>
+                        <button class="btn btn-primary" id="saveProfileBtn">حفظ التغييرات</button>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                const closeBtn = modal.querySelector('.modal-close');
+                if (closeBtn) closeBtn.onclick = () => modal.remove();
+                
+                const saveBtn = modal.querySelector('#saveProfileBtn');
+                if (saveBtn) {
+                    saveBtn.onclick = () => {
+                        const newName = document.getElementById('profileNameInput')?.value;
+                        const newAvatar = document.getElementById('profileAvatarInput')?.value;
+                        
+                        this.authManager.updateProfile({
+                            name: newName,
+                            avatar: newAvatar
+                        });
+                        
+                        this.loadUserData();
+                        modal.remove();
+                        this.ui.showToast('تم تحديث الملف الشخصي');
+                    };
+                }
+            }
+            
+            exportData() {
+                const exportData = {
+                    user: this.authManager.currentUser,
+                    profile: this.dataManager.profile,
+                    data: this.dataManager.data,
+                    currentEnergy: this.dataManager.currentEnergy,
+                    monthlyBudget: this.dataManager.monthlyBudget,
+                    exportDate: new Date().toISOString()
+                };
+                
+                const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `neurosync_backup_${Date.now()}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                this.ui.showToast('✅ تم تصدير البيانات بنجاح');
+            }
+        }
 
-// Start Application
-window.app = new NeuroSyncApp();
+        // Start Application
+        window.app = new NeuroSyncApp();
     </script>
-    <script type="module" src="app.js"></script>
 </body>
 </html>
